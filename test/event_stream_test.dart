@@ -4,14 +4,14 @@ import 'dart:async';
 import 'package:guinness/guinness.dart';
 import 'package:reactive/reactive.dart';
 
-void main() => describe("ReactiveStream", () {
+void main() => describe("EventStream", () {
   StreamController main;
   StreamController other;
-  ReactiveStream stream;
+  EventStream stream;
 
   beforeEach(() {
     main = new StreamController();
-    stream = new ReactiveStream(main.stream);
+    stream = new EventStream(main.stream);
     other = new StreamController();
   });
 

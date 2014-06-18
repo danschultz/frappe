@@ -2,7 +2,8 @@ library reactive;
 
 import 'dart:async';
 
-part 'src/reactive_stream.dart';
+part 'src/observable.dart';
+part 'src/event_stream.dart';
 part 'src/forwarding_stream.dart';
 part 'src/merged_stream.dart';
 part 'src/take_until_stream.dart';
