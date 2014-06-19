@@ -1,4 +1,4 @@
-library signal_test;
+library property_test;
 
 import 'dart:async';
 import 'package:guinness/guinness.dart';
@@ -38,7 +38,7 @@ void main() => describe("Property", () {
 
         afterEach(() => previousSubscription.cancel());
 
-        it("first value is the latest value of 2", () {
+        it("first value is 2", () {
           listenToFirstEvent(signal, expectAsync((value) => expect(value).toBe(2)));
         });
       });

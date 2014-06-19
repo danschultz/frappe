@@ -1,4 +1,4 @@
-library computed_signal_test;
+library computed_property_test;
 
 import 'dart:async';
 import 'package:guinness/guinness.dart';
