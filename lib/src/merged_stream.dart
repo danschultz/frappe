@@ -1,4 +1,4 @@
-part of reactive;
+part of relay;
 
 class _MergedStream extends Stream {
   Iterable<Stream> _streams;

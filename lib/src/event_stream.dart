@@ -1,4 +1,4 @@
-part of reactive;
+part of relay;
 
 /// An [EventStream] is wrapper around a standard Dart [Stream], but provides utility
 /// methods for creating other streams or properties.

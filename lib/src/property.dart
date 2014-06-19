@@ -1,4 +1,4 @@
-part of reactive;
+part of relay;
 
 // Extend dynamic to suppress warnings with operator overrides
 abstract class Property<T extends dynamic> implements Observable<T> {

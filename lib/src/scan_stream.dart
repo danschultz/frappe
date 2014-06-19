@@ -1,4 +1,4 @@
-part of reactive;
+part of relay;
 
 class _ScanStream<T> extends _ForwardingStream<T> {
   T _value;

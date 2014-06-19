@@ -3,7 +3,7 @@ library property_test;
 import 'dart:async';
 import 'package:guinness/guinness.dart';
 import 'package:unittest/unittest.dart' show expectAsync;
-import 'package:reactive/reactive.dart';
+import 'package:relay/relay.dart';
 import 'callback_helpers.dart';
 
 void main() => describe("Property", () {

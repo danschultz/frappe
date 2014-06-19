@@ -1,4 +1,4 @@
-part of reactive;
+part of relay;
 
 /// An [Observable] is a type that standardizes the API between [EventStream]s
 /// and [Property]s.

@@ -1,4 +1,4 @@
-part of reactive;
+part of relay;
 
 class _ComputedProperty<T> extends _ControllerProperty<T> {
   Property<T> _a;

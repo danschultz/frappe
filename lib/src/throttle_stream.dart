@@ -1,4 +1,4 @@
-part of reactive;
+part of relay;
 
 class _ThrottleStream<T> extends _ForwardingStream<T> {
   Duration _duration;

@@ -1,4 +1,4 @@
-part of reactive;
+part of relay;
 
 class _SkipUntilStream<T> extends _ForwardingStream<T> {
   Future _start;

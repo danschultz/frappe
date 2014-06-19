@@ -1,4 +1,4 @@
-name: reactive
+name: relay
 description: A pub package
 dependencies:
 dev_dependencies:

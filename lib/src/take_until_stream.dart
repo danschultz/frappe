@@ -1,4 +1,4 @@
-part of reactive;
+part of relay;
 
 class _TakeUntilStream<T> extends _ForwardingStream<T> {
   _TakeUntilStream(Stream<T> stream, Future stop) : super(stream) {

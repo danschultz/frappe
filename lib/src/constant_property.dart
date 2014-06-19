@@ -1,4 +1,4 @@
-part of reactive;
+part of relay;
 
 class _ConstantProperty<T> extends Property<T> {
   T _currentValue;

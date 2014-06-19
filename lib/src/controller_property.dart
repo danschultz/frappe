@@ -1,4 +1,4 @@
-part of reactive;
+part of relay;
 
 abstract class _ControllerProperty<T> extends Property<T> {
   StreamController<T> _controller;

@@ -1,4 +1,4 @@
-part of reactive;
+part of relay;
 
 class _StreamProperty<T> extends _ControllerProperty<T> {
   EventStream<T> _stream;

@@ -2,7 +2,7 @@ library computed_property_test;
 
 import 'dart:async';
 import 'package:guinness/guinness.dart';
-import 'package:reactive/reactive.dart';
+import 'package:relay/relay.dart';
 import 'callback_helpers.dart';
 
 void main() => describe("Computed properties", () {

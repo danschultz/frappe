@@ -1,8 +1,8 @@
-library reactive_stream_test;
+library event_stream_test;
 
 import 'dart:async';
 import 'package:guinness/guinness.dart';
-import 'package:reactive/reactive.dart';
+import 'package:relay/relay.dart';
 import 'callback_helpers.dart';
 
 void main() => describe("EventStream", () {

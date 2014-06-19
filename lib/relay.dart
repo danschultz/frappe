@@ -1,4 +1,4 @@
-library reactive;
+library relay;
 
 import 'dart:async';
 import 'dart:collection';

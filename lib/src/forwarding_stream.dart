@@ -1,4 +1,4 @@
-part of reactive;
+part of relay;
 
 abstract class _ForwardingStream<T> extends Stream<T> {
   Stream<T> _stream;

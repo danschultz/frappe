@@ -1,11 +1,11 @@
-library reactive.test_runner;
+library relay.test_runner;
 
-import 'event_stream_test.dart' as ReactiveStreamTest;
+import 'event_stream_test.dart' as EventStreamTest;
 import 'property_test.dart' as PropertyTest;
 import 'computed_property_test.dart' as ComputedPropertyTest;
 
 void main() {
-  ReactiveStreamTest.main();
+  EventStreamTest.main();
   PropertyTest.main();
   ComputedPropertyTest.main();
 }
