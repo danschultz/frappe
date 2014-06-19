@@ -1,13 +1,13 @@
 part of reactive;
 
-class _ConstantSignal<T> extends Signal<T> {
+class _ConstantProperty<T> extends Property<T> {
   T _currentValue;
 
   EventStream _changes;
   @override
   EventStream<T> get changes => _changes;
 
-  _ConstantSignal(T value) :
+  _ConstantProperty(T value) :
     _currentValue = value,
     _changes = new EventStream(new Stream.fromIterable([])),
     super._();

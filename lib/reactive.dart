@@ -12,8 +12,8 @@ part 'src/skip_until_stream.dart';
 part 'src/throttle_stream.dart';
 part 'src/scan_stream.dart';
 
-part 'src/signal.dart';
-part 'src/forwarding_signal.dart';
-part 'src/stream_signal.dart';
-part 'src/computed_signal.dart';
-part 'src/constant_signal.dart';
+part 'src/property.dart';
+part 'src/controller_property.dart';
+part 'src/stream_property.dart';
+part 'src/computed_property.dart';
+part 'src/constant_property.dart';

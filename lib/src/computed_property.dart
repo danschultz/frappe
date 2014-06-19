@@ -1,8 +1,8 @@
 part of reactive;
 
-class _ComputedSignal<T> extends _ForwardingSignal<T> {
-  Signal<T> _a;
-  Signal<T> _b;
+class _ComputedProperty<T> extends _ControllerProperty<T> {
+  Property<T> _a;
+  Property<T> _b;
   Function _compute;
 
   StreamSubscription<T> _subscriptionA;
@@ -10,7 +10,7 @@ class _ComputedSignal<T> extends _ForwardingSignal<T> {
 
   T _currentValue;
 
-  _ComputedSignal(this._a, this._b, T compute(T a, T b)) :
+  _ComputedProperty(this._a, this._b, T compute(T a, T b)) :
     _compute = compute,
     super();
 

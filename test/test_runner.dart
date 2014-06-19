@@ -1,11 +1,11 @@
 library reactive.test_runner;
 
 import 'event_stream_test.dart' as ReactiveStreamTest;
-import 'signal_test.dart' as SignalTest;
-import 'computed_signal_test.dart' as ComputedSignalTest;
+import 'property_test.dart' as PropertyTest;
+import 'computed_property_test.dart' as ComputedPropertyTest;
 
 void main() {
   ReactiveStreamTest.main();
-  SignalTest.main();
-  ComputedSignalTest.main();
+  PropertyTest.main();
+  ComputedPropertyTest.main();
 }

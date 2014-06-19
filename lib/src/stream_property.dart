@@ -1,6 +1,6 @@
 part of reactive;
 
-class _StreamSignal<T> extends _ForwardingSignal<T> {
+class _StreamProperty<T> extends _ControllerProperty<T> {
   EventStream<T> _stream;
   T _currentValue;
   bool _hasInitialValue;
@@ -10,16 +10,16 @@ class _StreamSignal<T> extends _ForwardingSignal<T> {
 
   StreamSubscription<T> _subscription;
 
-  _StreamSignal._(EventStream<T> stream, {T initialValue, bool hasInitialValue: false}) :
+  _StreamProperty._(EventStream<T> stream, {T initialValue, bool hasInitialValue: false}) :
     _currentValue = initialValue,
     _hasInitialValue = hasInitialValue,
     _stream = stream.asBroadcastStream(),
     super();
 
-  factory _StreamSignal(EventStream<T> stream) => new _StreamSignal._(stream);
+  factory _StreamProperty(EventStream<T> stream) => new _StreamProperty._(stream);
 
-  factory _StreamSignal.initialValue(EventStream<T> stream, T initialValue) =>
-    new _StreamSignal._(stream, initialValue: initialValue, hasInitialValue: true);
+  factory _StreamProperty.initialValue(EventStream<T> stream, T initialValue) =>
+    new _StreamProperty._(stream, initialValue: initialValue, hasInitialValue: true);
 
   @override
   StreamSubscription<T> listen(void onData(T event), {Function onError, void onDone(), bool cancelOnError}) {

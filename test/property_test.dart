@@ -6,10 +6,10 @@ import 'package:unittest/unittest.dart' show expectAsync;
 import 'package:reactive/reactive.dart';
 import 'callback_helpers.dart';
 
-void main() => describe("Signal", () {
+void main() => describe("Property", () {
   EventStream stream;
   StreamController controller;
-  Signal signal;
+  Property signal;
 
   beforeEach(() {
     controller = new StreamController();
@@ -18,7 +18,7 @@ void main() => describe("Signal", () {
 
   describe("listen()", () {
     describe("with initial value", () {
-      beforeEach(() => signal = stream.asSignalWithInitialValue(1));
+      beforeEach(() => signal = stream.asPropertyWithInitialValue(1));
 
       describe("without any subscriptions", () {
         beforeEach(() => controller.add(2));
@@ -45,7 +45,7 @@ void main() => describe("Signal", () {
     });
 
     describe("without initial value", () {
-      beforeEach(() => signal = stream.asSignal());
+      beforeEach(() => signal = stream.asProperty());
 
       it("first value is the next value in the stream", () {
         listenToFirstEvent(signal, expectAsync((value) => expect(value).toBe(2)));

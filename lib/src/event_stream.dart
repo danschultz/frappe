@@ -6,9 +6,9 @@ class EventStream<T> extends StreamView<T> implements Observable<T> {
   /// Returns a new stream that contains events from this stream and the [other] stream.
   EventStream merge(Stream other) => new EventStream(new _MergedStream([this, other]));
 
-  Signal<T> scan(T initialValue, T combine(T value, T element)) {
+  Property<T> scan(T initialValue, T combine(T value, T element)) {
     return new EventStream<T>(new _ScanStream(this, initialValue, combine))
-        .asSignalWithInitialValue(initialValue);
+        .asPropertyWithInitialValue(initialValue);
   }
 
   /// Returns a new stream that will begin forwarding events from this stream when the
@@ -32,11 +32,14 @@ class EventStream<T> extends StreamView<T> implements Observable<T> {
     return new EventStream<T>(new _ThrottleStream(this, duration));
   }
 
-  Signal<T> asSignal() {
-    return new _StreamSignal(this);
+  /// Returns a [Property] where the first value will be the next value from this stream.
+  Property<T> asProperty() {
+    return new _StreamProperty(this);
   }
 
-  Signal<T> asSignalWithInitialValue(T initialValue) {
-    return new _StreamSignal.initialValue(this, initialValue);
+  /// Returns a [Property] where the first value will be the [initialValue], and values
+  /// after that will be the values from this stream.
+  Property<T> asPropertyWithInitialValue(T initialValue) {
+    return new _StreamProperty.initialValue(this, initialValue);
   }
 }
