@@ -3,6 +3,7 @@ library reactive_stream_test;
 import 'dart:async';
 import 'package:guinness/guinness.dart';
 import 'package:reactive/reactive.dart';
+import 'callback_helpers.dart';
 
 void main() => describe("EventStream", () {
   StreamController main;
@@ -40,7 +41,7 @@ void main() => describe("EventStream", () {
         main..add(1)..close();
         other..addError("error");
 
-        return stream.merge(other.stream).listen(_doNothing, cancelOnError: true).cancel();
+        return stream.merge(other.stream).listen(doNothing, cancelOnError: true).cancel();
       });
     });
   });
@@ -134,5 +135,3 @@ void main() => describe("EventStream", () {
     });
   });
 });
-
-Function _doNothing = (_) {};

@@ -3,16 +3,13 @@ part of reactive;
 class EventStream<T> extends StreamView<T> implements Observable<T> {
   EventStream(Stream<T> stream) : super(stream);
 
-  Signal<T> _latest;
-  Signal<T> get latest {
-    if (_latest == null) {
-      _latest = new StreamSignal(null, this);
-    }
-    return _latest;
-  }
-
   /// Returns a new stream that contains events from this stream and the [other] stream.
   EventStream merge(Stream other) => new EventStream(new _MergedStream([this, other]));
+
+  Signal<T> scan(T initialValue, T combine(T value, T element)) {
+    return new EventStream<T>(new _ScanStream(this, initialValue, combine))
+        .asSignalWithInitialValue(initialValue);
+  }
 
   /// Returns a new stream that will begin forwarding events from this stream when the
   /// [future] completes.
@@ -33,5 +30,13 @@ class EventStream<T> extends StreamView<T> implements Observable<T> {
   /// The returned stream will not throttle errors.
   EventStream<T> throttle(Duration duration) {
     return new EventStream<T>(new _ThrottleStream(this, duration));
+  }
+
+  Signal<T> asSignal() {
+    return new _StreamSignal(this);
+  }
+
+  Signal<T> asSignalWithInitialValue(T initialValue) {
+    return new _StreamSignal.initialValue(this, initialValue);
   }
 }

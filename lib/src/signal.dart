@@ -1,68 +1,40 @@
 part of reactive;
 
 // Extend dynamic to suppress warnings with operator overrides
-abstract class Signal<T extends dynamic> extends Object {
-  T _value;
-  T get value => _value;
+abstract class Signal<T extends dynamic> implements Observable<T> {
+  EventStream<T> get changes;
 
-  StreamController<T> _onChange = new StreamController.broadcast();
-  ReactiveStream<T> get onChange => new ReactiveStream(_onChange.stream.distinct());
+  T get _currentValue;
 
   Signal._();
 
-  factory Signal(T value) {
-    return new _ConstantSignal(value);
+  factory Signal.constant(T value) => new _ConstantSignal(value);
+
+  Signal<bool> and(Signal<bool> other) {
+    return new _ComputedSignal<bool>(this, other, (a, b) => a && b);
   }
 
-  T call() => value;
-
-  void _setValue(T newValue) {
-    var oldValue = value;
-    _value = newValue;
-    _onChange.add(newValue);
+  Signal<bool> or(Signal<bool> other) {
+    return new _ComputedSignal<bool>(this, other, (a, b) => a || b);
   }
 
-  Signal<T> operator +(Signal<T> other) {
-    return new _CombinatorSignal(this, other, (a, b) => a + b);
+  Signal<bool> equals(Signal other) {
+    return new _ComputedSignal<bool>(this, other, (a, b) => a == b);
   }
 
-  BoolSignal equals(Signal other) {
-    return new BoolSignal(new _CombinatorSignal(this, other, (a, b) => a == b));
+  Signal operator +(Signal other) {
+    return new _ComputedSignal(this, other, (a, b) => a + b);
   }
 
-  Signal derive(Object computation(T value)) {
-    return new _ComputedSignal(onChange, () => computation(value));
-  }
-}
-
-class StreamSignal<T> extends Signal<T> {
-  Stream<T> _stream;
-  StreamSubscription<T> _subscription;
-
-  bool get _isSubscribed => _subscription != null;
-
-  StreamSignal(T initialValue, this._stream) : super._() {
-    _setValue(initialValue);
-    subscribe();
+  Signal operator -(Signal other) {
+    return new _ComputedSignal(this, other, (a, b) => a - b);
   }
 
-  void subscribe() {
-    if (!_isSubscribed) {
-      _subscription = _stream.listen((event) => _setValue(event));
-    }
+  Signal operator *(Signal other) {
+    return new _ComputedSignal(this, other, (a, b) => a * b);
   }
 
-  Future unsubscribe() {
-    if (_isSubscribed) {
-      return _subscription.cancel().then((_) => _subscription = null);
-    } else {
-      return new Future.value();
-    }
-  }
-}
-
-class _ConstantSignal<T> extends Signal<T> {
-  _ConstantSignal(T value) : super._() {
-    _setValue(value);
+  Signal operator /(Signal other) {
+    return new _ComputedSignal(this, other, (a, b) => a / b);
   }
 }
