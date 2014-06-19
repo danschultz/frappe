@@ -1,11 +1,19 @@
 part of reactive;
 
+/// An [EventStream] is wrapper around a standard Dart [Stream], but provides utility
+/// methods for creating other streams or properties.
 class EventStream<T> extends StreamView<T> implements Observable<T> {
   EventStream(Stream<T> stream) : super(stream);
 
   /// Returns a new stream that contains events from this stream and the [other] stream.
   EventStream merge(Stream other) => new EventStream(new _MergedStream([this, other]));
 
+  /// Returns a [Property] where the first value is the [initalValue] and values after
+  /// that are the result of [combine].
+  ///
+  /// [combine] is an accumulator function where its first argument is either the initial
+  /// value or the result of the last combine, and the second argument is the next value
+  /// in this stream.
   Property<T> scan(T initialValue, T combine(T value, T element)) {
     return new EventStream<T>(new _ScanStream(this, initialValue, combine))
         .asPropertyWithInitialValue(initialValue);
