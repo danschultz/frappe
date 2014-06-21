@@ -4,8 +4,6 @@ part of relay;
 abstract class Property<T extends dynamic> implements Observable<T> {
   EventStream<T> get changes;
 
-  T get _currentValue;
-
   Property._();
 
   factory Property.constant(T value) => new _ConstantProperty(value);
