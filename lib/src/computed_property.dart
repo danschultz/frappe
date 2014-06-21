@@ -1,6 +1,6 @@
 part of relay;
 
-class _ComputedProperty<T> extends _ControllerProperty<T> {
+class _CombinedProperty<T> extends _ControllerProperty<T> {
   Property<T> _a;
   Property<T> _b;
   Function _compute;
@@ -8,22 +8,23 @@ class _ComputedProperty<T> extends _ControllerProperty<T> {
   StreamSubscription<T> _subscriptionA;
   StreamSubscription<T> _subscriptionB;
 
-  T _currentValue;
-
   bool _hasReceivedA = false;
   bool _hasReceivedB = false;
 
   Object _valueA;
   Object _valueB;
 
-  _ComputedProperty(this._a, this._b, T compute(T a, T b)) :
+  _CombinedProperty(this._a, this._b, T compute(T a, T b)) :
     _compute = compute,
     super();
 
   void _recompute(T a, T b) {
     if (_hasReceivedA && _hasReceivedB) {
-      _currentValue = _compute(a, b);
-      _controller.add(_currentValue);
+      try {
+        _controller.add(_compute(a, b));
+      } catch (error, stackTrace) {
+        _controller.addError(error, stackTrace);
+      }
     }
   }
 
@@ -57,5 +58,34 @@ class _ComputedProperty<T> extends _ControllerProperty<T> {
       _subscriptionB.cancel();
       _subscriptionB = null;
     }
+  }
+}
+
+class _ComputedProperty<T, R> extends _ControllerProperty<R> {
+  Property<T> _property;
+  Function _compute;
+
+  StreamSubscription _subscription;
+
+  _ComputedProperty(this._property, this._compute);
+
+  void _recompute(T value) {
+    try {
+      _controller.add(_compute(value));
+    } catch (error, stackTrace) {
+      _controller.addError(error, stackTrace);
+    }
+  }
+
+  @override
+  void _startListening() {
+    _subscription = _property.listen((event) => _recompute(event),
+        onError: (error, stackTrace) => _controller.addError(error, stackTrace));
+  }
+
+  @override
+  void _stopListening() {
+    _subscription.cancel();
+    _subscription = null;
   }
 }

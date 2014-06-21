@@ -33,56 +33,62 @@ abstract class Property<T extends dynamic> implements Observable<T> {
 
   /// Combines this property and [other] with the `&&` operator.
   Property<bool> and(Property<bool> other) {
-    return new _ComputedProperty(this, other, (a, b) => a && b);
+    return new _CombinedProperty(this, other, (a, b) => a && b);
   }
 
   /// Combines this property and [other] with the `||` operator.
   Property<bool> or(Property<bool> other) {
-    return new _ComputedProperty(this, other, (a, b) => a || b);
+    return new _CombinedProperty(this, other, (a, b) => a || b);
   }
 
   /// Combines this property and [other] with the `==` operator.
   Property<bool> equals(Property other) {
-    return new _ComputedProperty(this, other, (a, b) => a == b);
+    return new _CombinedProperty(this, other, (a, b) => a == b);
   }
 
   /// Combines this property and [other] with the `>` operator.
   Property<bool> operator >(Property other) {
-    return new _ComputedProperty(this, other, (a, b) => a > b);
+    return new _CombinedProperty(this, other, (a, b) => a > b);
   }
 
   /// Combines this property and [other] with the `>=` operator.
   Property<bool> operator >=(Property other) {
-    return new _ComputedProperty(this, other, (a, b) => a >= b);
+    return new _CombinedProperty(this, other, (a, b) => a >= b);
   }
 
   /// Combines this property and [other] with the `<` operator.
   Property<bool> operator <(Property other) {
-    return new _ComputedProperty(this, other, (a, b) => a < b);
+    return new _CombinedProperty(this, other, (a, b) => a < b);
   }
 
   /// Combines this property and [other] with the `<=` operator.
   Property<bool> operator <=(Property other) {
-    return new _ComputedProperty(this, other, (a, b) => a <= b);
+    return new _CombinedProperty(this, other, (a, b) => a <= b);
   }
 
   /// Combines this property and [other] with the `+` operator.
   Property operator +(Property other) {
-    return new _ComputedProperty(this, other, (a, b) => a + b);
+    return new _CombinedProperty(this, other, (a, b) => a + b);
   }
 
   /// Combines this property and [other] with the `-` operator.
   Property operator -(Property other) {
-    return new _ComputedProperty(this, other, (a, b) => a - b);
+    return new _CombinedProperty(this, other, (a, b) => a - b);
   }
 
   /// Combines this property and [other] with the `*` operator.
   Property operator *(Property other) {
-    return new _ComputedProperty(this, other, (a, b) => a * b);
+    return new _CombinedProperty(this, other, (a, b) => a * b);
   }
 
   /// Combines this property and [other] with the `/` operator.
   Property operator /(Property other) {
-    return new _ComputedProperty(this, other, (a, b) => a / b);
+    return new _CombinedProperty(this, other, (a, b) => a / b);
+  }
+
+  /// Creates a new property that converts the each value of this property
+  /// using the [convert] function.
+  Property map(convert(T value)) {
+    return new _ComputedProperty(this, convert);
   }
 }
