@@ -2,6 +2,7 @@ library event_stream_test;
 
 import 'dart:async';
 import 'package:guinness/guinness.dart';
+import 'package:unittest/unittest.dart' show expectAsync;
 import 'package:relay/relay.dart';
 import 'callback_helpers.dart';
 
@@ -14,6 +15,30 @@ void main() => describe("EventStream", () {
     main = new StreamController();
     stream = new EventStream(main.stream);
     other = new StreamController();
+  });
+
+  describe("delay()", () {
+    it("delivers events from this stream after the specified duration", () {
+      var milliseconds = 100;
+
+      var result;
+      new Timer(new Duration(milliseconds: milliseconds ~/ 2), expectAsync(() => expect(result).toBeNull()));
+      listenToFirstEvent(stream.delay(new Duration(milliseconds: milliseconds)), (data) => result = data);
+
+      main.add(1);
+    });
+
+    it("does not delay error events", () {
+      var milliseconds = 100;
+
+      var error;
+      new Timer(new Duration(milliseconds: milliseconds ~/ 2), expectAsync(() => expect(error).toBeNotNull()));
+
+      var delayed = stream.delay(new Duration(milliseconds: milliseconds)).handleError((data) => error = data);
+      listenToFirstEvent(delayed, doNothing);
+
+      main..addError("error 1")..close();
+    });
   });
 
   describe("merge()", () {

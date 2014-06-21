@@ -11,6 +11,7 @@ part 'src/take_until_stream.dart';
 part 'src/skip_until_stream.dart';
 part 'src/throttle_stream.dart';
 part 'src/scan_stream.dart';
+part 'src/delay_stream.dart';
 
 part 'src/property.dart';
 part 'src/controller_property.dart';

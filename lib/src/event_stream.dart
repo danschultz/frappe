@@ -5,6 +5,11 @@ part of relay;
 class EventStream<T> extends StreamView<T> implements Observable<T> {
   EventStream(Stream<T> stream) : super(stream);
 
+  /// Delays the delivery of each non-error event from this stream by the given [duration].
+  EventStream<T> delay(Duration duration) {
+    return new EventStream<T>(new _DelayStream(this, duration));
+  }
+
   /// Returns a new stream that contains events from this stream and the [other] stream.
   EventStream merge(Stream other) => new EventStream(new _MergedStream([this, other]));
 
@@ -49,5 +54,16 @@ class EventStream<T> extends StreamView<T> implements Observable<T> {
   /// after that will be the values from this stream.
   Property<T> asPropertyWithInitialValue(T initialValue) {
     return new _StreamProperty.initialValue(this, initialValue);
+  }
+
+  //
+  // Wrappers for Dart Stream methods
+  //
+  EventStream<T> handleError(Function onError, {bool test(error)}) {
+    return new EventStream(super.handleError(onError, test: test));
+  }
+
+  EventStream map(convert(T event)) {
+    return new EventStream(super.map(convert));
   }
 }
