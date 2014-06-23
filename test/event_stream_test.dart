@@ -41,6 +41,59 @@ void main() => describe("EventStream", () {
     });
   });
 
+  describe("asyncMapLatest()", () {
+    Map<int, StreamController> controllers;
+
+    beforeEach(() {
+      controllers = {
+        1: new StreamController(),
+        2: new StreamController()
+      };
+
+      main..add(1);
+      main..add(2);
+    });
+
+    it("includes events from latest returned stream", () {
+      // Use a future to make sure that the controllers don't have values when the main
+      // events (1, 2) are added.
+      new Future(() {
+        controllers[1]..add("a")..close();
+        controllers[2]..add("b")..close();
+        main.close();
+      });
+
+      return stream.asyncExpandLatest((event) => controllers[event].stream)
+          .toList().then((values) => expect(values).toEqual(["b"]));
+    });
+
+    it("forwards events from the latest stream", () {
+      // Use a future to make sure that the controllers don't have values when the main
+      // events (1, 2) are added.
+      new Future(() {
+        controllers[1]..add("a")..close();
+        controllers[2]..addError("error B")..close();
+        main.close();
+      });
+
+      stream.asyncExpandLatest((event) => controllers[event].stream)
+          .listen(doNothing, onError: expectAsync((error) => expect(error).toBe("error B")), cancelOnError: true);
+    });
+
+    it("doesn't forward events from old stream", () {
+      // Use a future to make sure that the controllers don't have values when the main
+      // events (1, 2) are added.
+      new Future(() {
+        controllers[1]..addError("error A")..close();
+        controllers[2]..add("b")..close();
+        main.close();
+      });
+
+      return stream.asyncExpandLatest((event) => controllers[event].stream)
+          .toList().then((values) => expect(values).toEqual(["b"]));
+    });
+  });
+
   describe("merge()", () {
     it("contains events from both streams", () {
       main..add(1)..close();

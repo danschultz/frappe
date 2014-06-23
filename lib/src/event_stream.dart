@@ -10,6 +10,14 @@ class EventStream<T> extends StreamView<T> implements Observable<T> {
     return new EventStream<T>(new _DelayStream(this, duration));
   }
 
+  /// Returns a new stream that includes events and errors from only the latest stream
+  /// returned by [convert].
+  ///
+  /// This method can be thought of stream switching.
+  EventStream asyncExpandLatest(Stream convert(T event)) {
+    return new EventStream(new _AsyncExpandLatestStream(this, convert));
+  }
+
   /// Returns a new stream that contains events from this stream and the [other] stream.
   EventStream merge(Stream other) => new EventStream(new _MergedStream([this, other]));
 

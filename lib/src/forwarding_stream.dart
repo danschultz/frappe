@@ -1,7 +1,7 @@
 part of relay;
 
 abstract class _ForwardingStream<T> extends Stream<T> {
-  Stream<T> _stream;
+  Stream _stream;
 
   StreamController<T> _controller;
   StreamSubscription _subscription;
@@ -19,11 +19,11 @@ abstract class _ForwardingStream<T> extends Stream<T> {
     return _controller.stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
   }
 
-  void onData(EventSink<T> sink, T event) {
+  void onData(EventSink sink, T event) {
     sink.add(event);
   }
 
-  void onError(EventSink<T> sink, Object errorEvent, StackTrace stackTrace) {
+  void onError(EventSink sink, Object errorEvent, StackTrace stackTrace) {
     sink.addError(errorEvent, stackTrace);
   }
 
@@ -34,7 +34,13 @@ abstract class _ForwardingStream<T> extends Stream<T> {
 
   void _onListen() {
     _subscription = _stream.listen(
-        (event) => onData(_controller, event),
+        (event) {
+          try {
+            onData(_controller, event);
+          } catch (error, stackTrace) {
+            _controller.addError(error, stackTrace);
+          }
+        },
         onError: (error, stackTrace) => onError(_controller, error, stackTrace),
         onDone: _onDone);
   }

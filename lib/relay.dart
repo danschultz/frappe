@@ -1,7 +1,6 @@
 library relay;
 
 import 'dart:async';
-import 'dart:collection';
 
 part 'src/observable.dart';
 part 'src/event_stream.dart';
@@ -12,6 +11,7 @@ part 'src/skip_until_stream.dart';
 part 'src/throttle_stream.dart';
 part 'src/scan_stream.dart';
 part 'src/delay_stream.dart';
+part 'src/async_expand_latest_stream.dart';
 
 part 'src/property.dart';
 part 'src/controller_property.dart';
