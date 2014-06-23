@@ -1,6 +1,6 @@
 # Relay
 
-A slightly [Bacon.js](http://baconjs.github.io/) inspired Dart package that makes it easier to do functional reactive programming in Dart. Relay extends the behavior of Dart's streams, and introduces new concepts like dynamic values, called properties.
+A slightly [Bacon.js](http://baconjs.github.io/) inspired Dart package that makes it easier to do functional reactive programming in Dart. Relay extends the behavior of Dart's streams, and introduces new concepts like properties.
 
 ## EventStream
 `EventStream` subclasses Dart's `Stream` class so it has a familiar API and can be passed to functions that expect a `Stream`. This makes it easy to compose both Relay streams and Dart streams. 
