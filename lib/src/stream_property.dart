@@ -1,24 +1,24 @@
 part of relay;
 
 class _StreamProperty<T> extends _ControllerProperty<T> {
-  EventStream<T> _stream;
+  Stream<T> _stream;
   T _currentValue;
   bool _hasInitialValue;
 
   StreamController<T> _controller;
-  EventStream<T> get changes => _controller.stream;
+  EventStream<T> get changes => new EventStream(_controller.stream);
 
   StreamSubscription<T> _subscription;
 
-  _StreamProperty._(EventStream<T> stream, {T initialValue, bool hasInitialValue: false}) :
+  _StreamProperty._(Stream<T> stream, {T initialValue, bool hasInitialValue: false}) :
     _currentValue = initialValue,
     _hasInitialValue = hasInitialValue,
     _stream = stream.asBroadcastStream(),
     super();
 
-  factory _StreamProperty(EventStream<T> stream) => new _StreamProperty._(stream);
+  factory _StreamProperty(Stream<T> stream) => new _StreamProperty._(stream);
 
-  factory _StreamProperty.initialValue(EventStream<T> stream, T initialValue) =>
+  factory _StreamProperty.initialValue(Stream<T> stream, T initialValue) =>
     new _StreamProperty._(stream, initialValue: initialValue, hasInitialValue: true);
 
   @override
