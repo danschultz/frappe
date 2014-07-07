@@ -1,4 +1,4 @@
-part of relay;
+part of courier;
 
 class _DelayStream<T> extends _ForwardingStream<T> {
   Duration _delay;

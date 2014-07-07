@@ -1,4 +1,4 @@
-part of relay;
+part of courier;
 
 class _AsyncExpandLatestStream<T> extends _ForwardingStream {
   Function _convert;

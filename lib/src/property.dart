@@ -1,4 +1,4 @@
-part of relay;
+part of courier;
 
 /// A property is an observable with the concept of a current value.
 ///

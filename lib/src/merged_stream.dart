@@ -1,4 +1,4 @@
-part of relay;
+part of courier;
 
 class _MergedStream extends Stream {
   Iterable<Stream> _streams;

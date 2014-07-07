@@ -1,4 +1,4 @@
-library relay;
+library courier;
 
 import 'dart:async';
 import 'dart:collection';

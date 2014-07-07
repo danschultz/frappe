@@ -1,4 +1,4 @@
-library relay.hop_runner;
+library courier.hop_runner;
 
 import 'package:hop/hop.dart';
 import 'package:hop_unittest/hop_unittest.dart';

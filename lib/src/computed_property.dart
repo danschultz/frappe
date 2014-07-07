@@ -1,4 +1,4 @@
-part of relay;
+part of courier;
 
 class _CombinedProperty<T> extends _ControllerProperty<T> {
   Property<T> _a;

@@ -1,4 +1,4 @@
-part of relay;
+part of courier;
 
 class _StreamProperty<T> extends _ControllerProperty<T> {
   Stream<T> _stream;

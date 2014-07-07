@@ -1,4 +1,4 @@
-part of relay;
+part of courier;
 
 /// An [EventStream] is wrapper around a standard Dart [Stream], but provides utility
 /// methods for creating other streams or properties.

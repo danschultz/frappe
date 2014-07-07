@@ -1,4 +1,4 @@
-part of relay;
+part of courier;
 
 abstract class _ForwardingStream<T> extends Stream<T> {
   Stream _stream;

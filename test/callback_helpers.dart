@@ -1,7 +1,7 @@
 library callback_helpers;
 
 import 'dart:async';
-import 'package:relay/relay.dart';
+import 'package:courier/courier.dart';
 
 Function doNothing = (_) {};
 

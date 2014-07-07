@@ -1,4 +1,4 @@
-part of relay;
+part of courier;
 
 class _ScanStream<T> extends _ForwardingStream<T> {
   T _value;

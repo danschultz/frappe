@@ -1,4 +1,4 @@
-part of relay;
+part of courier;
 
 class _PauseWhenStream<T> extends _ForwardingStream<T> {
   Observable<bool> _toggleSwitch;

@@ -3,7 +3,7 @@ library event_stream_test;
 import 'dart:async';
 import 'package:guinness/guinness.dart';
 import 'package:unittest/unittest.dart' show expectAsync;
-import 'package:relay/relay.dart';
+import 'package:courier/courier.dart';
 import 'callback_helpers.dart';
 
 void main() => describe("EventStream", () {

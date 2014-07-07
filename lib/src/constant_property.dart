@@ -1,4 +1,4 @@
-part of relay;
+part of courier;
 
 class _ConstantProperty<T> extends Property<T> {
   T _currentValue;

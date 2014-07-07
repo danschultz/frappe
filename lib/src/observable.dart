@@ -1,4 +1,4 @@
-part of relay;
+part of courier;
 
 /// An [Observable] is a type that unifies the API between [EventStream]s
 /// and [Property]s.
