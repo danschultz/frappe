@@ -124,6 +124,41 @@ void main() => describe("EventStream", () {
     });
   });
 
+  describe("pauseWhen()", () {
+    StreamController toggleSwitchController;
+    Property toggleSwitch;
+
+    beforeEach(() {
+      toggleSwitchController = new StreamController();
+      toggleSwitch = new Property.fromStream(toggleSwitchController.stream);
+    });
+
+    it("pauses events when toggle switch is true", () {
+      toggleSwitchController.add(true);
+
+      new Future(() => main..add(1)..close());
+
+      return stream.pauseWhen(toggleSwitch).toList().then((values) {
+        expect(values.isEmpty).toBe(true);
+      });
+    });
+
+    it("flushes buffered events when toggle switch is false", () {
+      toggleSwitchController.add(true);
+
+      new Future(() {
+        main.add(1);
+        toggleSwitchController.add(false);
+
+        new Future(() => main.close());
+      });
+
+      return stream.pauseWhen(toggleSwitch).toList().then((values) {
+        expect(values).toEqual([1]);
+      });
+    });
+  });
+
   describe("takeUntil()", () {
     it("provides events until future completes", () {
       var takeStream = stream.takeUntil(other.stream.last);

@@ -21,6 +21,14 @@ class EventStream<T> extends StreamView<T> implements Observable<T> {
   /// Returns a new stream that contains events from this stream and the [other] stream.
   EventStream merge(Stream other) => new EventStream(new _MergedStream([this, other]));
 
+  /// Returns a new stream that is paused and events buffered when the last event in the
+  /// [toggleSwitch] is `true`.
+  ///
+  /// Buffered events are flushed when the [toggleSwitch] becomes `false`.
+  EventStream<T> pauseWhen(Observable<bool> toggleSwitch) {
+    return new EventStream(new _PauseWhenStream(this, toggleSwitch));
+  }
+
   /// Returns a [Property] where the first value is the [initalValue] and values after
   /// that are the result of [combine].
   ///
