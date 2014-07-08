@@ -1,5 +1,5 @@
 name: frappe
-version: 0.1.0+1
+version: 0.2.0
 description: An experimental reactive programming package for Dart.
 author: Dan Schultz <schultz.t.dan@gmail.com>
 homepage: http://www.github.com/danschultz/frappe
