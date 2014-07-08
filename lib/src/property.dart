@@ -8,7 +8,7 @@ part of courier;
 /// on how the property was created, some properties might not have an initial
 /// value to start with.
 // Extend dynamic to suppress warnings with operator overrides
-abstract class Property<T extends dynamic> implements Observable<T> {
+abstract class Property<T extends dynamic> implements Watchable<T> {
   /// An [EventStream] that contains the current values of the property.
   EventStream<T> get changes;
 
