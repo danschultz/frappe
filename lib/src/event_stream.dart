@@ -87,11 +87,60 @@ class EventStream<T> extends StreamView<T> implements Observable<T> {
   //
   // Wrappers for Dart Stream methods
   //
+  EventStream<T> asBroadcastStream({void onListen(StreamSubscription subscription),
+                                    void onCancel(StreamSubscription subscription)}) {
+    return new EventStream(super.asBroadcastStream(onListen: onListen, onCancel: onCancel));
+  }
+
+  EventStream asyncExpand(Stream convert(T event)) {
+    return new EventStream(super.asyncExpand(convert));
+  }
+
+  EventStream asyncMap(convert(T event)) {
+    return new EventStream(super.asyncMap(convert));
+  }
+
+  EventStream<T> distinct([bool equals(T previous, T next)]) {
+    return new EventStream(super.distinct(equals));
+  }
+
+  EventStream expand(Iterable convert(T value)) {
+    return new EventStream(super.expand(convert));
+  }
+
   EventStream<T> handleError(Function onError, {bool test(error)}) {
     return new EventStream(super.handleError(onError, test: test));
   }
 
   EventStream map(convert(T event)) {
     return new EventStream(super.map(convert));
+  }
+
+  EventStream<T> skip(int count) {
+    return new EventStream(super.skip(count));
+  }
+
+  EventStream<T> skipWhile(bool test(T element)) {
+    return new EventStream(super.skipWhile(test));
+  }
+
+  EventStream<T> take(int count) {
+    return new EventStream(super.take(count));
+  }
+
+  EventStream<T> takeWhile(bool test(T element)) {
+    return new EventStream(super.takeWhile(test));
+  }
+
+  EventStream timeout(Duration timeLimit, {void onTimeout(EventSink sink)}) {
+    return new EventStream(super.timeout(timeLimit, onTimeout: onTimeout));
+  }
+
+  EventStream transform(StreamTransformer<T, dynamic> streamTransformer) {
+    return new EventStream(super.transform(streamTransformer));
+  }
+
+  EventStream<T> where(bool test(T event)) {
+    return new EventStream(super.where(test));
   }
 }
