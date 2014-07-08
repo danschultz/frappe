@@ -1,4 +1,4 @@
-library courier.test_runner;
+library frappe.test_runner;
 
 import 'event_stream_test.dart' as EventStreamTest;
 import 'stream_property_test.dart' as StreamPropertyTest;

@@ -1,4 +1,4 @@
-part of courier;
+part of frappe;
 
 class _DelayStream<T> extends _ForwardingStream<T> {
   Duration _delay;

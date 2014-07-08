@@ -1,4 +1,4 @@
-part of courier;
+part of frappe;
 
 class _CombinedProperty<T> extends _ControllerProperty<T> {
   Property<T> _a;

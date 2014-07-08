@@ -1,4 +1,4 @@
-part of courier;
+part of frappe;
 
 /// A property is an observable with the concept of a current value.
 ///

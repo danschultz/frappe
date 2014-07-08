@@ -1,4 +1,4 @@
-part of courier;
+part of frappe;
 
 class _ConstantProperty<T> extends Property<T> {
   T _currentValue;

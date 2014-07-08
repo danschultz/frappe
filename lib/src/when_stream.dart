@@ -1,4 +1,4 @@
-part of courier;
+part of frappe;
 
 class _WhenStream<T> extends _ForwardingStream<T> {
   Property<bool> _toggle;

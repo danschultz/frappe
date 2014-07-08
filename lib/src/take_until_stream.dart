@@ -1,4 +1,4 @@
-part of courier;
+part of frappe;
 
 class _TakeUntilStream<T> extends _ForwardingStream<T> {
   _TakeUntilStream(Stream<T> stream, Future stop) : super(stream) {

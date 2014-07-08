@@ -1,4 +1,4 @@
-part of courier;
+part of frappe;
 
 /// An [Watchable] is a type that unifies the API between [EventStream]s
 /// and [Property]s.

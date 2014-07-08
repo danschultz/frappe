@@ -1,4 +1,4 @@
-library courier;
+library frappe;
 
 import 'dart:async';
 import 'dart:collection';

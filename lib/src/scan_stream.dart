@@ -1,4 +1,4 @@
-part of courier;
+part of frappe;
 
 class _ScanStream<T> extends _ForwardingStream<T> {
   T _value;

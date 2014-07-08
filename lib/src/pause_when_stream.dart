@@ -1,4 +1,4 @@
-part of courier;
+part of frappe;
 
 class _PauseWhenStream<T> extends _ForwardingStream<T> {
   Watchable<bool> _toggleSwitch;

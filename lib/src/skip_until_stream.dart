@@ -1,4 +1,4 @@
-part of courier;
+part of frappe;
 
 class _SkipUntilStream<T> extends _ForwardingStream<T> {
   Future _start;

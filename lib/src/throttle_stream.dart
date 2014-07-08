@@ -1,4 +1,4 @@
-part of courier;
+part of frappe;
 
 class _ThrottleStream<T> extends _ForwardingStream<T> {
   Duration _duration;

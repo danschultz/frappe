@@ -1,9 +1,9 @@
-# Courier
+# Frappé
 
-A slightly [Bacon.js](http://baconjs.github.io/) inspired Dart package that makes it easier to do functional reactive programming in Dart. Courier extends the behavior of Dart's streams, and introduces new concepts like properties.
+A slightly [Bacon.js](http://baconjs.github.io/) inspired Dart package that makes it easier to do functional reactive programming in Dart. Frappé extends the behavior of Dart's streams, and introduces new concepts like properties.
 
 ## EventStream
-`EventStream` subclasses Dart's `Stream` class so it has a familiar API and can be passed to functions that expect a `Stream`. This makes it easy to compose both Courier streams and Dart streams. 
+`EventStream` subclasses Dart's `Stream` class so it has a familiar API and can be passed to functions that expect a `Stream`. This makes it easy to compose both Frappé streams and Dart streams. 
 
 For instance, combining mouse down, mouse move and mouse up events for drawing:
 

@@ -1,4 +1,4 @@
-part of courier;
+part of frappe;
 
 class _MergedStream extends Stream {
   Iterable<Stream> _streams;

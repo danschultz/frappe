@@ -1,4 +1,4 @@
-part of courier;
+part of frappe;
 
 class _StreamProperty<T> extends _ControllerProperty<T> {
   Stream<T> _stream;

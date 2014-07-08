@@ -1,4 +1,4 @@
-part of courier;
+part of frappe;
 
 class _AsyncExpandLatestStream<T> extends _ForwardingStream {
   Function _convert;

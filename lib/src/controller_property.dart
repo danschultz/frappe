@@ -1,4 +1,4 @@
-part of courier;
+part of frappe;
 
 abstract class _ControllerProperty<T> extends Property<T> {
   StreamController<T> _controller;

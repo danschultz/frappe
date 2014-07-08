@@ -1,4 +1,4 @@
-part of courier;
+part of frappe;
 
 abstract class _ForwardingStream<T> extends Stream<T> {
   Stream _stream;
