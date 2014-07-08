@@ -5,7 +5,7 @@ A slightly [Bacon.js](http://baconjs.github.io/) inspired Dart package that aims
 ## EventStream
 An `EventStream` is just like a `Stream` in Dart. It inherits the same interface as a `Stream`, but extends its functionality. This makes it easy to compose both Frappé streams and Dart streams.
 
-For instance, combining mouse down, mouse move and mouse up events for drawing:
+For instance, by wrapping `window.onMouseMove` in an `EventStream`, we can combine multiple mouse events to perform a mouse drag operation in just a few lines of code:
 
 ```dart
 window.onMouseDown.forEach((mouseDown) {
@@ -19,10 +19,11 @@ window.onMouseDown.forEach((mouseDown) {
 Or, merging multiple streams together that will signal the close of your application:
 
 ```dart
-new EventStream(quitButton.onClick)
+var onQuit = new EventStream(quitButton.onClick)
     .merge(fileMenu.querySelector("quit").onClick)
-    .merge(fatalErrors)
-    .listen((_) => quitApp());
+    .merge(fatalErrors);
+    
+onQuit.listen((_) => closeApp());
 ```
 
 ## Properties
@@ -54,7 +55,7 @@ Property.fromStream(stream);
 Property.fromFuture(futureValue);
 ```
 
-Properties can also be combined, and their values will be recomputed whenever a dependency changes. For instance, `isFormValid` updates whenever a character is entered into the username or password fields:
+Properties can also be combined, and their values will be recomputed whenever a dependency changes. For instance, the property `isFormValid` will update whenever a character is entered into the username or password fields:
 
 ```dart
 bool isNotEmpty(String value) => value != null && value.isNotEmpty;
