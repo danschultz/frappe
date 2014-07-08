@@ -7,7 +7,7 @@ class EventStream<T> extends StreamView<T> implements Observable<T> {
 
   /// Delays the delivery of each non-error event from this stream by the given [duration].
   EventStream<T> delay(Duration duration) {
-    return new EventStream<T>(new _DelayStream(this, duration));
+    return _asEventStream(new _DelayStream(this, duration));
   }
 
   /// Returns a new stream that includes events and errors from only the latest stream
@@ -15,18 +15,20 @@ class EventStream<T> extends StreamView<T> implements Observable<T> {
   ///
   /// This method can be thought of stream switching.
   EventStream asyncExpandLatest(Stream convert(T event)) {
-    return new EventStream(new _AsyncExpandLatestStream(this, convert));
+    return _asEventStream(new _AsyncExpandLatestStream(this, convert));
   }
 
   /// Returns a new stream that contains events from this stream and the [other] stream.
-  EventStream merge(Stream other) => new EventStream(new _MergedStream([this, other]));
+  EventStream merge(Stream other) {
+    return _asEventStream(new _MergedStream([this, other]));
+  }
 
   /// Returns a new stream that is paused and events buffered when the last event in the
   /// [toggleSwitch] is `true`.
   ///
   /// Buffered events are flushed when the [toggleSwitch] becomes `false`.
   EventStream<T> pauseWhen(Observable<bool> toggleSwitch) {
-    return new EventStream(new _PauseWhenStream(this, toggleSwitch));
+    return _asEventStream(new _PauseWhenStream(this, toggleSwitch));
   }
 
   /// Returns a [Property] where the first value is the [initalValue] and values after
@@ -43,13 +45,13 @@ class EventStream<T> extends StreamView<T> implements Observable<T> {
   /// Returns a new stream that will begin forwarding events from this stream when the
   /// [future] completes.
   EventStream<T> skipUntil(Future future) {
-    return new EventStream<T>(new _SkipUntilStream(this, future));
+    return _asEventStream(new _SkipUntilStream(this, future));
   }
 
   /// Returns a new stream that contains events from this stream until the [future]
   /// completes.
   EventStream<T> takeUntil(Future future) {
-    return new EventStream<T>(new _TakeUntilStream(this, future));
+    return _asEventStream(new _TakeUntilStream(this, future));
   }
 
   /// Returns a new stream that upon forwarding an event from this stream, will ignore
@@ -58,7 +60,7 @@ class EventStream<T> extends StreamView<T> implements Observable<T> {
   ///
   /// The returned stream will not throttle errors.
   EventStream<T> throttle(Duration duration) {
-    return new EventStream<T>(new _ThrottleStream(this, duration));
+    return _asEventStream(new _ThrottleStream(this, duration));
   }
 
   /// Returns a [Property] where the first value will be the next value from this stream.
@@ -70,6 +72,16 @@ class EventStream<T> extends StreamView<T> implements Observable<T> {
   /// after that will be the values from this stream.
   Property<T> asPropertyWithInitialValue(T initialValue) {
     return new _StreamProperty.initialValue(this, initialValue);
+  }
+
+  /// Returns a wrapped broadcast or single-subscription version of [stream] based on
+  /// [isBroadcast].
+  ///
+  /// All methods defined on this class that return an [EventStream] should use this
+  /// method when returning their stream. It guarentees that the returned stream will be
+  /// the same type of stream as this stream (either broadcast or single-subscription).
+  EventStream _asEventStream(Stream stream) {
+    return new EventStream(isBroadcast ? stream.asBroadcastStream() : stream);
   }
 
   //
