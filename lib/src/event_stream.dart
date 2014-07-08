@@ -63,6 +63,14 @@ class EventStream<T> extends StreamView<T> implements Observable<T> {
     return _asEventStream(new _ThrottleStream(this, duration));
   }
 
+  /// Returns a new stream that forwards events when the last value for [toggle] is
+  /// `true`.
+  ///
+  /// Errors will always be forwarded regardless of the value of [toggle].
+  EventStream<T> when(Observable<bool> toggle) {
+    return _asEventStream(new _WhenStream(this, toggle));
+  }
+
   /// Returns a [Property] where the first value will be the next value from this stream.
   Property<T> asProperty() {
     return new _StreamProperty(this);

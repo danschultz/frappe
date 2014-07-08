@@ -247,4 +247,34 @@ void main() => describe("EventStream", () {
       });
     });
   });
+
+  describe("when()", () {
+    StreamController toggleController;
+    Property toggle;
+
+    beforeEach(() {
+      toggleController = new StreamController();
+      toggle = new Property.fromStream(toggleController.stream);
+    });
+
+    it("includes events when toggle is true", () {
+      toggleController.add(true);
+
+      new Future(() => main..add(1)..close());
+
+      return stream.when(toggle).toList().then((values) {
+        expect(values).toEqual([1]);
+      });
+    });
+
+    it("excludes events when toggle is false", () {
+      toggleController..add(true)..add(false);
+
+      new Future(() => main..add(1)..close());
+
+      return stream.when(toggle).toList().then((values) {
+        expect(values.isEmpty).toBe(true);
+      });
+    });
+  });
 });
