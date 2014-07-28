@@ -3,7 +3,7 @@ library frappe;
 import 'dart:async';
 import 'dart:collection';
 
-part 'src/watchable.dart';
+part 'src/reactable.dart';
 part 'src/event_stream.dart';
 part 'src/forwarding_stream.dart';
 part 'src/merged_stream.dart';

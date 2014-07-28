@@ -1,13 +1,13 @@
 part of frappe;
 
 class _PauseWhenStream<T> extends _ForwardingStream<T> {
-  Watchable<bool> _toggleSwitch;
+  Reactable<bool> _toggleSwitch;
   StreamSubscription<bool> _toggleSwitchSubscription;
 
   bool _isBuffering = false;
   Queue<T> _buffer = new Queue();
 
-  _PauseWhenStream(Stream<T> stream, Watchable<bool> toggleSwitch) :
+  _PauseWhenStream(Stream<T> stream, Reactable<bool> toggleSwitch) :
     _toggleSwitch = toggleSwitch,
     super(stream);
 

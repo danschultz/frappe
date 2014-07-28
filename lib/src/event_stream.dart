@@ -2,7 +2,7 @@ part of frappe;
 
 /// An [EventStream] is wrapper around a standard Dart [Stream], but provides utility
 /// methods for creating other streams or properties.
-class EventStream<T> extends StreamView<T> implements Watchable<T> {
+class EventStream<T> extends StreamView<T> implements Reactable<T> {
   EventStream(Stream<T> stream) : super(stream);
 
   /// Delays the delivery of each non-error event from this stream by the given [duration].
@@ -27,7 +27,7 @@ class EventStream<T> extends StreamView<T> implements Watchable<T> {
   /// [toggleSwitch] is `true`.
   ///
   /// Buffered events are flushed when the [toggleSwitch] becomes `false`.
-  EventStream<T> pauseWhen(Watchable<bool> toggleSwitch) {
+  EventStream<T> pauseWhen(Reactable<bool> toggleSwitch) {
     return _asEventStream(new _PauseWhenStream(this, toggleSwitch));
   }
 
@@ -67,7 +67,7 @@ class EventStream<T> extends StreamView<T> implements Watchable<T> {
   /// `true`.
   ///
   /// Errors will always be forwarded regardless of the value of [toggle].
-  EventStream<T> when(Watchable<bool> toggle) {
+  EventStream<T> when(Reactable<bool> toggle) {
     return _asEventStream(new _WhenStream(this, toggle));
   }
 
