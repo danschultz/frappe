@@ -9,7 +9,7 @@ class _BufferWhenStream<T> extends _ForwardingStream<T> {
 
   _BufferWhenStream(Stream<T> stream, Reactable<bool> toggleSwitch) :
     _toggleSwitch = toggleSwitch,
-    super(stream);
+    super(new EventStream(stream));
 
   @override
   void onData(EventSink sink, T event) {

@@ -9,7 +9,9 @@ part of frappe;
 /// value to start with.
 // Extend dynamic to suppress warnings with operator overrides
 abstract class Property<T extends dynamic> implements Reactable<T> {
-  /// An [EventStream] that contains the current values of the property.
+  /// An [EventStream] that contains the changes of the property.
+  ///
+  /// The stream will *not* contain an event for the current value of the `Property`.
   EventStream<T> get changes;
 
   Property._();
@@ -30,6 +32,12 @@ abstract class Property<T extends dynamic> implements Reactable<T> {
   /// the [future].
   factory Property.fromFuture(Future<T> future) =>
       new Property.fromStream(new Stream.fromFuture(future));
+
+  /// Returns a stream that contains events for the current value of this `Property`,
+  /// as well as any of its changes.
+  EventStream<T> asStream() {
+    return new EventStream(new _ForwardingStream(this));
+  }
 
   /// Combines this property and [other] with the `&&` operator.
   Property<bool> and(Property<bool> other) {

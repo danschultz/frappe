@@ -5,9 +5,6 @@ class _StreamProperty<T> extends _ControllerProperty<T> {
   T _currentValue;
   bool _hasInitialValue;
 
-  StreamController<T> _controller;
-  EventStream<T> get changes => new EventStream(_controller.stream);
-
   StreamSubscription<T> _subscription;
 
   _StreamProperty._(Stream<T> stream, {T initialValue, bool hasInitialValue: false}) :
@@ -43,6 +40,7 @@ class _StreamProperty<T> extends _ControllerProperty<T> {
   void _startListening() {
     _subscription = _stream.listen(
         (event) => _handleValue(event),
+        onDone: () => _controller.close(),
         onError: (error, stackTrace) => _controller.addError(error, stackTrace));
   }
 

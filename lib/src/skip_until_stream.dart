@@ -4,7 +4,7 @@ class _SkipUntilStream<T> extends _ForwardingStream<T> {
   Future _start;
   bool _shouldForward = false;
 
-  _SkipUntilStream(Stream<T> stream, this._start) : super(stream) {
+  _SkipUntilStream(Stream<T> stream, this._start) : super(new EventStream(stream)) {
     _start.then((_) => _shouldForward = true);
   }
 

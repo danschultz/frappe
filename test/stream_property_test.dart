@@ -10,12 +10,28 @@ void main() => describe("StreamProperty", () {
   StreamController controller;
   Property property;
 
-  beforeEach(() {
-    controller = new StreamController();
+  beforeEach(() => controller = new StreamController());
+
+  describe("asStream()", () {
+    beforeEach(() => property = new Property.fromStreamWithInitialValue(1, controller.stream));
+
+    it("contains the current value", () {
+      return property.asStream().first.then((value) => expect(value).toBe(1));
+    });
+
+    it("contains property changes", () {
+      controller..add(2)..close();
+      return property.asStream().last.then((value) => expect(value).toBe(2));
+    });
   });
 
   describe("listen()", () {
     beforeEach(() => property = new Property.fromStream(controller.stream));
+
+    it("is done when stream is closed", () {
+      new Future(() => controller.close());
+      return property.listen(null).asFuture();
+    });
 
     describe("with initial value", () {
       beforeEach(() => property = new Property.fromStreamWithInitialValue(1, controller.stream));

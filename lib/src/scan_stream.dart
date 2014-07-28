@@ -7,7 +7,7 @@ class _ScanStream<T> extends _ForwardingStream<T> {
   _ScanStream(Stream<T> stream, T initialValue, T combine(T value, T element)) :
     _value = initialValue,
     _combine = combine,
-    super(stream);
+    super(new EventStream(stream));
 
   void onData(EventSink<T> sink, T event) {
     _value = _combine(_value, event);

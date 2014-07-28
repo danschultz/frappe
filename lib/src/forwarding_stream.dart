@@ -1,7 +1,7 @@
 part of frappe;
 
-abstract class _ForwardingStream<T> extends Stream<T> {
-  Stream _stream;
+class _ForwardingStream<T> extends Stream<T> {
+  Reactable _stream;
 
   StreamController<T> _controller;
   StreamSubscription _subscription;
