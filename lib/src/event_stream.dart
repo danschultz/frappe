@@ -23,12 +23,11 @@ class EventStream<T> extends StreamView<T> implements Reactable<T> {
     return _asEventStream(new _MergedStream([this, other]));
   }
 
-  /// Returns a new stream that is paused and events buffered when the last event in the
-  /// [toggleSwitch] is `true`.
+  /// Returns a new stream that buffers events when the last event in [toggle] is `true`.
   ///
-  /// Buffered events are flushed when the [toggleSwitch] becomes `false`.
-  EventStream<T> pauseWhen(Reactable<bool> toggleSwitch) {
-    return _asEventStream(new _PauseWhenStream(this, toggleSwitch));
+  /// Buffered events are delivered when [toggle] becomes `false`.
+  EventStream<T> bufferWhen(Reactable<bool> toggle) {
+    return _asEventStream(new _BufferWhenStream(this, toggle));
   }
 
   /// Returns a [Property] where the first value is the [initalValue] and values after

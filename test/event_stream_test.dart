@@ -138,7 +138,7 @@ void main() => describe("EventStream", () {
 
       new Future(() => main..add(1)..close());
 
-      return stream.pauseWhen(toggleSwitch).toList().then((values) {
+      return stream.bufferWhen(toggleSwitch).toList().then((values) {
         expect(values.isEmpty).toBe(true);
       });
     });
@@ -153,7 +153,7 @@ void main() => describe("EventStream", () {
         new Future(() => main.close());
       });
 
-      return stream.pauseWhen(toggleSwitch).toList().then((values) {
+      return stream.bufferWhen(toggleSwitch).toList().then((values) {
         expect(values).toEqual([1]);
       });
     });

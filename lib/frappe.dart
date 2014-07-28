@@ -13,7 +13,7 @@ part 'src/throttle_stream.dart';
 part 'src/scan_stream.dart';
 part 'src/delay_stream.dart';
 part 'src/async_expand_latest_stream.dart';
-part 'src/pause_when_stream.dart';
+part 'src/buffer_when_stream.dart';
 part 'src/when_stream.dart';
 
 part 'src/property.dart';
