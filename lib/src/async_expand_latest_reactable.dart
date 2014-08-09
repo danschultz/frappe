@@ -1,13 +1,13 @@
 part of frappe;
 
-class _AsyncExpandLatestStream<T> extends _ForwardingStream {
+class _AsyncExpandLatestReactable<T> extends _ForwardingReactable {
   Function _convert;
 
   StreamSubscription _latestSubscription;
 
-  _AsyncExpandLatestStream(EventStream<T> stream, Stream convert(T event)) :
+  _AsyncExpandLatestReactable(Reactable<T> reactable, Stream convert(T event)) :
     _convert = convert,
-    super(stream);
+    super(reactable);
 
   @override
   void onData(EventSink sink, T event) {

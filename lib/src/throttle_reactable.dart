@@ -1,10 +1,10 @@
 part of frappe;
 
-class _ThrottleStream<T> extends _ForwardingStream<T> {
+class _ThrottleReactable<T> extends _ForwardingReactable<T> {
   Duration _duration;
   Timer _throttler;
 
-  _ThrottleStream(Stream<T> stream, this._duration) : super(new EventStream(stream));
+  _ThrottleReactable(Reactable<T> reactable, this._duration) : super(reactable);
 
   @override
   void onData(EventSink<T> sink, T event) {

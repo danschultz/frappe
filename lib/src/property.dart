@@ -36,7 +36,7 @@ abstract class Property<T extends dynamic> implements Reactable<T> {
   /// Returns a stream that contains events for the current value of this `Property`,
   /// as well as any of its changes.
   EventStream<T> asStream() {
-    return new EventStream(new _ForwardingStream(this));
+    return new EventStream(new _ForwardingReactable(this));
   }
 
   /// Combines this property and [other] with the `&&` operator.

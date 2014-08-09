@@ -2,20 +2,17 @@ part of frappe;
 
 /// An [EventStream] is wrapper around a standard Dart [Stream], but provides utility
 /// methods for creating other streams or properties.
-class EventStream<T> extends StreamView<T> implements Reactable<T> {
-  EventStream(Stream<T> stream) : super(stream);
+class EventStream<T> extends Reactable<T> implements Stream<T> {
+  Stream<T> _stream;
 
-  /// Delays the delivery of each non-error event from this stream by the given [duration].
-  EventStream<T> delay(Duration duration) {
-    return _asEventStream(new _DelayStream(this, duration));
-  }
+  bool get isBroadcast => _stream.isBroadcast;
 
-  /// Returns a new stream that includes events and errors from only the latest stream
-  /// returned by [convert].
-  ///
-  /// This method can be thought of stream switching.
-  EventStream asyncExpandLatest(Stream convert(T event)) {
-    return _asEventStream(new _AsyncExpandLatestStream(this, convert));
+  /// Returns a new [EventStream] that wraps a standard Dart [Stream].
+  EventStream(Stream<T> stream) :
+    _stream = stream;
+
+  StreamSubscription<T> listen(void onData(T event), {Function onError, void onDone(), bool cancelOnError}) {
+    return _stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
   }
 
   /// Returns a new stream that contains events from this stream and the [other] stream.
@@ -30,37 +27,9 @@ class EventStream<T> extends StreamView<T> implements Reactable<T> {
     return _asEventStream(new _BufferWhenStream(this, toggle));
   }
 
-  /// Returns a [Property] where the first value is the [initalValue] and values after
-  /// that are the result of [combine].
-  ///
-  /// [combine] is an accumulator function where its first argument is either the initial
-  /// value or the result of the last combine, and the second argument is the next value
-  /// in this stream.
-  Property<T> scan(T initialValue, T combine(T value, T element)) {
-    return new EventStream<T>(new _ScanStream(this, initialValue, combine))
-        .asPropertyWithInitialValue(initialValue);
-  }
-
   /// Returns a new stream that will begin forwarding events from this stream when the
   /// [future] completes.
-  EventStream<T> skipUntil(Future future) {
-    return _asEventStream(new _SkipUntilStream(this, future));
-  }
-
-  /// Returns a new stream that contains events from this stream until the [future]
-  /// completes.
-  EventStream<T> takeUntil(Future future) {
-    return _asEventStream(new _TakeUntilStream(this, future));
-  }
-
-  /// Returns a new stream that upon forwarding an event from this stream, will ignore
-  /// any subsequent events until [duration], after which the last event will be
-  /// forwarded.
-  ///
-  /// The returned stream will not throttle errors.
-  EventStream<T> throttle(Duration duration) {
-    return _asEventStream(new _ThrottleStream(this, duration));
-  }
+  Reactable<T> skipUntil(Future future) => _asEventStream(new _SkipUntilStream(this, future));
 
   /// Returns a new stream that forwards events when the last value for [toggle] is
   /// `true`.
@@ -85,7 +54,7 @@ class EventStream<T> extends StreamView<T> implements Reactable<T> {
   /// [isBroadcast].
   ///
   /// All methods defined on this class that return an [EventStream] should use this
-  /// method when returning their stream. It guarentees that the returned stream will be
+  /// method when returning their stream. It guarantees that the returned stream will be
   /// the same type of stream as this stream (either broadcast or single-subscription).
   EventStream _asEventStream(Stream stream) {
     return new EventStream(isBroadcast ? stream.asBroadcastStream() : stream);

@@ -8,7 +8,7 @@ class _WhenStream<T> extends _ForwardingStream<T> {
 
   _WhenStream(Stream<T> stream, Property<bool> toggle) :
     _toggle = toggle,
-    super(new EventStream(stream));
+    super(stream);
 
   @override
   void onData(EventSink sink, T event) {
