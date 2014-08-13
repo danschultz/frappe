@@ -1,15 +1,15 @@
 part of frappe;
 
-class _BufferWhenStream<T> extends _ForwardingStream<T> {
+class _BufferWhenReactable<T> extends _ForwardingReactable<T> {
   Reactable<bool> _toggleSwitch;
   StreamSubscription<bool> _toggleSwitchSubscription;
 
   bool _isBuffering = false;
   Queue<T> _buffer = new Queue();
 
-  _BufferWhenStream(Stream<T> stream, Reactable<bool> toggleSwitch) :
+  _BufferWhenReactable(Reactable<T> reactable, Reactable<bool> toggleSwitch) :
     _toggleSwitch = toggleSwitch,
-    super(stream);
+    super(reactable);
 
   @override
   void onData(EventSink sink, T event) {

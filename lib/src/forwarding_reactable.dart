@@ -29,7 +29,10 @@ class _ForwardingReactable<T> extends Reactable<T> {
 
   void close() {
     _controller.close();
-    _subscription.cancel();
+
+    if (_subscription != null) {
+      _subscription.cancel();
+    }
   }
 
   void _onListen() {

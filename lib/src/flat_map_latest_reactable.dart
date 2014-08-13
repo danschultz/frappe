@@ -1,11 +1,11 @@
 part of frappe;
 
-class _AsyncExpandLatestReactable<T> extends _ForwardingReactable {
+class _FlatMapLatestReactable<T> extends _ForwardingReactable<T> {
   Function _convert;
 
   StreamSubscription _latestSubscription;
 
-  _AsyncExpandLatestReactable(Reactable<T> reactable, Stream convert(T event)) :
+  _FlatMapLatestReactable(Reactable<T> reactable, Stream convert(T event)) :
     _convert = convert,
     super(reactable);
 

@@ -1,14 +1,14 @@
 part of frappe;
 
-class _WhenStream<T> extends _ForwardingStream<T> {
+class _WhenReactable<T> extends _ForwardingReactable<T> {
   Property<bool> _toggle;
   StreamSubscription<bool> _toggleSubscription;
 
   bool _isForwarding = false;
 
-  _WhenStream(Stream<T> stream, Property<bool> toggle) :
+  _WhenReactable(Reactable<T> reactable, Property<bool> toggle) :
     _toggle = toggle,
-    super(stream);
+    super(reactable);
 
   @override
   void onData(EventSink sink, T event) {

@@ -1,10 +1,10 @@
 part of frappe;
 
-class _SkipUntilStream<T> extends _ForwardingStream<T> {
+class _SkipUntilReactable<T> extends _ForwardingReactable<T> {
   Future _start;
   bool _shouldForward = false;
 
-  _SkipUntilStream(Stream<T> stream, this._start) : super(stream) {
+  _SkipUntilReactable(Reactable<T> reactable, this._start) : super(reactable) {
     _start.then((_) => _shouldForward = true);
   }
 

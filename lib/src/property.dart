@@ -8,7 +8,7 @@ part of frappe;
 /// on how the property was created, some properties might not have an initial
 /// value to start with.
 // Extend dynamic to suppress warnings with operator overrides
-abstract class Property<T extends dynamic> implements Reactable<T> {
+abstract class Property<T extends dynamic> extends Reactable<T> {
   /// An [EventStream] that contains the changes of the property.
   ///
   /// The stream will *not* contain an event for the current value of the `Property`.
@@ -33,6 +33,17 @@ abstract class Property<T extends dynamic> implements Reactable<T> {
   factory Property.fromFuture(Future<T> future) =>
       new Property.fromStream(new Stream.fromFuture(future));
 
+  @override
+  Property<T> asProperty() {
+    return this;
+  }
+
+  @override
+  Property<T> asPropertyWithInitialValue(T initialValue) {
+    return new Property.fromStreamWithInitialValue(initialValue, changes);
+  }
+
+  @override
   /// Returns a stream that contains events for the current value of this `Property`,
   /// as well as any of its changes.
   EventStream<T> asStream() {

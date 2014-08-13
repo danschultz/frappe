@@ -5,8 +5,11 @@ import 'package:guinness/guinness.dart';
 import 'package:unittest/unittest.dart' show expectAsync;
 import 'package:frappe/frappe.dart';
 import 'callback_helpers.dart';
+import 'reactable_shared_tests.dart';
 
 void main() => describe("EventStream", () {
+  injectReactableTests((controller) => new EventStream(controller.stream));
+
   StreamController main;
   StreamController other;
   EventStream stream;
@@ -41,59 +44,6 @@ void main() => describe("EventStream", () {
     });
   });
 
-  describe("asyncMapLatest()", () {
-    Map<int, StreamController> controllers;
-
-    beforeEach(() {
-      controllers = {
-        1: new StreamController(),
-        2: new StreamController()
-      };
-
-      main..add(1);
-      main..add(2);
-    });
-
-    it("includes events from latest returned stream", () {
-      // Use a future to make sure that the controllers don't have values when the main
-      // events (1, 2) are added.
-      new Future(() {
-        controllers[1]..add("a")..close();
-        controllers[2]..add("b")..close();
-        main.close();
-      });
-
-      return stream.asyncExpandLatest((event) => controllers[event].stream)
-          .toList().then((values) => expect(values).toEqual(["b"]));
-    });
-
-    it("forwards events from the latest stream", () {
-      // Use a future to make sure that the controllers don't have values when the main
-      // events (1, 2) are added.
-      new Future(() {
-        controllers[1]..add("a")..close();
-        controllers[2]..addError("error B")..close();
-        main.close();
-      });
-
-      stream.asyncExpandLatest((event) => controllers[event].stream)
-          .listen(doNothing, onError: expectAsync((error) => expect(error).toBe("error B")), cancelOnError: true);
-    });
-
-    it("doesn't forward events from old stream", () {
-      // Use a future to make sure that the controllers don't have values when the main
-      // events (1, 2) are added.
-      new Future(() {
-        controllers[1]..addError("error A")..close();
-        controllers[2]..add("b")..close();
-        main.close();
-      });
-
-      return stream.asyncExpandLatest((event) => controllers[event].stream)
-          .toList().then((values) => expect(values).toEqual(["b"]));
-    });
-  });
-
   describe("merge()", () {
     it("contains events from both streams", () {
       main..add(1)..close();
@@ -124,7 +74,7 @@ void main() => describe("EventStream", () {
     });
   });
 
-  describe("pauseWhen()", () {
+  describe("bufferWhen()", () {
     StreamController toggleSwitchController;
     Property toggleSwitch;
 
@@ -159,35 +109,6 @@ void main() => describe("EventStream", () {
     });
   });
 
-  describe("takeUntil()", () {
-    it("provides events until future completes", () {
-      var takeStream = stream.takeUntil(other.stream.last);
-
-      main.add(1);
-      other..add(2)..close();
-      main.add(3);
-
-      return takeStream.toList().then((values) => expect(values).toEqual([1]));
-    });
-
-    it("provides errors until future completes", () {
-      var errors = [];
-      var takeStream = stream.takeUntil(other.stream.last).handleError((error) => errors.add(error));
-
-      main.addError(1);
-      other..add(2)..close();
-      main.addError(3);
-
-      return takeStream.isEmpty.then((_) => expect(errors).toEqual([1]));
-    });
-
-    it("closes when source stream is closed", () {
-      var takeStream = stream.takeUntil(other.stream.last);
-      main.close();
-      return takeStream.isEmpty.then((isEmpty) => expect(isEmpty).toBe(true));
-    });
-  });
-
   describe("skipUntil()", () {
     it("provides events after future completes", () {
       var skipStream = stream.skipUntil(other.stream.last);
@@ -214,67 +135,6 @@ void main() => describe("EventStream", () {
       var skipStream = stream.skipUntil(other.stream.last);
       main.close();
       return skipStream.isEmpty.then((isEmpty) => expect(isEmpty).toBe(true));
-    });
-  });
-
-  describe("throttle()", () {
-    it("provides the last event after duration passes", () {
-      main..add(1)
-          ..add(2)
-          ..add(3);
-
-      new Timer(new Duration(milliseconds: 50), () => main.close());
-
-      return stream.throttle(new Duration(milliseconds: 25)).toList().then((values) => expect(values).toEqual([1, 3]));
-    });
-
-    it("does not throttle errors", () {
-      var errors = [];
-      var throttledStream = stream.throttle(new Duration(milliseconds: 25)).handleError((error) => errors.add(error));
-
-      main..add(1)
-          ..add(2)
-          ..add(3)
-          ..addError("error 1")
-          ..addError("error 2")
-          ..addError("error 3");
-
-      new Timer(new Duration(milliseconds: 50), () => main.close());
-
-      return throttledStream.toList().then((values) {
-        expect(values).toEqual([1, 3]);
-        expect(errors).toEqual(["error 1", "error 2", "error 3"]);
-      });
-    });
-  });
-
-  describe("when()", () {
-    StreamController toggleController;
-    Property toggle;
-
-    beforeEach(() {
-      toggleController = new StreamController();
-      toggle = new Property.fromStream(toggleController.stream);
-    });
-
-    it("includes events when toggle is true", () {
-      toggleController.add(true);
-
-      new Future(() => main..add(1)..close());
-
-      return stream.when(toggle).toList().then((values) {
-        expect(values).toEqual([1]);
-      });
-    });
-
-    it("excludes events when toggle is false", () {
-      toggleController..add(true)..add(false);
-
-      new Future(() => main..add(1)..close());
-
-      return stream.when(toggle).toList().then((values) {
-        expect(values.isEmpty).toBe(true);
-      });
     });
   });
 });

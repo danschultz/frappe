@@ -2,18 +2,9 @@ part of frappe;
 
 /// An [EventStream] is wrapper around a standard Dart [Stream], but provides utility
 /// methods for creating other streams or properties.
-class EventStream<T> extends Reactable<T> implements Stream<T> {
-  Stream<T> _stream;
-
-  bool get isBroadcast => _stream.isBroadcast;
-
+class EventStream<T> extends StreamView<T> with Reactable<T> {
   /// Returns a new [EventStream] that wraps a standard Dart [Stream].
-  EventStream(Stream<T> stream) :
-    _stream = stream;
-
-  StreamSubscription<T> listen(void onData(T event), {Function onError, void onDone(), bool cancelOnError}) {
-    return _stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
-  }
+  EventStream(Stream<T> stream) : super(stream);
 
   /// Returns a new stream that contains events from this stream and the [other] stream.
   EventStream merge(Stream other) {
@@ -24,19 +15,15 @@ class EventStream<T> extends Reactable<T> implements Stream<T> {
   ///
   /// Buffered events are delivered when [toggle] becomes `false`.
   EventStream<T> bufferWhen(Reactable<bool> toggle) {
-    return _asEventStream(new _BufferWhenStream(this, toggle));
+    return _asEventStream(new _BufferWhenReactable(this, toggle).asStream());
   }
 
   /// Returns a new stream that will begin forwarding events from this stream when the
   /// [future] completes.
-  Reactable<T> skipUntil(Future future) => _asEventStream(new _SkipUntilStream(this, future));
+  EventStream<T> skipUntil(Future future) => _asEventStream(new _SkipUntilReactable(this, future).asStream());
 
-  /// Returns a new stream that forwards events when the last value for [toggle] is
-  /// `true`.
-  ///
-  /// Errors will always be forwarded regardless of the value of [toggle].
-  EventStream<T> when(Reactable<bool> toggle) {
-    return _asEventStream(new _WhenStream(this, toggle));
+  EventStream<T> asStream() {
+    return this;
   }
 
   /// Returns a [Property] where the first value will be the next value from this stream.

@@ -5,8 +5,11 @@ import 'package:guinness/guinness.dart';
 import 'package:unittest/unittest.dart' show expectAsync;
 import 'package:frappe/frappe.dart';
 import 'callback_helpers.dart';
+import 'reactable_shared_tests.dart';
 
 void main() => describe("StreamProperty", () {
+  injectReactableTests((controller) => new Property.fromStream(controller.stream));
+
   StreamController controller;
   Property property;
 
