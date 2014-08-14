@@ -16,7 +16,9 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
       reactable = provider(controller);
     });
 
-    afterEach(() => controller.close());
+    afterEach(() {
+      controller.close();
+    });
 
     describe("first", () {
       it("completes with the first event", () {
@@ -81,6 +83,31 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
 
         return reactable.flatMapLatest((event) => controllers[event].stream)
             .toList().then((values) => expect(values).toEqual(["b"]));
+      });
+    });
+
+    describe("isWaitingOn()", () {
+      Reactable other;
+      StreamController otherController;
+
+      beforeEach(() {
+        otherController = new StreamController();
+        other = new EventStream(otherController.stream);
+      });
+
+      afterEach(() {
+        return otherController.close();
+      });
+
+      it("is true before other delivers an event", () {
+        var result = reactable.isWaitingOn(other);
+        return result.first.then((value) => expect(value).toBe(true));
+      });
+
+      it("is false once other delivers an event", () {
+        var result = reactable.isWaitingOn(other);
+        new Future(() => otherController.add(1));
+        return result.last.then((value) => expect(value).toBe(false));
       });
     });
 

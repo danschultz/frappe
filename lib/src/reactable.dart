@@ -108,6 +108,19 @@ abstract class Reactable<T> {
 
   Future forEach(void action(T element)) => new _ReactableAsStream(this).forEach(action);
 
+  /// Returns a property that indicates if this reactable is waiting for an event [other].
+  ///
+  /// The initial value for the returned property is `true`, and returns `false` once
+  /// [other] delivers an event.
+  ///
+  /// This method is useful for displaying spinners while waiting for AJAX responses.
+  Property<bool> isWaitingOn(Reactable other) {
+    return new Property
+        .constant(true).asStream()
+        .merge(new Property.fromFuture(other.first.then((_) => false)))
+        .asProperty();
+  }
+
   Reactable<T> handleError(onError, {bool test(error)}) => new EventStream(
       new _ReactableAsStream(this).handleError(onError, test: test));
 

@@ -52,7 +52,7 @@ abstract class Property<T extends dynamic> extends Reactable<T> {
   /// Returns a stream that contains events for the current value of this `Property`,
   /// as well as any of its changes.
   EventStream<T> asStream() {
-    return new EventStream(new _ForwardingReactable(this));
+    return new EventStream(new _ReactableAsStream(this));
   }
 
   Property combine(Property other, compute(T a, b)) => new _CombinedProperty(this, other, compute);
