@@ -1,10 +1,10 @@
 part of frappe;
 
-class _ThrottleReactable<T> extends _ForwardingReactable<T> {
+class _DebounceReactable<T> extends _ForwardingReactable<T> {
   Duration _duration;
   Timer _throttler;
 
-  _ThrottleReactable(Reactable<T> reactable, this._duration) : super(reactable);
+  _DebounceReactable(Reactable<T> reactable, this._duration) : super(reactable);
 
   @override
   void onData(EventSink<T> sink, T event) {

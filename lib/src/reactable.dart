@@ -81,6 +81,13 @@ abstract class Reactable<T> {
 
   Future<bool> contains(Object needle) => new _ReactableAsStream(this).contains(needle);
 
+  /// Returns a new stream that upon forwarding an event from this stream, will ignore
+  /// any subsequent events until [duration], after which the last event will be
+  /// forwarded.
+  ///
+  /// The returned stream will not throttle errors.
+  Reactable<T> debounce(Duration duration) => new _DebounceReactable(this, duration);
+
   /// Delays the delivery of each non-error event from this stream by the given [duration].
   Reactable<T> delay(Duration duration) => new _DelayReactable(this, duration);
 
@@ -138,13 +145,6 @@ abstract class Reactable<T> {
   Reactable<T> takeUntil(Future future) => new _TakeUntilReactable(this, future);
 
   Reactable<T> takeWhile(bool test(T element)) => new _ReactableAsStream(this).takeWhile(test);
-
-  /// Returns a new stream that upon forwarding an event from this stream, will ignore
-  /// any subsequent events until [duration], after which the last event will be
-  /// forwarded.
-  ///
-  /// The returned stream will not throttle errors.
-  Reactable<T> throttle(Duration duration) => new _ThrottleReactable(this, duration);
 
   /// Returns a new reactable that forwards events when the last value for [toggle] is
   /// `true`.

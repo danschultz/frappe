@@ -10,7 +10,7 @@ part 'src/reactable_stream.dart';
 part 'src/merged_stream.dart';
 part 'src/take_until_reactable.dart';
 part 'src/skip_until_reactable.dart';
-part 'src/throttle_reactable.dart';
+part 'src/debounce_reactable.dart';
 part 'src/scan_reactable.dart';
 part 'src/delay_reactable.dart';
 part 'src/flat_map_latest_reactable.dart';

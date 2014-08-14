@@ -117,7 +117,7 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
       });
     });
 
-    describe("throttle()", () {
+    describe("debounce()", () {
       it("provides the last event after duration passes", () {
         controller
             ..add(1)
@@ -126,7 +126,7 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
 
         new Timer(new Duration(milliseconds: 50), () => controller.close());
 
-        return reactable.throttle(new Duration(milliseconds: 25))
+        return reactable.debounce(new Duration(milliseconds: 25))
             .asStream().toList()
             .then((values) => expect(values).toEqual([1, 3]));
       });
@@ -134,7 +134,7 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
       it("does not throttle errors", () {
         var errors = [];
         var throttledStream = reactable
-            .throttle(new Duration(milliseconds: 25))
+            .debounce(new Duration(milliseconds: 25))
             .handleError((error) => errors.add(error));
 
         controller
