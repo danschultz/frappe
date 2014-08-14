@@ -66,6 +66,8 @@ abstract class Property<T extends dynamic> extends Reactable<T> {
   /// Combines this property and [other] with the `==` operator.
   Property<bool> equals(Property other) => combine(other, (a, b) => a == b);
 
+  Property<bool> not() => map((value) => !value).asProperty();
+
   /// Combines this property and [other] with the `>` operator.
   Property<bool> operator >(Property other) => combine(other, (a, b) => a > b);
 
