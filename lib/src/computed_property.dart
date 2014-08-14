@@ -60,32 +60,3 @@ class _CombinedProperty<T> extends _ControllerProperty<T> {
     }
   }
 }
-
-class _ComputedProperty<T, R> extends _ControllerProperty<R> {
-  Property<T> _property;
-  Function _compute;
-
-  StreamSubscription _subscription;
-
-  _ComputedProperty(this._property, this._compute);
-
-  void _recompute(T value) {
-    try {
-      _controller.add(_compute(value));
-    } catch (error, stackTrace) {
-      _controller.addError(error, stackTrace);
-    }
-  }
-
-  @override
-  void _startListening() {
-    _subscription = _property.listen((event) => _recompute(event),
-        onError: (error, stackTrace) => _controller.addError(error, stackTrace));
-  }
-
-  @override
-  void _stopListening() {
-    _subscription.cancel();
-    _subscription = null;
-  }
-}

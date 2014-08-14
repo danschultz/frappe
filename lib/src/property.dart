@@ -104,10 +104,4 @@ abstract class Property<T extends dynamic> extends Reactable<T> {
   Property operator /(Property other) {
     return new _CombinedProperty(this, other, (a, b) => a / b);
   }
-
-  /// Creates a new property that converts the each value of this property
-  /// using the [convert] function.
-  Property map(convert(T value)) {
-    return new _ComputedProperty(this, convert);
-  }
 }
