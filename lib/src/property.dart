@@ -55,58 +55,38 @@ abstract class Property<T extends dynamic> extends Reactable<T> {
     return new EventStream(new _ForwardingReactable(this));
   }
 
+  Property combine(Property other, compute(T a, b)) => new _CombinedProperty(this, other, compute);
+
   /// Combines this property and [other] with the `&&` operator.
-  Property<bool> and(Property<bool> other) {
-    return new _CombinedProperty(this, other, (a, b) => a && b);
-  }
+  Property<bool> and(Property<bool> other) => combine(other, (a, b) => a && b);
 
   /// Combines this property and [other] with the `||` operator.
-  Property<bool> or(Property<bool> other) {
-    return new _CombinedProperty(this, other, (a, b) => a || b);
-  }
+  Property<bool> or(Property<bool> other) => combine(other, (a, b) => a || b);
 
   /// Combines this property and [other] with the `==` operator.
-  Property<bool> equals(Property other) {
-    return new _CombinedProperty(this, other, (a, b) => a == b);
-  }
+  Property<bool> equals(Property other) => combine(other, (a, b) => a == b);
 
   /// Combines this property and [other] with the `>` operator.
-  Property<bool> operator >(Property other) {
-    return new _CombinedProperty(this, other, (a, b) => a > b);
-  }
+  Property<bool> operator >(Property other) => combine(other, (a, b) => a > b);
 
   /// Combines this property and [other] with the `>=` operator.
-  Property<bool> operator >=(Property other) {
-    return new _CombinedProperty(this, other, (a, b) => a >= b);
-  }
+  Property<bool> operator >=(Property other) => combine(other, (a, b) => a >= b);
 
   /// Combines this property and [other] with the `<` operator.
-  Property<bool> operator <(Property other) {
-    return new _CombinedProperty(this, other, (a, b) => a < b);
-  }
+  Property<bool> operator <(Property other) => combine(other, (a, b) => a < b);
 
   /// Combines this property and [other] with the `<=` operator.
-  Property<bool> operator <=(Property other) {
-    return new _CombinedProperty(this, other, (a, b) => a <= b);
-  }
+  Property<bool> operator <=(Property other) => combine(other, (a, b) => a <= b);
 
   /// Combines this property and [other] with the `+` operator.
-  Property operator +(Property other) {
-    return new _CombinedProperty(this, other, (a, b) => a + b);
-  }
+  Property operator +(Property other) => combine(other, (a, b) => a + b);
 
   /// Combines this property and [other] with the `-` operator.
-  Property operator -(Property other) {
-    return new _CombinedProperty(this, other, (a, b) => a - b);
-  }
+  Property operator -(Property other) => combine(other, (a, b) => a - b);
 
   /// Combines this property and [other] with the `*` operator.
-  Property operator *(Property other) {
-    return new _CombinedProperty(this, other, (a, b) => a * b);
-  }
+  Property operator *(Property other) => combine(other, (a, b) => a * b);
 
   /// Combines this property and [other] with the `/` operator.
-  Property operator /(Property other) {
-    return new _CombinedProperty(this, other, (a, b) => a / b);
-  }
+  Property operator /(Property other) => combine(other, (a, b) => a / b);
 }

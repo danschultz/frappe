@@ -37,7 +37,11 @@ void main() {
     });
 
     it("forwards errors from compute function", () {
+      var result = property1.combine(property2, (a, b) => throw "dummy error");
+      result.listen(doNothing, onError: expectAsync((error) => expect(error).toBeNotNull()), cancelOnError: true);
 
+      controller1.add(1);
+      controller2.add(2);
     });
   });
 
