@@ -1,11 +1,11 @@
 # Frappé
 
-A slightly [Bacon.js](http://baconjs.github.io/) inspired Dart package that aims to make functional reactive programming easier in Dart. Frappé extends the behavior of Dart's streams, and introduces new concepts like properties and watchables.
+A slightly [Bacon.js](http://baconjs.github.io/) inspired Dart package that aims to make functional reactive programming easier in Dart. Frappé extends the behavior of Dart's streams, and introduces new concepts like properties and reactables.
 
-Frappé is well documented. You can explore the full API here: http://www.dartdocs.org/documentation/frappe/0.2.0.
+You can explore the full API here: http://www.dartdocs.org/documentation/frappe/latest.
 
-## Watchable
-The `Watchable` class is what `EventStream` and `Property` extend from. Its purpose is to unify the interface of classes that deliver events. It defines a method called `listen()`, which has the same behavior as Dart's `Stream.listen()`. This method is used to subscribe to events that are emitted from a stream or property.
+## Reactable
+The `Reactable` class is what `EventStream` and `Property` extend from. Its purpose is to unify the interface of classes that deliver events. It defines a method called `listen()`, which has the same behavior as Dart's `Stream.listen()`. This method is used to subscribe to events that are emitted from a stream or property.
 
 ## EventStream
 An `EventStream` is just like a `Stream` in Dart. It inherits the same interface as a `Stream`, but extends its functionality with methods like `merge`, `scan` and `takeUntil`. Since `EventStream` just extends from `Stream`, it's easy to compose streams from either Frappé or Dart.
