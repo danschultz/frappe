@@ -12,11 +12,7 @@ class _FlatMapLatestReactable<T> extends _ForwardingReactable<T> {
   @override
   void onData(EventSink sink, T event) {
     _cancelLatestSubscription();
-
-    Stream stream = _convert(event);
-    _latestSubscription = stream.listen(
-        (event) => sink.add(event),
-        onError: (error, stackTrace) => sink.addError(error, stackTrace));
+    _latestSubscription = _convert(event).listen((event) => sink.add(event));
   }
 
   @override
