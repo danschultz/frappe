@@ -33,6 +33,11 @@ abstract class Property<T extends dynamic> extends Reactable<T> {
   factory Property.fromFuture(Future<T> future) =>
       new Property.fromStream(new Stream.fromFuture(future));
 
+  /// Returns a new property where the starting value is [initialValue], and its
+  /// value after that is the value from [future].
+  factory Property.fromFutureWithInitialValue(T initialValue, Future<T> future) =>
+      new Property.fromStreamWithInitialValue(initialValue, new Stream.fromFuture(future));
+
   @override
   Property<T> asProperty() {
     return this;
