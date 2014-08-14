@@ -45,7 +45,27 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
     });
 
     describe("flatMap", () {
+      Map<int, StreamController> controllers;
 
+      beforeEach(() {
+        controllers = {
+            1: new StreamController(),
+            2: new StreamController()
+        };
+
+        controller..add(1);
+        controller..add(2);
+      });
+
+      it("includes values from spawned streams", () {
+        var flatMapped = reactable.flatMap((value) => controllers[value].stream);
+
+        new Future(() => controllers[2]..add("b")..close())
+            .then((_) => new Future(() => controllers[1]..add("a")..close()))
+            .then((_) => new Future(() => controller.close()));
+
+        return flatMapped.toList().then((values) => expect(values).toEqual(["b", "a"]));
+      });
     });
 
     describe("flatMapLatest()", () {

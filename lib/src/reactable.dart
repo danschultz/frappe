@@ -63,7 +63,7 @@ abstract class Reactable<T> {
       new Property.fromStreamWithInitialValue(initialValue, asStream());
 
   /// Returns this reactable as an [EventStream].
-  EventStream<T> asStream() => new _ReactableAsStream(this);
+  EventStream<T> asStream() => new EventStream(new _ReactableAsStream(this));
 
   /// Returns a stream with the events of a stream per original event.
   ///
@@ -135,7 +135,7 @@ abstract class Reactable<T> {
 
   Future<T> reduce(T combine(T previous, T element)) => new _ReactableAsStream(this).reduce(combine);
 
-  /// Returns a [Property] where the first value is the [initalValue] and values after
+  /// Returns a [Property] where the first value is the [initialValue] and values after
   /// that are the result of [combine].
   ///
   /// [combine] is an accumulator function where its first argument is either the initial
@@ -146,6 +146,8 @@ abstract class Reactable<T> {
         .asPropertyWithInitialValue(initialValue);
   }
 
+  /// Returns an [EventStream] that contains events from each stream that is spawned from
+  /// [convert].
   EventStream flatMap(Stream convert(T event)) {
     return asStream().transform(new StreamTransformer.fromHandlers(
         handleData: (data, sink) => convert(data).forEach((event) => sink.add(event))
