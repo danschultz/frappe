@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Frappe : A Dart package for functional reactive programming">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Frappe</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/danschultz/frappe">View on GitHub</a>
+
+          <h1 id="project_title">Frappe</h1>
+          <h2 id="project_tagline">A Dart package for functional reactive programming</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/danschultz/frappe/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/danschultz/frappe/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="frapp%C3%A9" class="anchor" href="#frapp%C3%A9"><span class="octicon octicon-link"></span></a>Frappé</h1>
+
+<p>A mildly <a href="http://baconjs.github.io/">Bacon.js</a> inspired Dart package that aims to make functional reactive programming (FRP) easier in Dart. Frappé extends the behavior of Dart's streams, and introduces new concepts like properties and reactables.</p>
+
+<p>You can explore the full API here: <a href="http://www.dartdocs.org/documentation/frappe/latest">http://www.dartdocs.org/documentation/frappe/latest</a>.</p>
+
+<h2>
+<a name="why-frapp%C3%A9" class="anchor" href="#why-frapp%C3%A9"><span class="octicon octicon-link"></span></a>Why Frappé?</h2>
+
+<p>Functional reactive programming allows you to declaratively define behaviors for user actions. FRP makes it clearer to define behaviors such as, "when a user performs A, do X and Y, then finish with Z."</p>
+
+<p>To illustrate this, let's write an autocomplete widget with Frappé. After 250ms that a user inputs a character, a query is performed that suggests a list of movies that most closely matches the user's input. Because query results are asynchronous, we only want to show results from the last query.</p>
+
+<div class="highlight highlight-dart"><pre><span class="kd">var</span> <span class="n">searchInput</span> <span class="o">=</span> <span class="n">document</span><span class="p">.</span><span class="n">querySelector</span><span class="p">(</span><span class="s2">"#searchInput"</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="n">onInput</span> <span class="o">=</span> <span class="k">new</span> <span class="n">EventStream</span><span class="p">(</span><span class="n">searchInput</span><span class="p">.</span><span class="n">onKeyUp</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">debounce</span><span class="p">(</span><span class="k">new</span> <span class="n">Duration</span><span class="p">(</span><span class="nl">milliseconds:</span> <span class="m">250</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">map</span><span class="p">((</span><span class="n">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">event</span><span class="p">.</span><span class="n">target</span><span class="p">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">distinct</span><span class="p">();</span>
+
+<span class="kd">var</span> <span class="n">suggestions</span> <span class="o">=</span> <span class="n">onInput</span><span class="p">.</span><span class="n">flatMapLatest</span><span class="p">((</span><span class="n">input</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">querySuggestions</span><span class="p">(</span><span class="n">input</span><span class="p">));</span>
+<span class="kd">var</span> <span class="n">isPending</span> <span class="o">=</span> <span class="n">onInput</span><span class="p">.</span><span class="n">isWaitingOn</span><span class="p">(</span><span class="n">suggestions</span><span class="p">);</span>
+
+<span class="n">Future</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;&gt;</span> <span class="n">querySuggestions</span><span class="p">(</span><span class="kt">String</span> <span class="n">input</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// Query some API that returns suggestions for 'input'</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Frappe also makes it easy to merge multiple stream. This is useful for performing an action that's triggered from multiple user behaviors. For instance to signal the close of an application:</p>
+
+<div class="highlight highlight-dart"><pre><span class="kd">var</span> <span class="n">onQuit</span> <span class="o">=</span> <span class="k">new</span> <span class="n">EventStream</span><span class="p">(</span><span class="n">quitButton</span><span class="p">.</span><span class="n">onClick</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">merge</span><span class="p">(</span><span class="n">fileMenu</span><span class="p">.</span><span class="n">querySelector</span><span class="p">(</span><span class="s2">"quit"</span><span class="p">).</span><span class="n">onClick</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">merge</span><span class="p">(</span><span class="n">fatalErrors</span><span class="p">);</span>
+
+<span class="n">onQuit</span><span class="p">.</span><span class="n">listen</span><span class="p">((</span><span class="n">_</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">closeApp</span><span class="p">());</span>
+</pre></div>
+
+<p>It's often useful to unsubscribe from a stream after a user performs some action. Frappe makes this easy with <code>takeUntil</code>. For instance, we can start listening to <code>onMouseMove</code> after <code>onMouseDown</code>, and unsubscribe after <code>onMouseUp</code>:</p>
+
+<div class="highlight highlight-dart"><pre><span class="n">window</span><span class="p">.</span><span class="n">onMouseDown</span><span class="p">.</span><span class="n">forEach</span><span class="p">((</span><span class="n">mouseDown</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="n">pen</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Pen</span><span class="p">(</span><span class="n">mouseDown</span><span class="p">.</span><span class="n">client</span><span class="p">);</span>
+  <span class="k">new</span> <span class="n">EventStream</span><span class="p">(</span><span class="n">window</span><span class="p">.</span><span class="n">onMouseMove</span><span class="p">).</span><span class="n">takeUntil</span><span class="p">(</span><span class="n">window</span><span class="p">.</span><span class="n">onMouseUp</span><span class="p">.</span><span class="n">first</span><span class="p">)</span>
+      <span class="p">.</span><span class="n">forEach</span><span class="p">((</span><span class="n">mouseMove</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">pen</span><span class="p">.</span><span class="n">drawTo</span><span class="p">(</span><span class="n">mouseMove</span><span class="p">.</span><span class="n">client</span><span class="p">))</span>
+      <span class="p">.</span><span class="n">then</span><span class="p">((</span><span class="n">_</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">pen</span><span class="p">.</span><span class="n">done</span><span class="p">())</span>
+<span class="p">})</span>
+</pre></div>
+
+<h2>
+<a name="classes" class="anchor" href="#classes"><span class="octicon octicon-link"></span></a>Classes</h2>
+
+<h3>
+<a name="reactable" class="anchor" href="#reactable"><span class="octicon octicon-link"></span></a>Reactable</h3>
+
+<p>The <code>Reactable</code> class is what <code>EventStream</code> and <code>Property</code> extend from. It unifies the interface for classes that deliver events. At its heart, it defines a method <code>listen()</code>, which has the same behavior as Dart's <code>Stream.listen()</code>. In the same way that you'd listen to a Dart <code>Stream</code>, you'd use this method to subscribe to events from a <code>Reactable</code>, and use the returned <code>StreamSubscription</code> to unsubscribe from the stream.</p>
+
+<h3>
+<a name="eventstream" class="anchor" href="#eventstream"><span class="octicon octicon-link"></span></a>EventStream</h3>
+
+<p>An <code>EventStream</code> is just like a <code>Stream</code> in Dart. It inherits the same interface as a <code>Stream</code>, but extends its functionality with methods like <code>merge</code>, <code>scan</code> and <code>takeUntil</code>. Since <code>EventStream</code> just extends from <code>Stream</code>, it's easy to compose streams from either Frappé or Dart.</p>
+
+<h3>
+<a name="property" class="anchor" href="#property"><span class="octicon octicon-link"></span></a>Property</h3>
+
+<p>Properties are similar to streams, but they remember their last value. This means that if a property has previously emitted the value of <strong>x</strong> to its subscribers, it will deliver this value to any of its new subscribers.</p>
+
+<p>For instance, a property could be used to unify synchronous and asynchronous calls to get the window's current size:</p>
+
+<div class="highlight highlight-dart"><pre><span class="n">Map</span> <span class="n">innerSize</span><span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="s2">"width"</span><span class="o">:</span> <span class="n">window</span><span class="p">.</span><span class="n">innerWidth</span><span class="p">,</span> <span class="s2">"height"</span><span class="o">:</span> <span class="n">window</span><span class="p">.</span><span class="n">innerHeight</span><span class="p">};</span>
+
+<span class="kd">var</span> <span class="n">windowSize</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Property</span><span class="p">.</span><span class="n">fromStreamWithInitialValue</span><span class="p">(</span><span class="n">innerSize</span><span class="p">(),</span>
+    <span class="n">window</span><span class="p">.</span><span class="n">onResize</span><span class="p">.</span><span class="n">map</span><span class="p">((</span><span class="n">_</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">innerSize</span><span class="p">()));</span>
+
+<span class="n">print</span><span class="p">(</span><span class="n">innerSize</span><span class="p">());</span> <span class="c1">// hypothetical window size {"width": 1024, "height": 768}</span>
+
+<span class="c1">// The first call to `listen` will deliver the property's current value. Since </span>
+<span class="c1">// this is the first subscriber, the value of {"width": 1024, "height": 768} will </span>
+<span class="c1">// be printed. Resizing the window will print out the window's new size.</span>
+<span class="n">windowSize</span><span class="p">.</span><span class="n">listen</span><span class="p">((</span><span class="n">size</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="p">(</span><span class="n">size</span><span class="p">));</span>
+</pre></div>
+
+<h4>
+<a name="creating-properties" class="anchor" href="#creating-properties"><span class="octicon octicon-link"></span></a>Creating Properties</h4>
+
+<p>The <code>Property</code> class has constructors to create properties from a <code>Stream</code> or a <code>Future</code>.</p>
+
+<div class="highlight highlight-dart"><pre><span class="c1">// Create a property from a Dart Stream</span>
+<span class="n">Property</span><span class="p">.</span><span class="n">fromStream</span><span class="p">(</span><span class="n">stream</span><span class="p">);</span>
+
+<span class="c1">// Create a property from a Future.</span>
+<span class="n">Property</span><span class="p">.</span><span class="n">fromFuture</span><span class="p">(</span><span class="n">futureValue</span><span class="p">);</span>
+</pre></div>
+
+<p>You can also create a property that has a constant value.</p>
+
+<div class="highlight highlight-dart"><pre><span class="kd">var</span> <span class="n">constant</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Property</span><span class="p">.</span><span class="n">constant</span><span class="p">(</span><span class="m">5</span><span class="p">);</span>
+<span class="n">constant</span><span class="p">.</span><span class="n">listen</span><span class="p">((</span><span class="n">value</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">print</span><span class="p">(</span><span class="n">value</span><span class="p">));</span> <span class="c1">// 5</span>
+</pre></div>
+
+<p>An <code>EventStream</code> can also be converted into a <code>Property</code> with <code>EventStream.asProperty()</code>.</p>
+
+<h5>
+<a name="initial-values" class="anchor" href="#initial-values"><span class="octicon octicon-link"></span></a>Initial Values</h5>
+
+<p>When creating a property from a stream or a future, the property will not have an initial value. Frappé includes additional constructors to create properties that have a starting value.</p>
+
+<div class="highlight highlight-dart"><pre><span class="c1">// Create a property from a stream with an initial value.</span>
+<span class="n">Property</span><span class="p">.</span><span class="n">fromStreamWithInitialValue</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">initialValue</span><span class="p">);</span>
+
+<span class="c1">// Create a property from a Future with an initial value.</span>
+<span class="n">Property</span><span class="p">.</span><span class="n">fromFutureWithInitialValue</span><span class="p">(</span><span class="n">futureValue</span><span class="p">,</span> <span class="n">initialValue</span><span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="combining-properties" class="anchor" href="#combining-properties"><span class="octicon octicon-link"></span></a>Combining Properties</h4>
+
+<p>Properties can be combined with each other to create derived values. These values will be recomputed whenever the value changes from which the property was derived.</p>
+
+<p>Frappé includes many built in combinators that you can use, such as <code>and</code>, <code>or</code>, <code>equals</code>, and also operator combinators like <code>+</code>, <code>-</code>, <code>&gt;</code>, <code>&lt;</code>. For instance in the following example, the enabled state of a login button is updated whenever the form's fields change. In order for the form to be valid, both the username and password fields must be populated.</p>
+
+<div class="highlight highlight-dart"><pre><span class="kt">bool</span> <span class="n">isNotEmpty</span><span class="p">(</span><span class="kt">String</span> <span class="n">value</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">value</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">value</span><span class="p">.</span><span class="n">isNotEmpty</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="n">isUsernamePresent</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Property</span>
+    <span class="p">.</span><span class="n">fromStream</span><span class="p">(</span><span class="n">usernameField</span><span class="p">.</span><span class="n">onChange</span><span class="p">.</span><span class="n">map</span><span class="p">((</span><span class="n">_</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">usernameField</span><span class="p">.</span><span class="n">value</span><span class="p">))</span>
+    <span class="p">.</span><span class="n">map</span><span class="p">(</span><span class="n">isNotEmpty</span><span class="p">);</span>
+<span class="kd">var</span> <span class="n">isPasswordPresent</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Property</span>
+    <span class="p">.</span><span class="n">fromStream</span><span class="p">(</span><span class="n">passwordField</span><span class="p">.</span><span class="n">onChange</span><span class="p">.</span><span class="n">map</span><span class="p">((</span><span class="n">_</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">passwordField</span><span class="p">.</span><span class="n">value</span><span class="p">))</span>
+    <span class="p">.</span><span class="n">map</span><span class="p">(</span><span class="n">isNotEmpty</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="n">isFormValid</span> <span class="o">=</span> <span class="n">isUsernamePresent</span><span class="p">.</span><span class="n">and</span><span class="p">(</span><span class="n">isPasswordPresent</span><span class="p">);</span>
+<span class="n">isFormValid</span><span class="p">.</span><span class="n">listen</span><span class="p">((</span><span class="n">isValid</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">submitButton</span><span class="p">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="o">!</span><span class="n">isValid</span><span class="p">);</span>
+</pre></div>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Frappe maintained by <a href="https://github.com/danschultz">danschultz</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
