@@ -13,7 +13,7 @@ To illustrate this, let's write an autocomplete widget with Frappé. After 250ms
 var searchInput = document.querySelector("#searchInput");
 
 var onInput = new EventStream(searchInput.onKeyUp)
-    .debounce(new Duration(milliseconds: 250)
+    .debounce(new Duration(milliseconds: 250))
     .map((event) => event.target.value)
     .distinct();
     
