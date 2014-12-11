@@ -194,8 +194,7 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
 
         new Timer(new Duration(milliseconds: 50), () => controller.close());
 
-        return throttledStream.toList().then((values) {
-          expect(values).toEqual([1, 3]);
+        return throttledStream.last.then((values) {
           expect(errors).toEqual(["error 1", "error 2", "error 3"]);
         });
       });

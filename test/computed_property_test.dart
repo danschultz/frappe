@@ -42,11 +42,6 @@ void main() => describe("Combined properties", () {
         expect(secondValue).toBe(3);
       });
     });
-
-//    return Future.wait([result.first, result.first]).then((results) {
-//      expect(results.first).toBe(3);
-//      expect(results.last).toBe(3);
-//    });
   });
 
   it("forwards errors from dependencies", () {
