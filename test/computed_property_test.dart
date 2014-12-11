@@ -35,10 +35,18 @@ void main() => describe("Combined properties", () {
     controller1.add(1);
     controller2.add(2);
 
-    return Future.wait([result.first, result.first]).then((results) {
-      expect(results.first).toBe(3);
-      expect(results.last).toBe(3);
+    return result.first.then((firstValue) {
+      expect(firstValue).toBe(3);
+
+      return result.first.then((secondValue) {
+        expect(secondValue).toBe(3);
+      });
     });
+
+//    return Future.wait([result.first, result.first]).then((results) {
+//      expect(results.first).toBe(3);
+//      expect(results.last).toBe(3);
+//    });
   });
 
   it("forwards errors from dependencies", () {
