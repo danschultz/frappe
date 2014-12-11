@@ -20,5 +20,5 @@ part 'src/when_reactable.dart';
 part 'src/property.dart';
 part 'src/controller_property.dart';
 part 'src/stream_property.dart';
-part 'src/computed_property.dart';
+part 'src/combined_property.dart';
 part 'src/constant_property.dart';

@@ -10,11 +10,6 @@ abstract class _ControllerProperty<T> extends Property<T> {
         onCancel: () => _stopListening());
   }
 
-  @override
-  StreamSubscription<T> listen(void onData(T event), {Function onError, void onDone(), bool cancelOnError}) {
-    return changes.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
-  }
-
   void _startListening();
 
   void _stopListening();
