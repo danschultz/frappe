@@ -201,6 +201,15 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
       });
     });
 
+    describe("scan()", () {
+      it("calls combine on each event", () {
+        var stream = new EventStream<int>(new Stream.fromIterable([1, 2, 3]));
+        return stream.scan(0, (a, b) => a + b).last.then((result) {
+          expect(result).toBe(6);
+        });
+      });
+    });
+
     describe("when()", () {
       StreamController toggleController;
       Property toggle;
