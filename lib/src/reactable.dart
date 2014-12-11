@@ -117,7 +117,7 @@ abstract class Reactable<T> {
   Property<bool> isWaitingOn(Reactable other) {
     return new Property
         .constant(true).asStream()
-        .merge(new Property.fromFuture(other.first.then((_) => false)))
+        .merge(new Property.fromFuture(other.first.then((_) => false)).asStream())
         .asProperty();
   }
 
@@ -142,8 +142,7 @@ abstract class Reactable<T> {
   /// value or the result of the last combine, and the second argument is the next value
   /// in this stream.
   Property<T> scan(T initialValue, T combine(T value, T element)) {
-    return new EventStream<T>(new _ScanReactable(this, initialValue, combine))
-        .asPropertyWithInitialValue(initialValue);
+    return new _ScanReactable(this, initialValue, combine).asPropertyWithInitialValue(initialValue);
   }
 
   /// Returns an [EventStream] that contains events from each stream that is spawned from

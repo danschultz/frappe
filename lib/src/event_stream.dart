@@ -64,19 +64,19 @@ class EventStream<T> extends StreamView<T> with Reactable<T> {
   }
 
   EventStream<T> distinct([bool equals(T previous, T next)]) {
-    return new EventStream(super.distinct(equals));
+    return new EventStream(new _ReactableAsStream(super.distinct(equals)));
   }
 
   EventStream expand(Iterable convert(T value)) {
-    return new EventStream(super.expand(convert));
+    return new EventStream(new _ReactableAsStream(super.expand(convert)));
   }
 
   EventStream<T> handleError(Function onError, {bool test(error)}) {
-    return new EventStream(super.handleError(onError, test: test));
+    return new EventStream(new _ReactableAsStream(super.handleError(onError, test: test)));
   }
 
   EventStream map(convert(T event)) {
-    return new EventStream(super.map(convert));
+    return new EventStream(new _ReactableAsStream(super.map(convert)));
   }
 
   EventStream<T> skip(int count) {
@@ -92,7 +92,7 @@ class EventStream<T> extends StreamView<T> with Reactable<T> {
   }
 
   EventStream<T> takeWhile(bool test(T element)) {
-    return new EventStream(super.takeWhile(test));
+    return new EventStream(new _ReactableAsStream(super.takeWhile(test)));
   }
 
   EventStream timeout(Duration timeLimit, {void onTimeout(EventSink sink)}) {
@@ -104,6 +104,6 @@ class EventStream<T> extends StreamView<T> with Reactable<T> {
   }
 
   EventStream<T> where(bool test(T event)) {
-    return new EventStream(super.where(test));
+    return new EventStream(new _ReactableAsStream(super.where(test)));
   }
 }
