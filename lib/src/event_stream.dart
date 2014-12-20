@@ -6,6 +6,16 @@ class EventStream<T> extends StreamView<T> with Reactable<T> {
   /// Returns a new [EventStream] that wraps a standard Dart [Stream].
   EventStream(Stream<T> stream) : super(stream);
 
+  /// Returns a new [EventStream] that contains events from an [iterable].
+  factory EventStream.fromIterable(Iterable<T> iterable) {
+    return new EventStream(new Stream.fromIterable(iterable));
+  }
+
+  /// Returns a new [EventStream] that contains a single event of the completed [future].
+  factory EventStream.fromFuture(Future<T> future) {
+    return new EventStream(new Stream.fromFuture(future));
+  }
+
   /// Returns a new stream that contains events from this stream and the [other] stream.
   EventStream merge(Stream other) {
     return _asEventStream(new _MergedStream([this, other]));
