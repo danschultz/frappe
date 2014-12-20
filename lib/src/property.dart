@@ -7,8 +7,7 @@ part of frappe;
 /// its subscribers, it will deliver this value to any new subscribers. Depending
 /// on how the property was created, some properties might not have an initial
 /// value to start with.
-// Extend dynamic to suppress warnings with operator overrides
-abstract class Property<T extends dynamic> extends Reactable<T> {
+abstract class Property<T> extends Reactable<T> {
   /// An [EventStream] that contains the changes of the property.
   ///
   /// The stream will *not* contain an event for the current value of the `Property`.
