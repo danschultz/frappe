@@ -1,8 +1,21 @@
 part of frappe;
 
-/// An [Reactable] is a type that unifies the API between [EventStream]s
-/// and [Property]s.
+/// A [Reactable] is a type that unifies the API between [EventStream]s and [Property]s.
 abstract class Reactable<T> {
+  /// Returns a [Property] where the current value is an iterable that contains the
+  /// latest values from a collection of [reactables].
+  ///
+  /// The supplied [reactables] can be a mixture of [Property]s and [EventStream]s,
+  /// where any [Property]s will first be converted to a stream.
+  ///
+  /// The returned [Property] will only have a value once all the [reactables] contain
+  /// a value.
+  static Property<Iterable> collect(Iterable<Reactable> reactables) {
+    var values = () => Future.wait(reactables.map((reactable) => reactable.first));
+    EventStream changes = reactables.reduce((value, element) => value.asStream().merge(element.asStream()));
+    return changes.flatMapLatest((_) => new Stream.fromFuture(values())).asProperty();
+  }
+
   /// Returns the first element of the reactable.
   ///
   /// Stops listening to the reactable after the first element has been

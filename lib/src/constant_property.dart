@@ -14,7 +14,10 @@ class _ConstantProperty<T> extends Property<T> {
 
   @override
   StreamSubscription<T> listen(void onData(T event), {Function onError, void onDone(), bool cancelOnError}) {
-    return new Stream.fromFuture(new Future(() => _currentValue))
-        .listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
+    return new Stream.fromIterable([_currentValue]).listen(
+        onData,
+        onError: onError,
+        onDone: onDone,
+        cancelOnError: cancelOnError);
   }
 }

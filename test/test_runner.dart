@@ -5,6 +5,7 @@ import 'property_test.dart' as PropertyTest;
 import 'constant_property_test.dart' as ConstantPropertyTest;
 import 'stream_property_test.dart' as StreamPropertyTest;
 import 'computed_property_test.dart' as ComputedPropertyTest;
+import 'collect_reactable_test.dart' as CollectReactableTest;
 
 void main() {
   EventStreamTest.main();
@@ -12,4 +13,5 @@ void main() {
   ConstantPropertyTest.main();
   StreamPropertyTest.main();
   ComputedPropertyTest.main();
+  CollectReactableTest.main();
 }
