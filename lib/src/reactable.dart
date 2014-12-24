@@ -105,7 +105,7 @@ abstract class Reactable<T> {
   Reactable<T> debounce(Duration duration) => asStream().transform(new Debounce<T>(duration));
 
   /// Delays the delivery of each non-error event from this stream by the given [duration].
-  Reactable<T> delay(Duration duration) => new _DelayReactable(this, duration);
+  Reactable<T> delay(Duration duration) => asStream().transform(new Delay<T>(duration));
 
   Reactable<T> distinct([bool equals(T previous, T next)]) => new EventStream(
       new _ReactableAsStream(this).distinct(equals));
