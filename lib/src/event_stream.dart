@@ -17,9 +17,7 @@ class EventStream<T> extends StreamView<T> with Reactable<T> {
   }
 
   /// Returns a new stream that contains events from this stream and the [other] stream.
-  EventStream merge(Stream other) {
-    return _asEventStream(new _MergedStream([this, other]));
-  }
+  EventStream merge(Stream other) => transform(new Merge(other));
 
   /// Returns a new stream that buffers events when the last event in [toggle] is `true`.
   ///
