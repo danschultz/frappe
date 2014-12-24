@@ -163,9 +163,7 @@ abstract class Reactable<T> {
   /// Returns an [EventStream] that contains events from each stream that is spawned from
   /// [convert].
   EventStream flatMap(Stream convert(T event)) {
-    return asStream().transform(new StreamTransformer.fromHandlers(handleData: (data, sink) {
-      convert(data).forEach((event) => sink.add(event));
-    }));
+    return asStream().transform(new FlatMap(convert));
   }
 
   /// Returns an [EventStream] that only includes events from the last spawned stream.

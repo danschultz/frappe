@@ -2,6 +2,7 @@ library frappe;
 
 import 'dart:async';
 import 'dart:collection';
+import 'package:frappe/src/transformers.dart';
 
 part 'src/reactable.dart';
 part 'src/event_stream.dart';

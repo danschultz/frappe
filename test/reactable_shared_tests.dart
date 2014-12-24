@@ -66,6 +66,25 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
 
         return flatMapped.toList().then((values) => expect(values).toEqual(["b", "a"]));
       });
+
+      it("doesn't add events from spawned streams when source stream is done", () {
+        var values = reactable.flatMap((value) => controllers[value].stream).toList();
+
+        controller.close();
+        var worker = new Future(() {
+          controllers[1].add("a");
+          return controllers[1].close();
+        });
+
+        return worker.then((_) => values).then((values) => expect(values).toEqual([]));
+      });
+
+      it("https://github.com/danschultz/frappe/issues/23 passes", () {
+        var listener = new EventStream.fromFuture(new Future.value(1))
+            .flatMap((value) => new Stream.fromIterable([value]))
+            .listen((_) {});
+        return listener.asFuture();
+      });
     });
 
     describe("flatMapLatest()", () {
