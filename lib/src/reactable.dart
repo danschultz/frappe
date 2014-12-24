@@ -12,8 +12,10 @@ abstract class Reactable<T> {
   /// a value.
   static Property<Iterable> collect(Iterable<Reactable> reactables) {
     var values = () => Future.wait(reactables.map((reactable) => reactable.first));
-    EventStream changes = reactables.reduce((value, element) => value.asStream().merge(element.asStream()));
-    return changes.flatMapLatest((_) => new Stream.fromFuture(values())).asProperty();
+    var changes = reactables.skip(1).fold(reactables.first.asStream(), (value, element) {
+      return value.asStream().merge(element.asStream());
+    });
+    return changes.flatMapLatest((value) => new Stream.fromFuture(values())).asProperty();
   }
 
   /// Returns the first element of the reactable.
