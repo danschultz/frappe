@@ -167,8 +167,7 @@ abstract class Reactable<T> {
   }
 
   /// Returns an [EventStream] that only includes events from the last spawned stream.
-  EventStream flatMapLatest(Stream convert(T event)) => new EventStream(
-      new _ReactableAsStream(new _FlatMapLatestReactable(this, convert)));
+  EventStream flatMapLatest(Stream convert(T event)) => asStream().transform(new FlatMapLatest(convert));
 
   /// Returns a new stream that contains events from this stream until the [future]
   /// completes.

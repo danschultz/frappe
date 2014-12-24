@@ -79,7 +79,7 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
         return worker.then((_) => values).then((values) => expect(values).toEqual([]));
       });
 
-      it("https://github.com/danschultz/frappe/issues/23 passes", () {
+      it("hasn't regressed https://github.com/danschultz/frappe/issues/23", () {
         var listener = new EventStream.fromFuture(new Future.value(1))
             .flatMap((value) => new Stream.fromIterable([value]))
             .listen((_) {});
@@ -122,6 +122,13 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
 
         return reactable.flatMapLatest((event) => controllers[event].stream)
             .toList().then((values) => expect(values).toEqual(["b"]));
+      });
+
+      it("hasn't regressed https://github.com/danschultz/frappe/issues/23", () {
+        var listener = new EventStream.fromFuture(new Future.value(1))
+            .flatMapLatest((value) => new Stream.fromIterable([value]))
+            .listen((_) {});
+        return listener.asFuture();
       });
     });
 
