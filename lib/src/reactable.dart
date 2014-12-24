@@ -102,7 +102,7 @@ abstract class Reactable<T> {
   /// forwarded.
   ///
   /// The returned stream will not throttle errors.
-  Reactable<T> debounce(Duration duration) => new _DebounceReactable(this, duration);
+  Reactable<T> debounce(Duration duration) => asStream().transform(new Debounce<T>(duration));
 
   /// Delays the delivery of each non-error event from this stream by the given [duration].
   Reactable<T> delay(Duration duration) => new _DelayReactable(this, duration);

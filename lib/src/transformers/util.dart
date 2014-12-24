@@ -8,14 +8,19 @@ Stream bindStream(Stream stream, {StreamSubscription onListen(EventSink sink), v
       onListen: () {
         subscription = onListen(controller);
         subscription.onDone(() {
-          onDone();
+          if (onDone != null) {
+            onDone();
+          }
           controller.close();
         });
       },
       onPause: () => subscription.pause(),
       onResume: () => subscription.resume(),
       onCancel: () {
-        var futures = [onCancel(), subscription.cancel()].where((future) => future != null);
+        var futures = [onCancel, subscription.cancel]
+            .where((function) => function != null)
+            .map((function) => function())
+            .where((future) => future != null);
         return Future.wait(futures);
       });
 
