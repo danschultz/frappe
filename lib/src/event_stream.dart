@@ -22,9 +22,7 @@ class EventStream<T> extends StreamView<T> with Reactable<T> {
   /// Returns a new stream that buffers events when the last event in [toggle] is `true`.
   ///
   /// Buffered events are delivered when [toggle] becomes `false`.
-  EventStream<T> bufferWhen(Reactable<bool> toggle) {
-    return _asEventStream(new _BufferWhenReactable(this, toggle).asStream());
-  }
+  EventStream<T> bufferWhen(Reactable<bool> toggle) => transform(new BufferWhen(toggle.asStream()));
 
   /// Returns a new stream that will begin forwarding events from this stream when the
   /// [future] completes.

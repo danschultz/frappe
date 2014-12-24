@@ -3,6 +3,7 @@ library frappe.transformers;
 import 'dart:async';
 import 'dart:collection';
 
+part 'transformers/buffer_when.dart';
 part 'transformers/debounce.dart';
 part 'transformers/delay.dart';
 part 'transformers/flat_map.dart';
