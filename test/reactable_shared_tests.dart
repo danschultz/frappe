@@ -237,31 +237,31 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
 
     describe("when()", () {
       StreamController toggleController;
-      Property toggle;
+      EventStream toggle;
 
       beforeEach(() {
         toggleController = new StreamController();
-        toggle = new Property.fromStream(toggleController.stream);
+        toggle = new EventStream(toggleController.stream);
       });
 
       it("includes events when toggle is true", () {
-        toggleController.add(true);
+        new Future(() => toggleController.add(false))
+            .then((_) => controller.add(1))
+            .then((_) => toggleController.add(true))
+            .then((_) {
+              controller..add(2)..close();
+            });
 
-        new Future(() => controller..add(1)..close());
-
-        return reactable.when(toggle).asStream().toList().then((values) {
-          expect(values).toEqual([1]);
-        });
+        return reactable.when(toggle).last.then((value) => expect(value).toBe(2));
       });
 
       it("excludes events when toggle is false", () {
-        toggleController..add(true)..add(false);
+        new Future(() => toggleController.add(true))
+            .then((_) => controller.add(1))
+            .then((_) => toggleController.add(false))
+            .then((_) => controller..add(2)..close());
 
-        new Future(() => controller..add(1)..close());
-
-        return reactable.when(toggle).asStream().toList().then((values) {
-          expect(values.isEmpty).toBe(true);
-        });
+        return reactable.when(toggle).last.then((value) => expect(value).toBe(1));
       });
     });
   });

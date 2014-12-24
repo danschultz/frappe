@@ -179,7 +179,7 @@ abstract class Reactable<T> {
   /// `true`.
   ///
   /// Errors will always be forwarded regardless of the value of [toggle].
-  Reactable<T> when(Reactable<bool> toggle) => new _WhenReactable(this, toggle);
+  Reactable<T> when(Reactable<bool> toggle) => asStream().transform(new When(toggle.asStream()));
 
   Reactable<T> where(bool test(T event)) => new EventStream(new _ReactableAsStream(this).where(test));
 }
