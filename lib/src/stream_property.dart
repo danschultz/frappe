@@ -22,7 +22,7 @@ class _StreamProperty<T> extends _ControllerProperty<T> {
   StreamSubscription<T> listen(void onData(T event), {Function onError, void onDone(), bool cancelOnError}) {
     Stream stream;
 
-    if (_hasInitialValue) {
+    if (_currentValue != null) {
       stream = new EventStream(new Stream.fromIterable([_currentValue])).merge(changes);
     } else {
       stream = changes;
