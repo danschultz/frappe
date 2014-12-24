@@ -169,7 +169,7 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
             .then((_) => new Future(() => stopper.complete()))
             .then((_) => controller.add(3));
 
-        return takeUntil.asStream().toList().then((values) => expect(values).toEqual([1]));
+        return takeUntil.last.then((value) => expect(value).toEqual(1));
       });
 
       it("provides errors until future completes", () {

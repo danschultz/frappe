@@ -169,9 +169,9 @@ abstract class Reactable<T> {
   /// Returns an [EventStream] that only includes events from the last spawned stream.
   EventStream flatMapLatest(Stream convert(T event)) => asStream().transform(new FlatMapLatest(convert));
 
-  /// Returns a new stream that contains events from this stream until the [future]
+  /// Returns a new stream that contains events from this stream until the [signal]
   /// completes.
-  Reactable<T> takeUntil(Future future) => new _TakeUntilReactable(this, future);
+  Reactable<T> takeUntil(Future signal) => asStream().transform(new TakeUntil(signal));
 
   Reactable<T> takeWhile(bool test(T element)) => new EventStream(new _ReactableAsStream(this).takeWhile(test));
 
