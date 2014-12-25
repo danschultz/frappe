@@ -25,8 +25,8 @@ class EventStream<T> extends StreamView<T> with Reactable<T> {
   EventStream<T> bufferWhen(Reactable<bool> toggle) => transform(new BufferWhen(toggle.asStream()));
 
   /// Returns a new stream that will begin forwarding events from this stream when the
-  /// [future] completes.
-  EventStream<T> skipUntil(Future future) => _asEventStream(new _SkipUntilReactable(this, future).asStream());
+  /// [signal] completes.
+  EventStream<T> skipUntil(Future signal) => transform(new SkipUntil(signal));
 
   EventStream<T> asStream() {
     return this;
