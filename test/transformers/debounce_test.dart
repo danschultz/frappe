@@ -1,4 +1,4 @@
-library buffer_when_test;
+library debounce_test;
 
 import 'dart:async';
 import 'package:guinness/guinness.dart';
