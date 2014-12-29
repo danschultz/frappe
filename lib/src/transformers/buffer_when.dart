@@ -3,18 +3,46 @@ part of frappe.transformers;
 class BufferWhen<T> implements StreamTransformer {
   final Stream _signal;
 
-  BufferWhen(Stream signal) : _signal = signal.asBroadcastStream();
+  BufferWhen(Stream signal) : _signal = signal;
 
   Stream<T> bind(Stream<T> stream) {
-    var buffer = new StreamController.broadcast()..addStream(stream);
-    var bufferedStream = buffer.stream;
+    StreamSubscription signalSubscription;
+    StreamSubscription streamSubscription;
+    StreamController<T> controller;
 
-    var beforeSignal = bufferedStream.transform(new TakeUntil(_signal.first));
-    var afterSignal = _signal.transform(new FlatMapLatest((buffer) {
-      return buffer ? new Stream.fromIterable([]) : bufferedStream;
-    }));
-    var done = bufferedStream.isEmpty;
+    void done() {
+      signalSubscription.cancel();
+      streamSubscription.cancel();
+      controller.close();
+    }
 
-    return beforeSignal.transform(new Merge(afterSignal.transform(new TakeUntil(done))));
+    void onListen() {
+      streamSubscription = stream.listen(controller.add, onError: controller.addError, onDone: done);
+      signalSubscription = _signal.listen((isBuffering) {
+        if (isBuffering) {
+          streamSubscription.pause();
+        } else {
+          streamSubscription.resume();
+        }
+      });
+    }
+
+    void onPause() {
+      signalSubscription.pause();
+      streamSubscription.pause();
+    }
+
+    void onResume() {
+      signalSubscription.resume();
+      streamSubscription.resume();
+    }
+
+    controller = _createControllerForStream(stream,
+        onListen: onListen,
+        onResume: onResume,
+        onPause: onPause,
+        onCancel: done);
+
+    return controller.stream;
   }
 }
