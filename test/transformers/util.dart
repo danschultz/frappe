@@ -10,7 +10,7 @@ Future<List> testStream(Stream stream, {behavior(), expectation(List values)}) {
   });
 
   return new Future(() => behavior())
-      .then((v) => new Future(() {
+      .then((_) => new Future(() {
         subscription.cancel();
       }))
       .then((_) => expectation(results));

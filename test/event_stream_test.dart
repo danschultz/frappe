@@ -114,7 +114,7 @@ void main() => describe("EventStream", () {
       var skipStream = stream.skipUntil(other.stream.last);
 
       main.add(1);
-      other..add(2)..close();
+      other..add(true)..close();
       main..add(3)..close();
 
       return skipStream.toList().then((values) => expect(values).toEqual([3]));

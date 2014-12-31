@@ -165,9 +165,9 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
       it("provides events until future completes", () {
         var takeUntil = reactable.takeUntil(stopper.future);
 
-        new Future(() => controller.add(1))
-            .then((_) => new Future(() => stopper.complete()))
-            .then((_) => controller.add(3));
+        controller.add(1);
+        stopper.complete();
+        controller.add(3);
 
         return takeUntil.last.then((value) => expect(value).toEqual(1));
       });
@@ -176,9 +176,9 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
         var errors = [];
         var takeUntil = reactable.takeUntil(stopper.future).handleError((error) => errors.add(error));
 
-        new Future(() => controller.addError(1))
-            .then((_) => new Future(() => stopper.complete()))
-            .then((_) => controller.addError(3));
+        controller.addError(1);
+        stopper.complete();
+        controller.addError(3);
 
         return takeUntil.isEmpty.then((_) => expect(errors).toEqual([1]));
       });
