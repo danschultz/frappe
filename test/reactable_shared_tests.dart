@@ -67,15 +67,5 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
         return result.last.then((value) => expect(value).toBe(false));
       });
     });
-
-    describe("map()", () {
-      it("maps each event", () {
-        return testReactable(reactable.map((value) => value + 1),
-            behavior: () {
-              controller..add(1)..add(2);
-            },
-            expectation: (values) => expect(values).toEqual([2, 3]));
-      });
-    });
   });
 }

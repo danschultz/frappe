@@ -20,18 +20,6 @@ class _CombinedProperty<S, T> extends _ControllerProperty<T> {
     _compute = compute,
     super();
 
-  StreamSubscription<T> listen(void onData(T event), {Function onError, void onDone(), bool cancelOnError}) {
-    Stream stream;
-
-    if (_canCompute) {
-      stream = new EventStream(new Stream.fromIterable([_currentValue])).merge(changes);
-    } else {
-      stream = changes;
-    }
-
-    return stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
-  }
-
   void _recompute(S a, b) {
     if (_canCompute) {
       try {

@@ -36,6 +36,27 @@ void main() => describe("StreamProperty", () {
       return property.listen(null).asFuture();
     });
 
+    // Tests fix for https://github.com/danschultz/frappe/issues/25
+    it("redelivers the current value to multiple listeners", () {
+      controller.add(1);
+
+      return property.first.then((value) {
+        expect(value).toBe(1);
+
+        return new Future.delayed(new Duration(milliseconds: 100), () => property.first).then((value) {
+          expect(value).toBe(1);
+        });
+      });
+    });
+
+    it("onError is called when stream receives errors", () {
+      property.listen(doNothing,
+          onError: expectAsync((error, stackTrace) => expect(error).toBeNotNull()),
+          cancelOnError: true);
+
+      controller.addError("Error");
+    });
+
     describe("with initial value", () {
       beforeEach(() => property = new Property.fromStreamWithInitialValue(1, controller.stream));
 
@@ -70,14 +91,6 @@ void main() => describe("StreamProperty", () {
         listenToFirstEvent(property, expectAsync((value) => expect(value).toBe(2)));
         controller.add(2);
       });
-    });
-
-    it("onError is called when stream receives errors", () {
-      property.listen(doNothing,
-          onError: expectAsync((error, stackTrace) => expect(error).toBeNotNull()),
-          cancelOnError: true);
-
-      controller.addError("Error");
     });
   });
 });
