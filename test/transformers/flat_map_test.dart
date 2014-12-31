@@ -3,7 +3,7 @@ library flat_map_test;
 import 'dart:async';
 import 'package:guinness/guinness.dart';
 import 'package:frappe/src/transformers.dart';
-import 'util.dart';
+import '../util.dart';
 
 void main() => describe("FlatMap", () {
   StreamController controller;

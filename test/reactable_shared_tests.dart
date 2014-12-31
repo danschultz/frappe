@@ -3,8 +3,7 @@ library reactable_shared_tests;
 import 'dart:async';
 import 'package:frappe/frappe.dart';
 import 'package:guinness/guinness.dart';
-import 'package:unittest/unittest.dart' show expectAsync;
-import 'callback_helpers.dart';
+import 'util.dart';
 
 void injectReactableTests(Reactable provider(StreamController controller)) {
   describe("injected reactable tests", () {
@@ -66,6 +65,16 @@ void injectReactableTests(Reactable provider(StreamController controller)) {
         var result = reactable.isWaitingOn(other);
         new Future(() => otherController.add(1));
         return result.last.then((value) => expect(value).toBe(false));
+      });
+    });
+
+    describe("map()", () {
+      it("maps each event", () {
+        return testReactable(reactable.map((value) => value + 1),
+            behavior: () {
+              controller..add(1)..add(2);
+            },
+            expectation: (values) => expect(values).toEqual([2, 3]));
       });
     });
   });

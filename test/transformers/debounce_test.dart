@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:guinness/guinness.dart';
 import 'package:unittest/unittest.dart' show expectAsync;
 import 'package:frappe/src/transformers.dart';
-import 'util.dart';
+import '../util.dart';
 
 void main() => describe("Debounce", () {
   StreamController controller;
