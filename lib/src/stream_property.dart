@@ -6,7 +6,7 @@ class _StreamProperty<T> extends _ControllerProperty<T> {
   StreamSubscription<T> _subscription;
 
   _StreamProperty._(Stream<T> stream, {T initialValue, bool hasInitialValue: false}) :
-    _stream = stream,
+    _stream = stream.asBroadcastStream(),
     super(initialValue: initialValue, hasInitialValue: hasInitialValue);
 
   factory _StreamProperty(Stream<T> stream) => new _StreamProperty._(stream);
@@ -16,13 +16,10 @@ class _StreamProperty<T> extends _ControllerProperty<T> {
 
   void _handleValue(T value) {
     _currentValue = value;
-    _controller.add(value);
   }
 
   @override
   void _startListening() {
-    super._startListening();
-
     _subscription = _stream.listen(
         (event) => _handleValue(event),
         onDone: () => _controller.close(),
@@ -31,8 +28,6 @@ class _StreamProperty<T> extends _ControllerProperty<T> {
 
   @override
   void _stopListening() {
-    super._stopListening();
-
     _subscription.cancel();
     _subscription = null;
   }

@@ -14,7 +14,6 @@ class _CombinedProperty<S, T> extends _ControllerProperty<T> {
 
   S _valueA;
   Object _valueB;
-  T _currentValue;
 
   _CombinedProperty(this._a, this._b, T compute(S a, b)) :
     _compute = compute,
@@ -24,7 +23,6 @@ class _CombinedProperty<S, T> extends _ControllerProperty<T> {
     if (_canCompute) {
       try {
         _currentValue = _compute(a, b);
-        _controller.add(_currentValue);
       } catch (error, stackTrace) {
         _controller.addError(error, stackTrace);
       }

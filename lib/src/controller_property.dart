@@ -6,6 +6,7 @@ abstract class _ControllerProperty<T> extends Property<T> {
   set _currentValue(T value) {
     _hasCurrentValue = true;
     __currentValue = value;
+    _controller.add(value);
   }
 
   StreamController<T> _controller;
@@ -35,11 +36,7 @@ abstract class _ControllerProperty<T> extends Property<T> {
     return stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
   }
 
-  void _startListening() {
-    _currentValueSubscription = changes.listen((value) => _currentValue = value, onError: (_) {});
-  }
+  void _startListening();
 
-  void _stopListening() {
-    _currentValueSubscription.cancel();
-  }
+  void _stopListening();
 }
