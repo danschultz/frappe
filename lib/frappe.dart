@@ -7,7 +7,6 @@ import 'package:frappe/src/transformers.dart';
 part 'src/reactable.dart';
 part 'src/event_stream.dart';
 part 'src/reactable_stream.dart';
-part 'src/scan_reactable.dart';
 
 part 'src/property.dart';
 part 'src/controller_property.dart';

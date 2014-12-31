@@ -9,6 +9,7 @@ part 'transformers/delay.dart';
 part 'transformers/flat_map.dart';
 part 'transformers/flat_map_latest.dart';
 part 'transformers/merge.dart';
+part 'transformers/scan.dart';
 part 'transformers/skip_until.dart';
 part 'transformers/take_until.dart';
 part 'transformers/when.dart';

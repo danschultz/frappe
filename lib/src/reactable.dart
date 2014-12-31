@@ -157,7 +157,7 @@ abstract class Reactable<T> {
   /// value or the result of the last combine, and the second argument is the next value
   /// in this stream.
   Property<T> scan(T initialValue, T combine(T value, T element)) {
-    return new _ScanReactable(this, initialValue, combine).asPropertyWithInitialValue(initialValue);
+    return asStream().transform(new Scan(initialValue, combine)).asPropertyWithInitialValue(initialValue);
   }
 
   /// Returns an [EventStream] that contains events from each stream that is spawned from
