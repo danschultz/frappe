@@ -9,9 +9,6 @@ class Zip<A, B, R> implements StreamTransformer<A, R> {
     _combiner = combiner;
 
   Stream<R> bind(Stream<A> stream) {
-    var other = _other.asBroadcastStream();
-    stream = stream.asBroadcastStream();
-
     StreamController<R> controller;
     StreamSubscription<A> subscriptionA;
     StreamSubscription<B> subscriptionB;
@@ -26,7 +23,7 @@ class Zip<A, B, R> implements StreamTransformer<A, R> {
       var bufferA = new Queue();
       var bufferB = new Queue();
 
-      void fireIfPairedValuesExist() {
+      void zipIfValuesExist() {
         if (bufferA.isNotEmpty && bufferB.isNotEmpty) {
           controller.add(_combiner(bufferA.removeFirst(), bufferB.removeFirst()));
         }
@@ -34,12 +31,12 @@ class Zip<A, B, R> implements StreamTransformer<A, R> {
 
       subscriptionA = stream.listen((value) {
         bufferA.addLast(value);
-        fireIfPairedValuesExist();
-      }, onDone: () => done());
-      subscriptionB = other.listen((value) {
+        zipIfValuesExist();
+      }, onError: controller.addError, onDone: () => done());
+      subscriptionB = _other.listen((value) {
         bufferB.addLast(value);
-        fireIfPairedValuesExist();
-      }, onDone: () => done());
+        zipIfValuesExist();
+      }, onError: controller.addError, onDone: () => done());
     }, onCancel: () => done());
 
     return controller.stream;
