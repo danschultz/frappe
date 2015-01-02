@@ -1,7 +1,5 @@
 part of frappe.transformers;
 
-typedef Stream<T> StreamConverter<S, T>(S event);
-
 class FlatMap<S, T> implements StreamTransformer {
   final StreamConverter<S, T> _convert;
 

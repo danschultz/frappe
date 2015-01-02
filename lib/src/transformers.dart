@@ -12,5 +12,7 @@ part 'transformers/merge.dart';
 part 'transformers/scan.dart';
 part 'transformers/skip_until.dart';
 part 'transformers/take_until.dart';
+part 'transformers/typedefs.dart';
 part 'transformers/when.dart';
 part 'transformers/util.dart';
+part 'transformers/zip.dart';
