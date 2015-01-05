@@ -25,6 +25,6 @@ class FlatMapLatest<S, T> implements StreamTransformer<S, T> {
       });
     }
 
-    return bindStream(stream, onListen: onListen, onCancel: () => cancelLatest(), onDone: () => cancelLatest());
+    return bindStream(like: stream, onListen: onListen, onCancel: () => cancelLatest(), onDone: () => cancelLatest());
   }
 }

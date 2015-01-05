@@ -39,7 +39,7 @@ void main() => describe("Combine", () {
         expectation: (values) => expect(values).toEqual([2, 3]));
   });
 
-  it("returned stream closes when both stream are done", () {
+  it("returned stream closes when both streams are done", () {
     return testStream(controllerA.stream.transform(new Combine(controllerB.stream, (a, b) => a + b)),
         behavior: () {
           controllerA.close();

@@ -1,6 +1,6 @@
 part of frappe.transformers;
 
-class Scan<T> implements StreamTransformer<T, T> {
+class Scan<T> implements StreamTransformer {
   final T _initialValue;
   final Function _combine;
 
@@ -9,7 +9,7 @@ class Scan<T> implements StreamTransformer<T, T> {
     _combine = combine;
 
   Stream<T> bind(Stream<T> stream) {
-    return bindStream(stream, onListen: (EventSink<T> sink) {
+    return bindStream(like: stream, onListen: (EventSink<T> sink) {
       var value = _initialValue;
       return stream.listen((data) {
         value = _combine(value, data);

@@ -19,7 +19,7 @@ class Zip<A, B, R> implements StreamTransformer<A, R> {
       controller.close();
     }
 
-    controller = _createControllerForStream(stream, onListen: () {
+    controller = _createControllerLikeStream(stream: stream, onListen: () {
       var bufferA = new Queue();
       var bufferB = new Queue();
 

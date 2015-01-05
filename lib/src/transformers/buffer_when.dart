@@ -37,7 +37,8 @@ class BufferWhen<T> implements StreamTransformer {
       streamSubscription.resume();
     }
 
-    controller = _createControllerForStream(stream,
+    controller = _createControllerLikeStream(
+        stream: stream,
         onListen: onListen,
         onResume: onResume,
         onPause: onPause,

@@ -1,6 +1,22 @@
 part of frappe.transformers;
 
 class Combine<A, B, R> implements StreamTransformer<A, R> {
+  static Stream<List> all(Iterable<Stream> streams) {
+    return bindStream(onListen: (EventSink<List> sink) {
+      Stream<List> merged = Merge.all(streams.map((stream) => stream.map((event) => [stream, event])));
+      Stream<Map<Stream, Object>> values = merged.transform(new Scan<Map<Stream, Object>>({}, (previous, current) {
+        var values = new Map.from(previous);
+        values[current.first] = current.last;
+        return values;
+      }));
+
+      return values
+          .where((values) => values.length == streams.length)
+          .map((values) => streams.map((stream) => values[stream]).toList(growable: false))
+          .listen((combined) => sink.add(combined));
+    });
+  }
+
   final Stream<B> _other;
   final Combiner<A, B, R> _combiner;
 
@@ -9,47 +25,8 @@ class Combine<A, B, R> implements StreamTransformer<A, R> {
     _combiner = combiner;
 
   Stream<R> bind(Stream<A> stream) {
-    StreamController<R> controller;
-    StreamSubscription<A> subscriptionA;
-    StreamSubscription<B> subscriptionB;
-
-    var completerA = new Completer();
-    var completerB = new Completer();
-
-    A valueA;
-    var hasA = false;
-
-    B valueB;
-    var hasB = false;
-
-    void combineIfValuesExist() {
-      if (hasA && hasB) {
-        controller.add(_combiner(valueA, valueB));
-      }
-    }
-
-    void done() {
-      subscriptionA.cancel();
-      subscriptionB.cancel();
-      controller.close();
-    }
-
-    controller = _createControllerForStream(stream, onListen: () {
-      subscriptionA = stream.listen((value) {
-        valueA = value;
-        hasA = true;
-        combineIfValuesExist();
-      }, onError: controller.addError, onDone: completerA.complete);
-
-      subscriptionB = _other.listen((value) {
-        valueB = value;
-        hasB = true;
-        combineIfValuesExist();
-      }, onError: controller.addError, onDone: completerB.complete);
+    return bindStream(like: stream, onListen: (EventSink<R> sink) {
+      return Combine.all([stream, _other]).listen((values) => sink.add(_combiner(values.first, values.last)));
     });
-
-    Future.wait([completerA.future, completerB.future]).then((_) => done());
-
-    return controller.stream;
   }
 }

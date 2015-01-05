@@ -19,6 +19,6 @@ class FlatMap<S, T> implements StreamTransformer {
 
     var cleanup = () => cancelSubscriptions(subscriptions).then((_) => subscriptions.clear());
 
-    return bindStream(stream, onListen: onListen, onDone: () => cleanup(), onCancel: () => cleanup());
+    return bindStream(like: stream, onListen: onListen, onDone: () => cleanup(), onCancel: () => cleanup());
   }
 }

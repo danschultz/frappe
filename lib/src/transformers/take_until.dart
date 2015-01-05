@@ -31,7 +31,7 @@ class TakeUntil<T> implements StreamTransformer<T, T> {
       });
     }
 
-    controller = _createControllerForStream(stream,
+    controller = _createControllerLikeStream(stream: stream,
         onListen: () => onListen(),
         onCancel: () {
           streamSubscription.cancel();
