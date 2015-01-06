@@ -12,25 +12,19 @@ Future testStream(Stream stream, {behavior(), expectation(List values)}) {
     results.add(value);
   });
 
-  return new Future(() => behavior())
-      .then((_) => new Future(() {
-        subscription.cancel();
-      }))
-      .then((_) => expectation(results));
+  return new Future(() {
+    if (behavior != null) {
+      return behavior();
+    }
+  })
+  .then((_) => new Future(() {
+    subscription.cancel();
+  }))
+  .then((_) => expectation(results));
 }
 
 Future testReactable(Reactable reactable, {behavior(), expectation(List values)}) {
-  var results = [];
-
-  var subscription = reactable.listen((value) {
-    results.add(value);
-  });
-
-  return new Future(() => behavior())
-      .then((_) => new Future(() {
-        subscription.cancel();
-      }))
-      .then((_) => expectation(results));
+  return testStream(reactable.asStream(), behavior: behavior, expectation: expectation);
 }
 
 void listenToFirstEvent(Reactable observable, void onData(data)) {

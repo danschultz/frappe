@@ -1,7 +1,7 @@
 part of frappe.transformers;
 
 class Combine<A, B, R> implements StreamTransformer<A, R> {
-  static Stream<List> all(Iterable<Stream> streams) {
+  static Stream<List> all(List<Stream> streams) {
     return bindStream(onListen: (EventSink<List> sink) {
       Stream<List> merged = Merge.all(streams.map((stream) => stream.map((event) => [stream, event])));
       Stream<Map<Stream, Object>> values = merged.transform(new Scan<Map<Stream, Object>>({}, (previous, current) {
