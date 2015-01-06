@@ -9,36 +9,15 @@ class Zip<A, B, R> implements StreamTransformer<A, R> {
     _combiner = combiner;
 
   Stream<R> bind(Stream<A> stream) {
-    StreamController<R> controller;
-    StreamSubscription<A> subscriptionA;
-    StreamSubscription<B> subscriptionB;
+    Queue appendToQueue(Queue queue, element) => queue..add(element);
 
-    void done() {
-      subscriptionA.cancel();
-      subscriptionB.cancel();
-      controller.close();
-    }
+    var bufferA = stream.transform(new Scan(new Queue<A>(), appendToQueue));
+    var bufferB = _other.transform(new Scan(new Queue<B>(), appendToQueue));
 
-    controller = _createControllerLikeStream(stream: stream, onListen: () {
-      var bufferA = new Queue();
-      var bufferB = new Queue();
+    var combined = Combine.all([bufferA, bufferB]) as Stream<List<Queue>>;
 
-      void zipIfValuesExist() {
-        if (bufferA.isNotEmpty && bufferB.isNotEmpty) {
-          controller.add(_combiner(bufferA.removeFirst(), bufferB.removeFirst()));
-        }
-      }
-
-      subscriptionA = stream.listen((value) {
-        bufferA.addLast(value);
-        zipIfValuesExist();
-      }, onError: controller.addError, onDone: () => done());
-      subscriptionB = _other.listen((value) {
-        bufferB.addLast(value);
-        zipIfValuesExist();
-      }, onError: controller.addError, onDone: () => done());
-    }, onCancel: () => done());
-
-    return controller.stream;
+    return combined
+        .where((queues) => queues.first.isNotEmpty && queues.last.isNotEmpty)
+        .map((queues) => _combiner(queues.first.removeFirst(), queues.last.removeFirst()));
   }
 }
