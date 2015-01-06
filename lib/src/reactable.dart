@@ -180,4 +180,11 @@ abstract class Reactable<T> {
   Reactable<T> when(Reactable<bool> toggle) => asStream().transform(new When(toggle.asStream()));
 
   Reactable<T> where(bool test(T event)) => new EventStream(new _ReactableAsStream(this).where(test));
+
+  /// Returns a new reactable that merges this stream with [other] by combining their
+  /// values in a pair-wire fashion.
+  ///
+  /// A zipped stream will only start producing values when there's a value from each
+  /// stream. The returned stream will stop producing values when either stream ends.
+  Reactable zip(Reactable other, Combiner combiner) => asStream().transform(new Zip(other.asStream(), combiner));
 }

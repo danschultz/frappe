@@ -38,10 +38,8 @@ void main() => describe("Zip", () {
   });
 
   it("returned stream closes when a source stream is done", () {
-    return testStream(controllerA.stream.transform(new Zip(controllerB.stream, (a, b) => a + b)),
-        behavior: () {
-          controllerB.close();
-        },
-        expectation: (values) => expect(values).toEqual([]));
+    var stream = controllerA.stream.transform(new Zip(controllerB.stream, (a, b) => a + b));
+    controllerB.close();
+    return stream.isEmpty;
   });
 });
