@@ -2,9 +2,13 @@ part of frappe;
 
 /// An [EventStream] is wrapper around a standard Dart [Stream], but provides utility
 /// methods for creating other streams or properties.
-class EventStream<T> extends StreamView<T> with Reactable<T> {
+class EventStream<T> extends Reactable<T> {
+  final Stream<T> _stream;
+
+  bool get isBroadcast => _stream.isBroadcast;
+
   /// Returns a new [EventStream] that wraps a standard Dart [Stream].
-  EventStream(Stream<T> stream) : super(stream);
+  EventStream(Stream<T> stream) : _stream = stream;
 
   /// Returns a new [EventStream] that contains events from an [iterable].
   factory EventStream.fromIterable(Iterable<T> iterable) {
@@ -16,100 +20,19 @@ class EventStream<T> extends StreamView<T> with Reactable<T> {
     return new EventStream<T>(new Stream<T>.fromFuture(future));
   }
 
-  /// Returns a new stream that contains events from this stream and the [other] stream.
-  EventStream merge(Stream other) => transform(new Merge(other));
-
-  /// Returns a new stream that buffers events when the last event in [toggle] is `true`.
-  ///
-  /// Buffered events are delivered when [toggle] becomes `false`.
-  EventStream<T> bufferWhen(Reactable<bool> toggle) => transform(new BufferWhen(toggle.asStream()));
-
-  /// Returns a new stream that will begin forwarding events from this stream when the
-  /// [signal] completes.
-  EventStream<T> skipUntil(Future signal) => transform(new SkipUntil(signal));
-
-  EventStream<T> asStream() {
-    return this;
+  StreamSubscription<T> listen(void onData(T event), {Function onError, void onDone(), bool cancelOnError}) {
+    return _stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
   }
+
+  EventStream<T> asStream() => this;
 
   /// Returns a [Property] where the first value will be the next value from this stream.
-  Property<T> asProperty() {
-    return new _StreamProperty(this);
-  }
+  Property<T> asProperty() => new Property.fromStream(this);
 
   /// Returns a [Property] where the first value will be the [initialValue], and values
   /// after that will be the values from this stream.
-  Property<T> asPropertyWithInitialValue(T initialValue) {
-    return new _StreamProperty.initialValue(this, initialValue);
-  }
+  Property<T> asPropertyWithInitialValue(T initialValue) =>
+      new Property.fromStreamWithInitialValue(initialValue, this);
 
-  /// Returns a wrapped broadcast or single-subscription version of [stream] based on
-  /// [isBroadcast].
-  ///
-  /// All methods defined on this class that return an [EventStream] should use this
-  /// method when returning their stream. It guarantees that the returned stream will be
-  /// the same type of stream as this stream (either broadcast or single-subscription).
-  EventStream _asEventStream(Stream stream) {
-    return new EventStream(isBroadcast ? stream.asBroadcastStream() : stream);
-  }
-
-  //
-  // Wrappers for Dart Stream methods
-  //
-  EventStream<T> asBroadcastStream({void onListen(StreamSubscription subscription),
-                                    void onCancel(StreamSubscription subscription)}) {
-    return new EventStream(super.asBroadcastStream(onListen: onListen, onCancel: onCancel));
-  }
-
-  EventStream asyncExpand(Stream convert(T event)) {
-    return new EventStream(super.asyncExpand(convert));
-  }
-
-  EventStream asyncMap(convert(T event)) {
-    return new EventStream(super.asyncMap(convert));
-  }
-
-  EventStream<T> distinct([bool equals(T previous, T next)]) {
-    return new EventStream(new _ReactableAsStream(super.distinct(equals)));
-  }
-
-  EventStream expand(Iterable convert(T value)) {
-    return new EventStream(new _ReactableAsStream(super.expand(convert)));
-  }
-
-  EventStream<T> handleError(Function onError, {bool test(error)}) {
-    return new EventStream(new _ReactableAsStream(super.handleError(onError, test: test)));
-  }
-
-  EventStream map(convert(T event)) {
-    return new EventStream(new _ReactableAsStream(super.map(convert)));
-  }
-
-  EventStream<T> skip(int count) {
-    return new EventStream(super.skip(count));
-  }
-
-  EventStream<T> skipWhile(bool test(T element)) {
-    return new EventStream(super.skipWhile(test));
-  }
-
-  EventStream<T> take(int count) {
-    return new EventStream(super.take(count));
-  }
-
-  EventStream<T> takeWhile(bool test(T element)) {
-    return new EventStream(new _ReactableAsStream(super.takeWhile(test)));
-  }
-
-  EventStream timeout(Duration timeLimit, {void onTimeout(EventSink sink)}) {
-    return new EventStream(super.timeout(timeLimit, onTimeout: onTimeout));
-  }
-
-  EventStream transform(StreamTransformer<T, dynamic> streamTransformer) {
-    return new EventStream(super.transform(streamTransformer));
-  }
-
-  EventStream<T> where(bool test(T event)) {
-    return new EventStream(new _ReactableAsStream(super.where(test)));
-  }
+  Reactable _wrap(Stream stream) => new EventStream(stream);
 }
