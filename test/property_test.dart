@@ -70,6 +70,22 @@ void main() => describe("Property", () {
       property.listen(null).cancel();
       return completer.future;
     });
+
+    describe("changes", () {
+      it("doesn't include the initial value", () {
+        testStream(property.changes,
+            behavior: () => controller.add(2),
+            expectation: (values) => expect(values).toEqual([2]));
+      });
+    });
+
+    describe("asEventStream()", () {
+      it("includes the initial value and changes", () {
+        testStream(property.changes,
+            behavior: () => controller.add(2),
+            expectation: (values) => expect(values).toEqual([1, 2]));
+      });
+    });
   });
 
   describe("without initial value", () {
