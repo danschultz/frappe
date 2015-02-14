@@ -20,7 +20,7 @@ class Property<T> extends Reactable<T> {
   bool get isBroadcast => _controller.stream.isBroadcast;
 
   Property._(Stream<T> stream, bool hasInitialValue, [T initialValue]) {
-    var input = stream.asBroadcastStream();
+    var input = stream.asBroadcastStream(onCancel: (subscription) => subscription.cancel());
     _hasCurrentValue = hasInitialValue;
     _currentValue = initialValue;
 
@@ -85,9 +85,7 @@ class Property<T> extends Reactable<T> {
   Property _wrap(Stream stream) => new Property.fromStream(stream);
 
   @override
-  Property<T> asProperty() {
-    return this;
-  }
+  Property<T> asProperty() => this;
 
   @override
   Property<T> asPropertyWithInitialValue(T initialValue) {

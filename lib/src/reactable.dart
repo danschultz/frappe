@@ -108,9 +108,11 @@ abstract class Reactable<T> extends Stream<T> {
 
   Reactable<T> skip(int count) => _wrap(super.skip(count));
 
+  Reactable<T> skipWhile(bool test(T element)) => _wrap(super.skipWhile(test));
+
   /// Returns a new stream that will begin forwarding events from this stream when the
   /// [signal] completes.
-  Reactable<T> skipUntil(Future signal) => transform(new SkipUntil(signal));
+  Reactable<T> skipUntil(Stream signal) => transform(new SkipUntil(signal));
 
   Reactable<T> take(int count) => _wrap(super.take(count));
 
@@ -138,7 +140,7 @@ abstract class Reactable<T> extends Stream<T> {
   ///
   /// A zipped stream will only start producing values when there's a value from each
   /// stream. The returned stream will stop producing values when either stream ends.
-  Reactable zip(Reactable other, Combiner combiner) => transform(new Zip(other.asStream(), combiner));
+  Reactable zip(Stream other, Combiner combiner) => transform(new Zip(other, combiner));
 
   Reactable _wrap(Stream stream);
 }
