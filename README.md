@@ -1,5 +1,7 @@
 # Frappé
 
+[![Build Status](https://travis-ci.org/danschultz/frappe.svg)](https://travis-ci.org/danschultz/frappe)
+
 A mildly [Bacon.js](http://baconjs.github.io/) inspired Dart package that aims to make functional reactive programming (FRP) easier in Dart. Frappé extends the behavior of Dart's streams, and introduces new concepts like properties and reactables.
 
 You can explore the full API here: http://www.dartdocs.org/documentation/frappe/latest.
