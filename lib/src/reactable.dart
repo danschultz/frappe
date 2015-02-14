@@ -11,9 +11,7 @@ abstract class Reactable<T> extends Stream<T> {
   /// The returned [Property] will only have a value once all the [reactables] contain
   /// a value.
   static Property<Iterable> collect(Iterable<Reactable> reactables) {
-    var streams = reactables.map((reactable) => reactable.asStream()).toList();
-    var combined = Combine.all(streams).asBroadcastStream();
-    return new Property.fromStream(combined);
+    return new Property.fromStream(Combine.all(reactables.toList()));
   }
 
   Reactable<T> asBroadcastStream({void onListen(StreamSubscription<T> subscription),
@@ -34,7 +32,11 @@ abstract class Reactable<T> extends Stream<T> {
       new Property.fromStreamWithInitialValue(initialValue, this);
 
   /// Returns this reactable as an [EventStream].
-  EventStream<T> asStream() => new EventStream(this);
+  @deprecated("Expected to be removed in v0.5. Use asEventStream() instead.")
+  EventStream<T> asStream() => asEventStream();
+
+  /// Returns this reactable as an [EventStream].
+  EventStream<T> asEventStream() => new EventStream(this);
 
   /// Returns a stream with the events of a stream per original event.
   ///
@@ -71,6 +73,13 @@ abstract class Reactable<T> extends Stream<T> {
 
   Reactable expand(Iterable convert(T value)) => _wrap(super.expand(convert));
 
+  /// Returns an [EventStream] that contains events from each stream that is spawned from
+  /// [convert].
+  Reactable flatMap(Stream convert(T event)) => transform(new FlatMap(convert));
+
+  /// Returns an [EventStream] that only includes events from the last spawned stream.
+  Reactable flatMapLatest(Stream convert(T event)) => transform(new FlatMapLatest(convert));
+
   /// Returns a property that indicates if this reactable is waiting for an event [other].
   ///
   /// The initial value for the returned property is `true`, and returns `false` once
@@ -78,15 +87,15 @@ abstract class Reactable<T> extends Stream<T> {
   ///
   /// This method is useful for displaying spinners while waiting for AJAX responses.
   Property<bool> isWaitingOn(Reactable other) {
-    return new Property
-        .constant(true).asStream()
-        .merge(new Property.fromFuture(other.first.then((_) => false)).asStream())
-        .asProperty();
+    return new Property.constant(true).merge(new Property.fromFuture(other.first.then((_) => false)));
   }
 
   Reactable<T> handleError(onError, {bool test(error)}) => _wrap(super.handleError(onError, test: test));
 
   Reactable map(convert(T event)) => _wrap(super.map(convert));
+
+  /// Returns a new stream that contains events from this stream and the [other] stream.
+  Reactable merge(Stream other) => transform(new Merge(other));
 
   /// Returns a [Property] where the first value is the [initialValue] and values after
   /// that are the result of [combine].
@@ -95,16 +104,6 @@ abstract class Reactable<T> extends Stream<T> {
   /// value or the result of the last combine, and the second argument is the next value
   /// in this stream.
   Reactable<T> scan(T initialValue, T combine(T value, T element)) => transform(new Scan(initialValue, combine));
-
-  /// Returns an [EventStream] that contains events from each stream that is spawned from
-  /// [convert].
-  Reactable flatMap(Stream convert(T event)) => transform(new FlatMap(convert));
-
-  /// Returns an [EventStream] that only includes events from the last spawned stream.
-  Reactable flatMapLatest(Stream convert(T event)) => transform(new FlatMapLatest(convert));
-
-  /// Returns a new stream that contains events from this stream and the [other] stream.
-  Reactable merge(Stream other) => transform(new Merge(other));
 
   Reactable<T> skip(int count) => _wrap(super.skip(count));
 

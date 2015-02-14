@@ -92,11 +92,6 @@ class Property<T> extends Reactable<T> {
     return new Property.fromStreamWithInitialValue(initialValue, changes);
   }
 
-  @override
-  /// Returns a stream that contains events for the current value of this `Property`,
-  /// as well as any of its changes.
-  EventStream<T> asStream() => new EventStream(this);
-
   /// Combines this property and [other] with the `&&` operator.
   Property<bool> and(Property<bool> other) => combine(other, (a, b) => a && b);
 

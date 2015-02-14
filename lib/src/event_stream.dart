@@ -24,7 +24,7 @@ class EventStream<T> extends Reactable<T> {
     return _stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
   }
 
-  EventStream<T> asStream() => this;
+  EventStream<T> asEventStream() => this;
 
   /// Returns a [Property] where the first value will be the next value from this stream.
   Property<T> asProperty() => new Property.fromStream(this);
