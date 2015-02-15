@@ -11,8 +11,8 @@ void testWhen(Reactable provider(Stream stream)) {
   Reactable reactable;
 
   beforeEach(() {
-    source = new StreamController();
-    signal = new StreamController();
+    source = new StreamController(sync: true);
+    signal = new StreamController(sync: true);
     reactable = provider(source.stream);
   });
 
