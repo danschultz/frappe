@@ -1,4 +1,4 @@
-library reactable_shared_tests;
+library return_type_shared_tests;
 
 import 'dart:async';
 import 'package:frappe/frappe.dart';

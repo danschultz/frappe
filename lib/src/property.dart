@@ -46,7 +46,7 @@ class Property<T> extends Reactable<T> {
       subscription = null;
     }
 
-    _controller = new StreamController.broadcast(onListen: onListen, onCancel: onCancel);
+    _controller = new StreamController.broadcast(onListen: onListen, onCancel: onCancel, sync: true);
   }
 
   /// Returns a new property where its current value is always [value].
@@ -71,13 +71,13 @@ class Property<T> extends Reactable<T> {
       new Property.fromStreamWithInitialValue(initialValue, new Stream.fromFuture(future));
 
   StreamSubscription<T> listen(void onData(T value), {Function onError, void onDone(), bool cancelOnError}) {
-    var controller = new StreamController();
+    var controller = new StreamController(sync: true);
 
     if (_hasCurrentValue) {
       controller.add(_currentValue);
     }
 
-    controller.addStream(_controller.stream).then((_) => controller.close());
+    controller.addStream(_controller.stream, cancelOnError: false).then((_) => controller.close());
 
     return controller.stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
   }
