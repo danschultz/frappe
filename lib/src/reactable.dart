@@ -75,6 +75,9 @@ abstract class Reactable<T> extends Stream<T> {
 
   Reactable<T> distinct([bool equals(T previous, T next)]) => _wrap(super.distinct(equals));
 
+  Reactable<T> doAction(void onData(T value), {Function onError, void onDone()}) =>
+      transform(new DoAction(onData, onError: onError, onDone: onDone));
+
   Reactable expand(Iterable convert(T value)) => _wrap(super.expand(convert));
 
   /// Returns an [EventStream] that contains events from each stream that is spawned from
