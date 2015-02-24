@@ -118,6 +118,8 @@ abstract class Reactable<T> extends Stream<T> {
   /// in this stream.
   Reactable<T> scan(T initialValue, T combine(T value, T element)) => transform(new Scan(initialValue, combine));
 
+  Reactable selectFirst(Stream other) => transform(new SelectFirst(other));
+
   Reactable<T> skip(int count) => _wrap(super.skip(count));
 
   Reactable<T> skipWhile(bool test(T element)) => _wrap(super.skipWhile(test));
