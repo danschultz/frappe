@@ -128,6 +128,10 @@ abstract class Reactable<T> extends Stream<T> {
   /// [signal] completes.
   Reactable<T> skipUntil(Stream signal) => transform(new SkipUntil(signal));
 
+  Reactable startWith(value) => transform(new StartWith(value));
+
+  Reactable startWithValues(Iterable values) => transform(new StartWith.many(values));
+
   Reactable<T> take(int count) => _wrap(super.take(count));
 
   /// Returns a new stream that contains events from this stream until the [signal]
