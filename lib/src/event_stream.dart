@@ -12,6 +12,8 @@ class EventStream<T> extends Reactable<T> {
 
   factory EventStream.empty() => new EventStream.fromIterable([]);
 
+  factory EventStream.single(T value) => new EventStream.fromIterable([value]);
+
   /// Returns a new [EventStream] that contains events from an `Iterable`.
   factory EventStream.fromIterable(Iterable<T> iterable) {
     return new EventStream<T>(new Stream<T>.fromIterable(iterable));
