@@ -61,6 +61,8 @@ abstract class Reactable<T> extends Stream<T> {
 
   Reactable concat(Stream other) => transform(new Concat(other));
 
+  Reactable concatAll() => transform(new ConcatAll());
+
   /// Returns a new stream that upon forwarding an event from this stream, will ignore
   /// any subsequent events until [duration], after which the last event will be
   /// forwarded.
