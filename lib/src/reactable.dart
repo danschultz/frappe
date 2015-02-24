@@ -116,7 +116,7 @@ abstract class Reactable<T> extends Stream<T> {
   /// [combine] is an accumulator function where its first argument is either the initial
   /// value or the result of the last combine, and the second argument is the next value
   /// in this stream.
-  Reactable<T> scan(T initialValue, T combine(T value, T element)) => transform(new Scan(initialValue, combine));
+  Reactable scan(initialValue, combine(value, T element)) => transform(new Scan(initialValue, combine));
 
   Reactable selectFirst(Stream other) => transform(new SelectFirst(other));
 
