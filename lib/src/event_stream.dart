@@ -1,13 +1,13 @@
 part of frappe;
 
-/// An [EventStream] is wrapper around a standard Dart [Stream], but provides utility
+/// An [EventStream] is wrapper around a standard Dart `Stream`, but provides utility
 /// methods for creating other streams or properties.
 class EventStream<T> extends Reactable<T> {
   final Stream<T> _stream;
 
   bool get isBroadcast => _stream.isBroadcast;
 
-  /// Returns a new [EventStream] that wraps a standard Dart [Stream].
+  /// Returns a new [EventStream] that wraps a standard Dart `Stream`.
   EventStream(Stream<T> stream) : _stream = stream;
 
   factory EventStream.empty() => new EventStream.fromIterable([]);
