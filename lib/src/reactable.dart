@@ -59,6 +59,8 @@ abstract class Reactable<T> extends Stream<T> {
 
   Reactable combine(Stream other, Object combiner(T a, b)) => transform(new Combine(other, combiner));
 
+  Reactable concat(Stream other) => transform(new Concat(other));
+
   /// Returns a new stream that upon forwarding an event from this stream, will ignore
   /// any subsequent events until [duration], after which the last event will be
   /// forwarded.
