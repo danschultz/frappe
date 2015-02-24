@@ -8,4 +8,5 @@ environment:
 dependencies:
   stream_transformers: ^0.3.0
 dev_dependencies:
+  browser: ^0.10.0
   guinness: ^0.1.6
