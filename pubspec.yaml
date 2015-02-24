@@ -6,6 +6,6 @@ homepage: http://www.github.com/danschultz/frappe
 environment:
   sdk: ^1.8.0
 dependencies:
-  stream_transformers: ^0.2.0
+  stream_transformers: ^0.3.0
 dev_dependencies:
   guinness: ^0.1.6
