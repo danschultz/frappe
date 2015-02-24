@@ -104,6 +104,8 @@ abstract class Reactable<T> extends Stream<T> {
   /// Returns a new stream that contains events from this stream and the [other] stream.
   Reactable merge(Stream other) => transform(new Merge(other));
 
+  Reactable mergeAll() => transform(new MergeAll());
+
   /// Returns a [Property] where the first value is the [initialValue] and values after
   /// that are the result of [combine].
   ///
