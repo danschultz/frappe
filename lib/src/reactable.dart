@@ -106,6 +106,8 @@ abstract class Reactable<T> extends Stream<T> {
 
   Reactable mergeAll() => transform(new MergeAll());
 
+  Reactable<T> sampleOn(Stream trigger) => transform(new SampleOn(trigger));
+
   /// Returns a [Property] where the first value is the [initialValue] and values after
   /// that are the result of [combine].
   ///
