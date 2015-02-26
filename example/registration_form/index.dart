@@ -65,6 +65,6 @@ Future<bool> register(String username, String fullname) {
 
 Duration randomDelay() => new Duration(milliseconds: new Random().nextInt(500) + 500);
 
-String inputValue(Event event) => event.target.value;
+String inputValue(Event event) => (event.target as InputElement).value;
 
 bool isEnterKey(KeyboardEvent event) => event.keyCode == 13;
