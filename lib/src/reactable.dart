@@ -87,14 +87,15 @@ abstract class Reactable<T> extends Stream<T> {
   /// Returns an [EventStream] that only includes events from the last spawned stream.
   Reactable flatMapLatest(Stream convert(T event)) => transform(new FlatMapLatest(convert));
 
-  /// Returns a property that indicates if this reactable is waiting for an event [other].
-  ///
-  /// The initial value for the returned property is `true`, and returns `false` once
-  /// [other] delivers an event.
+  /// Returns a property that indicates if this reactable is waiting for an event from
+  /// [other].
   ///
   /// This method is useful for displaying spinners while waiting for AJAX responses.
-  Property<bool> isWaitingOn(Reactable other) {
-    return new Property.constant(true).merge(new Property.fromFuture(other.first.then((_) => false)));
+  Property<bool> isWaitingOn(Stream other) {
+    return new Property.fromStreamWithInitialValue(
+        false,
+        flatMapLatest((_) => new EventStream.single(true).merge(other.take(1).map((_) => false))))
+      .distinct();
   }
 
   Reactable<T> handleError(onError, {bool test(error)}) => _wrap(super.handleError(onError, test: test));
