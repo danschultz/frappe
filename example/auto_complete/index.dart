@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 import 'package:frappe/frappe.dart';
@@ -6,21 +7,25 @@ void main() {
   var searchInput = querySelector("#searchInput");
   var suggestionsList = querySelector("#suggestions");
 
-  var searchText = new EventStream<Event>(searchInput.onInput)
-      .map((event) => event.target.value)
-      .distinct();
+  var searchText = new EventStream(searchInput.onInput.map((event) => event.target.value));
 
-  var suggestions = searchText
-      .debounce(new Duration(milliseconds: 250))
-      .doAction((term) => print("Querying `$term`"))
-      .flatMapLatest((term) => queryTerm(term))
-      .doAction((results) => print("Found ${results.length} results"));
+  var suggestions =
+      searchText
+          .debounce(new Duration(milliseconds: 250))
+          .doAction((term) => print("Querying `$term`"))
+          .flatMapLatest((term) => queryTerm(term))
+          .doAction((results) => print("Found ${results.length} results"));
 
-  suggestions.forEach((results) {
-    suggestionsList.children
-        ..clear()
-        ..addAll(results.map((result) => new LIElement()..text = result));
-  });
+  var isPending = searchText.isWaitingOn(suggestions);
+
+  isPending
+      .where((value) => value)
+      .forEach((_) => suggestionsList.children..clear()..add(new DivElement()..text = "Loading ..."));
+
+  suggestions.forEach((results) =>
+      suggestionsList.children
+          ..clear()
+          ..addAll(results.map((result) => new LIElement()..text = result)));
 }
 
 EventStream<Iterable<String>> queryTerm(String term) {
