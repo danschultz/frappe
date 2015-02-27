@@ -19,52 +19,53 @@ void main() {
       username
           .changes
           .flatMapLatest((value) => new Stream.fromFuture(fetchIsUsernameAvailable(value)));
+  var isCheckingUsername = username.changes.isWaitingOn(isUsernameAvailable);
+
   var isValid =
       isUsernameValid
           .combine(isFullnameValid, (a, b) => a && b)
           .combine(isUsernameAvailable, (a, b) => a && b)
+          .distinct()
+          .doAction((value) => print("Form valid? $value"))
           .asPropertyWithInitialValue(false);
 
   var onSubmit =
-      new EventStream(usernameInput.onKeyUp.where(isEnterKey))
-          .merge(fullnameInput.onKeyUp.where(isEnterKey))
-          .merge(registerButton.onClick)
-          .when(isValid);
+      new EventStream(registerButton.onClick)
+          .doAction((_) => print("Submitting ..."));
 
   var onRequestRegistration =
       username
-          .combine(fullname, (username, fullname) => register(username, fullname))
-          .sampleOn(onSubmit);
+          .combine(fullname, (username, fullname) => () => registerUser(username, fullname))
+          .sampleOn(onSubmit)
+          .asyncMap((registerUser) => registerUser())
+          .asEventStream()
+          .doAction((_) => print("Registered!"));
+  var isSubmittingRegistration = onSubmit.isWaitingOn(onRequestRegistration);
 
-  username.changes.forEach((_) => usernameAvailable.text = "");
+  var canSubmit =
+      isValid
+          .and(isCheckingUsername.map((value) => !value))
+          .and(isSubmittingRegistration.map((value) => !value));
+
+  isCheckingUsername
+      .where((value) => value)
+      .forEach((_) => usernameAvailable.text = "Checking ...");
 
   isUsernameAvailable
       .doAction((value) => print("Username available? $value"))
-      .where((value) => !value)
-      .forEach((value) => usernameAvailable.text = "Sorry, username is taken");
+      .forEach((value) => usernameAvailable.text = value ? "Available" : "Sorry, username is taken");
 
-  isValid
-      .distinct()
-      .doAction((value) => print("Form valid? $value"))
-      .forEach((value) => registerButton.disabled = !value);
-
-  onRequestRegistration
-      .doAction((_) => print("Registering ..."))
-      .asyncMap((request) => request)
-      .doAction((_) => print("Registered!"))
-      .forEach((_) => result.text = "Thanks, you're registered!");
+  canSubmit.forEach((value) => registerButton.disabled = !value);
+  onRequestRegistration.forEach((id) => result.text = "Thanks, your user ID is $id!");
 }
 
 Future<bool> fetchIsUsernameAvailable(String username) {
   return new Future.delayed(randomDelay(), () => username.length % 2 == 0);
 }
-
-Future<bool> register(String username, String fullname) {
-  return new Future.delayed(randomDelay() * 4, () => true);
+Future<int> registerUser(String username, String fullname) {
+  return new Future.delayed(randomDelay() * 4, () => username.hashCode + fullname.hashCode);
 }
 
 Duration randomDelay() => new Duration(milliseconds: new Random().nextInt(500) + 500);
 
 String inputValue(Event event) => (event.target as InputElement).value;
-
-bool isEnterKey(KeyboardEvent event) => event.keyCode == 13;
