@@ -11,7 +11,7 @@ This simple registration form includes a laundry list of features:
 - [x] Disabling the Register button in case the username is unavailable
 - [x] Disabling the Register button while the check is being performed
 - [x] Disabling the Register button immediately when pressed to prevent double-submit
-- [ ] Showing an AJAX indicator while registration is being processed
+- [x] Showing an AJAX indicator while registration is being processed
 - [x] Showing feedback after registration
 
 You can try out the demo for yourself [here](http://danschultz.github.io/frappe/examples/registration_form/).

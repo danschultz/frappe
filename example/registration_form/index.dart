@@ -56,6 +56,8 @@ void main() {
       .forEach((value) => usernameAvailable.text = value ? "Available" : "Sorry, username is taken");
 
   canSubmit.forEach((value) => registerButton.disabled = !value);
+
+  isSubmittingRegistration.where((value) => value).forEach((_) => result.text = "Registering ...");
   onRequestRegistration.forEach((id) => result.text = "Thanks, your user ID is $id!");
 }
 
