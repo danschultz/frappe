@@ -1,6 +1,6 @@
 part of frappe;
 
-/// A property is an observable with the concept of a current value.
+/// A property is an reactable with the concept of a current value.
 ///
 /// Calling [listen] on a property will deliver its current value, if one exists.
 /// This means that if the property has previously emitted the value of *x* to
@@ -17,6 +17,7 @@ class Property<T> extends Reactable<T> {
   /// The stream will *not* contain an event for the current value of the `Property`.
   EventStream<T> get changes => new EventStream(_controller.stream);
 
+  @override
   bool get isBroadcast => _controller.stream.isBroadcast;
 
   Property._(Stream<T> stream, bool hasInitialValue, [T initialValue]) {

@@ -5,13 +5,17 @@ part of frappe;
 class EventStream<T> extends Reactable<T> {
   final Stream<T> _stream;
 
+  @override
   bool get isBroadcast => _stream.isBroadcast;
 
-  /// Returns a new [EventStream] that wraps a standard Dart `Stream`.
+  /// Returns a new stream that wraps a standard Dart `Stream`.
   EventStream(Stream<T> stream) : _stream = stream;
 
+  /// Returns a new stream that doesn't contain any events and completes when
+  /// subscribed to.
   factory EventStream.empty() => new EventStream.fromIterable([]);
 
+  /// Returns a new stream that contains a single event then completes.
   factory EventStream.single(T value) => new EventStream<T>.fromIterable([value]);
 
   /// Returns a new [EventStream] that contains events from an `Iterable`.
@@ -22,6 +26,16 @@ class EventStream<T> extends Reactable<T> {
   /// Returns a new [EventStream] that contains a single event of the completed [future].
   factory EventStream.fromFuture(Future<T> future) {
     return new EventStream<T>(new Stream<T>.fromFuture(future));
+  }
+
+  /// Creates a stream that repeatedly emits events at period intervals.
+  ///
+  /// The event values are computed by invoking `computation`. The argument to this
+  /// callback is an integer that starts with 0 and is incremented for every event.
+  ///
+  /// If computation is omitted the event values will all be `null`.
+  factory EventStream.periodic(Duration period, T computation(int count)) {
+    return new EventStream<T>(new Stream<T>.periodic(period, computation));
   }
 
   // Overrides
