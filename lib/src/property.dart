@@ -102,8 +102,6 @@ class Property<T> extends Reactable<T> {
   /// Combines this property and [other] with the `||` operator.
   Property<bool> or(Stream<bool> other) => combine(other, (a, b) => a || b);
 
-  Property<bool> not() => map((value) => !value).asProperty();
-
   /// Combines this property and [other] with the `==` operator.
   @deprecated("Expected to be removed in v0.5. Use combine() instead.")
   Property<bool> equals(Property other) => combine(other, (a, b) => a == b);

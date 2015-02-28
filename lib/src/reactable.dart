@@ -107,6 +107,8 @@ abstract class Reactable<T> extends Stream<T> {
 
   Reactable mergeAll() => transform(new MergeAll());
 
+  Reactable<bool> not() => map((value) => !value);
+
   Reactable<T> sampleOn(Stream trigger) => transform(new SampleOn(trigger));
 
   Reactable<T> samplePeriodically(Duration duration) => transform(new SamplePeriodically(duration));
