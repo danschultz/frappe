@@ -97,10 +97,10 @@ class Property<T> extends Reactable<T> {
   }
 
   /// Combines this property and [other] with the `&&` operator.
-  Property<bool> and(Property<bool> other) => combine(other, (a, b) => a && b);
+  Property<bool> and(Stream<bool> other) => combine(other, (a, b) => a && b);
 
   /// Combines this property and [other] with the `||` operator.
-  Property<bool> or(Property<bool> other) => combine(other, (a, b) => a || b);
+  Property<bool> or(Stream<bool> other) => combine(other, (a, b) => a || b);
 
   Property<bool> not() => map((value) => !value).asProperty();
 
