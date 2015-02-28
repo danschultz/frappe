@@ -13,18 +13,21 @@ void main() {
   var username = new Property<String>.fromStreamWithInitialValue(usernameInput.value, usernameInput.onInput.map(inputValue));
   var fullname = new Property<String>.fromStreamWithInitialValue(fullnameInput.value, fullnameInput.onInput.map(inputValue));
 
-  var isUsernameValid = username.map((value) => value.isNotEmpty);
-  var isFullnameValid = fullname.map((value) => value.isNotEmpty);
-  var isUsernameAvailable =
+  var isUsernameValid = username.map((value) => value.isNotEmpty) as Property<bool>;
+  var isFullnameValid = fullname.map((value) => value.isNotEmpty) as Property<bool>;
+
+  var availabilityResponse =
       username
           .changes
+          .debounce(new Duration(milliseconds: 250))
           .flatMapLatest((value) => new Stream.fromFuture(fetchIsUsernameAvailable(value)));
-  var isCheckingUsername = username.changes.isWaitingOn(isUsernameAvailable);
+  var isUsernameAvailable = availabilityResponse.asProperty();
+  var isCheckingUsername = username.changes.isWaitingOn(availabilityResponse);
 
   var isValid =
       isUsernameValid
-          .combine(isFullnameValid, (a, b) => a && b)
-          .combine(isUsernameAvailable, (a, b) => a && b)
+          .and(isFullnameValid)
+          .and(isUsernameAvailable)
           .distinct()
           .doAction((value) => print("Form valid? $value"))
           .asPropertyWithInitialValue(false);
@@ -44,8 +47,8 @@ void main() {
 
   var canSubmit =
       isValid
-          .and(isCheckingUsername.map((value) => !value))
-          .and(isSubmittingRegistration.map((value) => !value));
+          .and(isCheckingUsername.not())
+          .and(isSubmittingRegistration.not());
 
   isCheckingUsername
       .where((value) => value)
