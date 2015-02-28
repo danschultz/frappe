@@ -15,28 +15,25 @@ abstract class Reactable<T> extends Stream<T> {
   }
 
   Reactable<T> asBroadcastStream({void onListen(StreamSubscription<T> subscription),
-                                 void onCancel(StreamSubscription<T> subscription)}) {
-    return _wrap(super.asBroadcastStream(onListen: onListen, onCancel: onCancel));
-  }
+                                 void onCancel(StreamSubscription<T> subscription)});
 
   /// Returns this reactable as a [Property].
   ///
   /// If this reactable is already a property, this this returns itself.
-  Property<T> asProperty() => new Property.fromStream(this);
+  Property<T> asProperty();
 
   /// Returns this reactable as a [Property] with an initial value.
   ///
   /// If this reactable is already a [Property], then this method returns a new [Property]
   /// where its current value is set to [initialValue].
-  Property<T> asPropertyWithInitialValue(T initialValue) =>
-      new Property.fromStreamWithInitialValue(initialValue, this);
+  Property<T> asPropertyWithInitialValue(T initialValue);
 
   /// Returns this reactable as an [EventStream].
   @deprecated("Expected to be removed in v0.5. Use asEventStream() instead.")
   EventStream<T> asStream() => asEventStream();
 
   /// Returns this reactable as an [EventStream].
-  EventStream<T> asEventStream() => new EventStream(this);
+  EventStream<T> asEventStream();
 
   /// Returns a stream with the events of a stream per original event.
   ///
@@ -48,44 +45,43 @@ abstract class Reactable<T> extends Stream<T> {
   /// it returned an empty stream.
   ///
   /// The returned stream is a broadcast stream if this stream is.
-  Reactable asyncExpand(Stream convert(T event)) => _wrap(super.asyncExpand(convert));
+  Reactable asyncExpand(Stream convert(T event));
 
-  Reactable asyncMap(dynamic convert(T event)) => _wrap((super.asyncMap(convert)));
+  Reactable asyncMap(dynamic convert(T event));
 
   /// Returns a new stream that buffers events when the last event in [toggle] is `true`.
   ///
   /// Buffered events are delivered when [toggle] becomes `false`.
-  Reactable<T> bufferWhen(Stream<bool> toggle) => transform(new BufferWhen(toggle));
+  Reactable<T> bufferWhen(Stream<bool> toggle);
 
-  Reactable combine(Stream other, Object combiner(T a, b)) => transform(new Combine(other, combiner));
+  Reactable combine(Stream other, Object combiner(T a, b));
 
-  Reactable concat(Stream other) => transform(new Concat(other));
+  Reactable concat(Stream other);
 
-  Reactable concatAll() => transform(new ConcatAll());
+  Reactable concatAll();
 
   /// Returns a new stream that upon forwarding an event from this stream, will ignore
   /// any subsequent events until [duration], after which the last event will be
   /// forwarded.
   ///
   /// The returned stream will not throttle errors.
-  Reactable<T> debounce(Duration duration) => transform(new Debounce<T>(duration));
+  Reactable<T> debounce(Duration duration);
 
   /// Delays the delivery of each non-error event from this stream by the given [duration].
-  Reactable<T> delay(Duration duration) => transform(new Delay<T>(duration));
+  Reactable<T> delay(Duration duration);
 
-  Reactable<T> distinct([bool equals(T previous, T next)]) => _wrap(super.distinct(equals));
+  Reactable<T> distinct([bool equals(T previous, T next)]);
 
-  Reactable<T> doAction(void onData(T value), {Function onError, void onDone()}) =>
-      transform(new DoAction(onData, onError: onError, onDone: onDone));
+  Reactable<T> doAction(void onData(T value), {Function onError, void onDone()});
 
-  Reactable expand(Iterable convert(T value)) => _wrap(super.expand(convert));
+  Reactable expand(Iterable convert(T value));
 
   /// Returns an [EventStream] that contains events from each stream that is spawned from
   /// [convert].
-  Reactable flatMap(Stream convert(T event)) => transform(new FlatMap(convert));
+  Reactable flatMap(Stream convert(T event));
 
   /// Returns an [EventStream] that only includes events from the last spawned stream.
-  Reactable flatMapLatest(Stream convert(T event)) => transform(new FlatMapLatest(convert));
+  Reactable flatMapLatest(Stream convert(T event));
 
   /// Returns a property that indicates if this reactable is waiting for an event from
   /// [other].
@@ -98,20 +94,20 @@ abstract class Reactable<T> extends Stream<T> {
       .distinct();
   }
 
-  Reactable<T> handleError(onError, {bool test(error)}) => _wrap(super.handleError(onError, test: test));
+  Reactable<T> handleError(onError, {bool test(error)});
 
-  Reactable map(convert(T event)) => _wrap(super.map(convert));
+  Reactable map(convert(T event));
 
   /// Returns a new stream that contains events from this stream and the [other] stream.
-  Reactable merge(Stream other) => transform(new Merge(other));
+  Reactable merge(Stream other);
 
-  Reactable mergeAll() => transform(new MergeAll());
+  Reactable mergeAll();
 
   Reactable<bool> not() => map((value) => !value);
 
-  Reactable<T> sampleOn(Stream trigger) => transform(new SampleOn(trigger));
+  Reactable<T> sampleOn(Stream trigger);
 
-  Reactable<T> samplePeriodically(Duration duration) => transform(new SamplePeriodically(duration));
+  Reactable<T> samplePeriodically(Duration duration);
 
   /// Returns a [Property] where the first value is the [initialValue] and values after
   /// that are the result of [combine].
@@ -119,49 +115,46 @@ abstract class Reactable<T> extends Stream<T> {
   /// [combine] is an accumulator function where its first argument is either the initial
   /// value or the result of the last combine, and the second argument is the next value
   /// in this stream.
-  Reactable scan(initialValue, combine(value, T element)) => transform(new Scan(initialValue, combine));
+  Reactable scan(initialValue, combine(value, T element));
 
-  Reactable selectFirst(Stream other) => transform(new SelectFirst(other));
+  Reactable selectFirst(Stream other);
 
-  Reactable<T> skip(int count) => _wrap(super.skip(count));
+  Reactable<T> skip(int count);
 
-  Reactable<T> skipWhile(bool test(T element)) => _wrap(super.skipWhile(test));
+  Reactable<T> skipWhile(bool test(T element));
 
   /// Returns a new stream that will begin forwarding events from this stream when the
   /// [signal] completes.
-  Reactable<T> skipUntil(Stream signal) => transform(new SkipUntil(signal));
+  Reactable<T> skipUntil(Stream signal);
 
-  Reactable startWith(value) => transform(new StartWith(value));
+  Reactable startWith(value);
 
-  Reactable startWithValues(Iterable values) => transform(new StartWith.many(values));
+  Reactable startWithValues(Iterable values);
 
-  Reactable<T> take(int count) => _wrap(super.take(count));
+  Reactable<T> take(int count);
 
   /// Returns a new stream that contains events from this stream until the [signal]
   /// completes.
-  Reactable<T> takeUntil(Stream signal) => transform(new TakeUntil(signal));
+  Reactable<T> takeUntil(Stream signal);
 
-  Reactable<T> takeWhile(bool test(T element)) => _wrap(super.takeWhile(test));
+  Reactable<T> takeWhile(bool test(T element));
 
-  Reactable timeout(Duration timeLimit, {void onTimeout(EventSink sink)}) =>
-      _wrap(super.timeout(timeLimit, onTimeout: onTimeout));
+  Reactable timeout(Duration timeLimit, {void onTimeout(EventSink sink)});
 
-  Reactable transform(StreamTransformer<T, dynamic> streamTransformer) => _wrap(super.transform(streamTransformer));
+  Reactable transform(StreamTransformer<T, dynamic> streamTransformer);
 
   /// Returns a new reactable that forwards events when the last value for [toggle] is
   /// `true`.
   ///
   /// Errors will always be forwarded regardless of the value of [toggle].
-  Reactable<T> when(Stream<bool> toggle) => transform(new When(toggle));
+  Reactable<T> when(Stream<bool> toggle);
 
-  Reactable<T> where(bool test(T event)) => _wrap(super.where(test));
+  Reactable<T> where(bool test(T event));
 
   /// Returns a new reactable that merges this stream with [other] by combining their
   /// values in a pair-wire fashion.
   ///
   /// A zipped stream will only start producing values when there's a value from each
   /// stream. The returned stream will stop producing values when either stream ends.
-  Reactable zip(Stream other, Combiner combiner) => transform(new Zip(other, combiner));
-
-  Reactable _wrap(Stream stream);
+  Reactable zip(Stream other, Combiner combiner);
 }

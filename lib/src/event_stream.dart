@@ -12,7 +12,7 @@ class EventStream<T> extends Reactable<T> {
 
   factory EventStream.empty() => new EventStream.fromIterable([]);
 
-  factory EventStream.single(T value) => new EventStream.fromIterable([value]);
+  factory EventStream.single(T value) => new EventStream<T>.fromIterable([value]);
 
   /// Returns a new [EventStream] that contains events from an `Iterable`.
   factory EventStream.fromIterable(Iterable<T> iterable) {
@@ -24,8 +24,11 @@ class EventStream<T> extends Reactable<T> {
     return new EventStream<T>(new Stream<T>.fromFuture(future));
   }
 
-  StreamSubscription<T> listen(void onData(T event), {Function onError, void onDone(), bool cancelOnError}) {
-    return _stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
+  // Overrides
+
+  EventStream<T> asBroadcastStream({void onListen(StreamSubscription<T> subscription),
+                                void onCancel(StreamSubscription<T> subscription)}) {
+    return new EventStream(super.asBroadcastStream(onListen: onListen, onCancel: onCancel));
   }
 
   EventStream<T> asEventStream() => this;
@@ -38,5 +41,79 @@ class EventStream<T> extends Reactable<T> {
   Property<T> asPropertyWithInitialValue(T initialValue) =>
       new Property.fromStreamWithInitialValue(initialValue, this);
 
-  Reactable _wrap(Stream stream) => new EventStream(stream);
+  EventStream asyncExpand(Stream convert(T event)) => new EventStream(super.asyncExpand(convert));
+
+  EventStream asyncMap(dynamic convert(T event)) => new EventStream((super.asyncMap(convert)));
+
+  EventStream<T> bufferWhen(Stream<bool> toggle) => transform(new BufferWhen(toggle));
+
+  EventStream combine(Stream other, Object combiner(T a, b)) => transform(new Combine(other, combiner));
+
+  EventStream concat(Stream other) => transform(new Concat(other));
+
+  EventStream concatAll() => transform(new ConcatAll());
+
+  EventStream<T> debounce(Duration duration) => transform(new Debounce<T>(duration));
+
+  EventStream<T> delay(Duration duration) => transform(new Delay<T>(duration));
+
+  EventStream<T> distinct([bool equals(T previous, T next)]) => new EventStream(super.distinct(equals));
+
+  EventStream<T> doAction(void onData(T value), {Function onError, void onDone()}) =>
+      transform(new DoAction(onData, onError: onError, onDone: onDone));
+
+  EventStream expand(Iterable convert(T value)) => new EventStream(super.expand(convert));
+
+  EventStream flatMap(Stream convert(T event)) => transform(new FlatMap(convert));
+
+  EventStream flatMapLatest(Stream convert(T event)) => transform(new FlatMapLatest(convert));
+
+  EventStream<T> handleError(onError, {bool test(error)}) =>
+      new EventStream(super.handleError(onError, test: test));
+
+  StreamSubscription<T> listen(void onData(T event), {Function onError, void onDone(), bool cancelOnError}) {
+    return _stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
+  }
+
+  EventStream map(convert(T event)) => new EventStream(super.map(convert));
+
+  EventStream merge(Stream other) => transform(new Merge(other));
+
+  EventStream mergeAll() => transform(new MergeAll());
+
+  EventStream<T> sampleOn(Stream trigger) => transform(new SampleOn(trigger));
+
+  EventStream<T> samplePeriodically(Duration duration) => transform(new SamplePeriodically(duration));
+
+  EventStream scan(initialValue, combine(value, T element)) => transform(new Scan(initialValue, combine));
+
+  EventStream selectFirst(Stream other) => transform(new SelectFirst(other));
+
+  EventStream<T> skip(int count) => new EventStream(super.skip(count));
+
+  EventStream<T> skipWhile(bool test(T element)) => new EventStream(super.skipWhile(test));
+
+  EventStream<T> skipUntil(Stream signal) => transform(new SkipUntil(signal));
+
+  EventStream startWith(value) => transform(new StartWith(value));
+
+  EventStream startWithValues(Iterable values) => transform(new StartWith.many(values));
+
+  EventStream<T> take(int count) => new EventStream(super.take(count));
+
+  EventStream<T> takeUntil(Stream signal) => transform(new TakeUntil(signal));
+
+  EventStream<T> takeWhile(bool test(T element)) => new EventStream(super.takeWhile(test));
+
+  EventStream timeout(Duration timeLimit, {void onTimeout(EventSink sink)}) =>
+      new EventStream(super.timeout(timeLimit, onTimeout: onTimeout));
+
+  EventStream transform(StreamTransformer<T, dynamic> streamTransformer) =>
+      new EventStream(super.transform(streamTransformer));
+
+  EventStream<T> when(Stream<bool> toggle) => transform(new When(toggle));
+
+  EventStream<T> where(bool test(T event)) => new EventStream(super.where(test));
+
+  EventStream zip(Stream other, Combiner combiner) => transform(new Zip(other, combiner));
 }

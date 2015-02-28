@@ -13,8 +13,8 @@ void main() {
   var username = new Property<String>.fromStreamWithInitialValue(usernameInput.value, usernameInput.onInput.map(inputValue));
   var fullname = new Property<String>.fromStreamWithInitialValue(fullnameInput.value, fullnameInput.onInput.map(inputValue));
 
-  var isUsernameValid = username.map((value) => value.isNotEmpty) as Property<bool>;
-  var isFullnameValid = fullname.map((value) => value.isNotEmpty) as Property<bool>;
+  var isUsernameValid = username.map((value) => value.isNotEmpty);
+  var isFullnameValid = fullname.map((value) => value.isNotEmpty);
 
   var availabilityResponse =
       username
