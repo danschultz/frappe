@@ -102,32 +102,41 @@ class Property<T> extends Reactable<T> {
   /// Combines this property and [other] with the `||` operator.
   Property<bool> or(Property<bool> other) => combine(other, (a, b) => a || b);
 
-  /// Combines this property and [other] with the `==` operator.
-  Property<bool> equals(Property other) => combine(other, (a, b) => a == b);
-
   Property<bool> not() => map((value) => !value).asProperty();
 
+  /// Combines this property and [other] with the `==` operator.
+  @deprecated("Expected to be removed in v0.5. Use combine() instead.")
+  Property<bool> equals(Property other) => combine(other, (a, b) => a == b);
+
   /// Combines this property and [other] with the `>` operator.
+  @deprecated("Expected to be removed in v0.5. Use combine() instead.")
   Property<bool> operator >(Property other) => combine(other, (a, b) => a > b);
 
   /// Combines this property and [other] with the `>=` operator.
+  @deprecated("Expected to be removed in v0.5. Use combine() instead.")
   Property<bool> operator >=(Property other) => combine(other, (a, b) => a >= b);
 
   /// Combines this property and [other] with the `<` operator.
+  @deprecated("Expected to be removed in v0.5. Use combine() instead.")
   Property<bool> operator <(Property other) => combine(other, (a, b) => a < b);
 
   /// Combines this property and [other] with the `<=` operator.
+  @deprecated("Expected to be removed in v0.5. Use combine() instead.")
   Property<bool> operator <=(Property other) => combine(other, (a, b) => a <= b);
 
   /// Combines this property and [other] with the `+` operator.
+  @deprecated("Expected to be removed in v0.5. Use combine() instead.")
   Property operator +(Property other) => combine(other, (a, b) => a + b);
 
   /// Combines this property and [other] with the `-` operator.
+  @deprecated("Expected to be removed in v0.5. Use combine() instead.")
   Property operator -(Property other) => combine(other, (a, b) => a - b);
 
   /// Combines this property and [other] with the `*` operator.
+  @deprecated("Expected to be removed in v0.5. Use combine() instead.")
   Property operator *(Property other) => combine(other, (a, b) => a * b);
 
   /// Combines this property and [other] with the `/` operator.
+  @deprecated("Expected to be removed in v0.5. Use combine() instead.")
   Property operator /(Property other) => combine(other, (a, b) => a / b);
 }
