@@ -64,7 +64,7 @@ An `EventStream` represents a series of discrete events. It's just like a `Strea
 
 A `Property` represents a value that changes over time. They're similar to event streams, but they have a current value. If you were to model text input using properties and streams, the individual key strokes would be events, and the resulting text is a property.
 
-Properties are implemented internally as broadcast stream. New subscription to a property will always receive its current value as its first event.
+Properties are implemented internally as broadcast streams. Subscription to a property will always receive its current value as its first event.
 
 ## Learning More
 
