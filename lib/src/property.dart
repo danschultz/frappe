@@ -143,6 +143,8 @@ class Property<T> extends Reactable<T> {
 
   Property mergeAll() => transform(new MergeAll());
 
+  Property<bool> not() => super.not();
+
   Property<T> sampleOn(Stream trigger) => transform(new SampleOn(trigger));
 
   Property<T> samplePeriodically(Duration duration) => transform(new SamplePeriodically(duration));

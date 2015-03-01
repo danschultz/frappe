@@ -95,6 +95,8 @@ class EventStream<T> extends Reactable<T> {
 
   EventStream mergeAll() => transform(new MergeAll());
 
+  EventStream<bool> not() => super.not();
+
   EventStream<T> sampleOn(Stream trigger) => transform(new SampleOn(trigger));
 
   EventStream<T> samplePeriodically(Duration duration) => transform(new SamplePeriodically(duration));
