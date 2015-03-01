@@ -2,125 +2,88 @@
 
 [![Build Status](https://travis-ci.org/danschultz/frappe.svg)](https://travis-ci.org/danschultz/frappe)
 
-A mildly [Bacon.js](http://baconjs.github.io/) inspired Dart package that aims to make functional reactive programming (FRP) easier in Dart. Frappé extends the behavior of Dart's streams, and introduces new concepts like properties and reactables.
+A functional reactive programming library for Dart. Frappé extends the functionality of Dart's stream, and introduces new concepts like properties.
 
-You can explore the full API here: http://www.dartdocs.org/documentation/frappe/latest.
+## Why FRP?
 
-## Why Frappé?
-Functional reactive programming allows you to declaratively define behaviors for user actions. FRP makes it clearer to define behaviors such as, "when a user performs A, do X and Y, then finish with Z."
+UI applications today are highly interactive and data driven. User input can trigger updates to the DOM, playing of animations, invoking network requests, and modifying application state. Using the traditional form of event callbacks and modifying state variables can quickly become messy and difficult to maintain.
 
-To illustrate this, let's write an autocomplete widget with Frappé. After 250ms that a user inputs a character, a query is performed that suggests a list of movies that most closely matches the user's input. Because query results are asynchronous, we only want to show results from the last query.
+Functional reactive programming (FRP) makes it clearer to define behaviors for user and system events, how state changes in your application, and the result of these changes. With FRP, it's easy to define, "when a user performs A, do X and Y, then output Z."
+
+When writing reactive code, you'll find yourself focusing more on the dependencies between events for business logic, and less time on their implementation details.
+
+## Example
+
+Lets write an auto-complete movie widget with Frappé. The widget has an input field for the movie name, and a list element that displays movies that most closely match the user's input. A working version can be found [here](http://danschultz.github.io/frappe/examples/auto_complete/).
 
 ```dart
 var searchInput = document.querySelector("#searchInput");
+var suggestionsElement = document.querySelector("#suggestions");
 
-var onInput = new EventStream(searchInput.onKeyUp)
-    .debounce(new Duration(milliseconds: 250))
-    .map((event) => event.target.value)
-    .distinct();
-    
+var onInput = new EventStream(searchInput.onInput)
+    .debounce(new Duration(milliseconds: 250)) // Limit the number of network requests
+    .map((event) => event.target.value) // Get the text from the input field
+    .distinct(); // Ignore duplicate events with the same text
+
+// Make a network request to get the list of movie suggestions. Because requests
+// are asynchronous, they can complete out of order. Use `flatMapLatest` to only
+// respond to request for the last text change.
 var suggestions = onInput.flatMapLatest((input) => querySuggestions(input));
-var isPending = onInput.isWaitingOn(suggestions);
-    
+
+suggestions.listen((movies) =>
+    suggestionsElement.children
+        ..clear()
+        ..addAll(movies.map((movie) => new LIElement()..text = movie));
+
+// Show "Searching ..." feedback while the request is pending
+var isPending = searchInput.onInput.isWaitingOn(suggestions);
+isPending.where((value) => value).listen((_) {
+  suggestionsElement.children
+      ..clear()
+      ..add(new DivElement()..text = "Searching ...");
+});
+
 Future<List<String>> querySuggestions(String input) {
   // Query some API that returns suggestions for 'input'
 }
 ```
 
-Frappe also makes it easy to merge multiple stream. This is useful for performing an action that's triggered from multiple user behaviors. For instance to signal the close of an application:
+## API
 
-```dart
-var onQuit = new EventStream(quitButton.onClick)
-    .merge(fileMenu.querySelector("quit").onClick)
-    .merge(fatalErrors);
-    
-onQuit.listen((_) => closeApp());
-```
+You can explore the full API [here][documentation].
 
-It's often useful to unsubscribe from a stream after a user performs some action. Frappe makes this easy with `takeUntil`. For instance, we can start listening to `onMouseMove` after `onMouseDown`, and unsubscribe after `onMouseUp`:
+### `Reactable`
 
-```dart
-window.onMouseDown.forEach((mouseDown) {
-  var pen = new Pen(mouseDown.client);
-  new EventStream(window.onMouseMove).takeUntil(window.onMouseUp.first)
-      .forEach((mouseMove) => pen.drawTo(mouseMove.client))
-      .then((_) => pen.done())
-})
-```
+The `Reactable` class extends from Stream and is inherited by the `EventStream` and `Property` sub-classes. Because these classes extend from Dart's `Stream`, you can pass them directly to other API's that expect `Stream`.
 
-## Classes
+### `EventStream`
 
-### Reactable
-The `Reactable` class is what `EventStream` and `Property` extend from. It unifies the interface for classes that deliver events. At its heart, it defines a method `listen()`, which has the same behavior as Dart's `Stream.listen()`. In the same way that you'd listen to a Dart `Stream`, you'd use this method to subscribe to events from a `Reactable`, and use the returned `StreamSubscription` to unsubscribe from the stream.
+An `EventStream` represents a series of discrete events. It's just like a `Stream` in Dart, but extends its functionality with the methods found on `Reactable`.
 
-### EventStream
-An `EventStream` is just like a `Stream` in Dart. It inherits the same interface as a `Stream`, but extends its functionality with methods like `merge`, `scan` and `takeUntil`. Since `EventStream` just extends from `Stream`, it's easy to compose streams from either Frappé or Dart.
+### `Property`
 
-### Property
-Properties are similar to streams, but they remember their last value. This means that if a property has previously emitted the value of **x** to its subscribers, it will deliver this value to any of its new subscribers.
+A `Property` represents a value that changes over time. They're similar to event streams, but they have a current value. If you were to model text input using properties and streams, the individual key strokes would be events, and the resulting text is a property.
 
-For instance, a property could be used to unify synchronous and asynchronous calls to get the window's current size:
+Properties are implemented internally as broadcast stream. New subscription to a property will always receive its current value as its first event.
 
-```dart
-Map innerSize() => {"width": window.innerWidth, "height": window.innerHeight};
+## Learning More
 
-var windowSize = new Property.fromStreamWithInitialValue(innerSize(),
-    window.onResize.map((_) => innerSize()));
+Definitely take a look at the API [documentation], and play around with some of the [examples]. It's also worth checking out [BaconJS] and [RxJS]. They're both mature FRP libraries, and offer some great resourses on the subject.
 
-print(innerSize()); // hypothetical window size {"width": 1024, "height": 768}
+## Running Tests
 
-// The first call to `listen` will deliver the property's current value. Since 
-// this is the first subscriber, the value of {"width": 1024, "height": 768} will 
-// be printed. Resizing the window will print out the window's new size.
-windowSize.listen((size) => print(size));
-```
+Tests are run using [test_runner].
 
-#### Creating Properties
-The `Property` class has constructors to create properties from a `Stream` or a `Future`.
+* Install *test_runner*: `pub global activate test_runner`
+* Run *test_runner* inside *frappe*: `pub global run run_tests`
 
-```dart
-// Create a property from a Dart Stream
-Property.fromStream(stream);
+## Features and bugs
 
-// Create a property from a Future.
-Property.fromFuture(futureValue);
-```
+Please file feature requests and bugs at the [issue tracker][tracker].
 
-You can also create a property that has a constant value.
-
-```dart
-var constant = new Property.constant(5);
-constant.listen((value) => print(value)); // 5
-```
-
-An `EventStream` can also be converted into a `Property` with `EventStream.asProperty()`.
-
-##### Initial Values
-When creating a property from a stream or a future, the property will not have an initial value. Frappé includes additional constructors to create properties that have a starting value.
-
-```dart
-// Create a property from a stream with an initial value.
-Property.fromStreamWithInitialValue(stream, initialValue);
-
-// Create a property from a Future with an initial value.
-Property.fromFutureWithInitialValue(futureValue, initialValue);
-```
-
-#### Combining Properties
-Properties can be combined with each other to create derived values. These values will be recomputed whenever the value changes from which the property was derived.
-
-Frappé includes many built in combinators that you can use, such as `and`, `or`, `equals`, and also operator combinators like `+`, `-`, `>`, `<`. For instance in the following example, the enabled state of a login button is updated whenever the form's fields change. In order for the form to be valid, both the username and password fields must be populated.
-
-```dart
-bool isNotEmpty(String value) => value != null && value.isNotEmpty;
-
-var isUsernamePresent = new Property
-    .fromStream(usernameField.onChange.map((_) => usernameField.value))
-    .map(isNotEmpty);
-var isPasswordPresent = new Property
-    .fromStream(passwordField.onChange.map((_) => passwordField.value))
-    .map(isNotEmpty);
-    
-var isFormValid = isUsernamePresent.and(isPasswordPresent);
-isFormValid.listen((isValid) => submitButton.disabled = !isValid);
-```
+[documentation]: http://www.dartdocs.org/documentation/frappe/latest
+[examples]: https://github.com/danschultz/frappe/tree/example
+[tracker]: https://github.com/danschultz/frappe/issues
+[test_runner]: https://pub.dartlang.org/packages/test_runner
+[baconjs]: https://github.com/baconjs/bacon.js
+[rxjs]: http://reactive-extensions.github.io/RxJS/
