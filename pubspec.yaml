@@ -1,6 +1,8 @@
 name: frappe
 version: 0.4.0-rc.1
-description: A slightly Bacon.js inspired package to make reactive programming easier in Dart.
+description: >
+  A functional reactive programming library for Dart. Frappé extends the
+  functionality of Dart's stream, and introduces new concepts like properties.
 author: Dan Schultz <schultz.t.dan@gmail.com>
 homepage: http://www.github.com/danschultz/frappe
 environment:
