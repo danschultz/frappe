@@ -150,10 +150,15 @@ abstract class Reactable<T> extends Stream<T> {
   ///     // 2
   Reactable concatAll();
 
-  /// Ignores events for a given duration, then delivers the last event in
-  /// the stream after the duration has passed. Errors occurring on the
-  /// source stream will not be ignored. If the source stream is a broadcast
-  /// stream, then the transformed stream will also be a broadcast stream.
+  /// Delivers the last event from the source after the duration has passed
+  /// without receiving an event.
+  ///
+  /// Errors occurring on the source stream will not be ignored. If the source
+  /// stream is a broadcast stream, then the transformed stream will also be
+  /// a broadcast stream.
+  ///
+  ///     source:             asdf----asdf----
+  ///     source.debounce(2): -----f-------f--
   ///
   /// **Example:**
   ///
@@ -166,7 +171,7 @@ abstract class Reactable<T> extends Stream<T> {
   ///     controller.add(2);
   ///     controller.add(3);
   ///
-  ///     // Prints: 3
+  ///     // 3
   Reactable<T> debounce(Duration duration);
 
   /// Throttles the delivery of each event by a given duration. Errors occurring
