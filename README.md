@@ -82,7 +82,7 @@ Tests are run using [test_runner].
 Please file feature requests and bugs at the [issue tracker][tracker].
 
 [documentation]: http://www.dartdocs.org/documentation/frappe/latest
-[examples]: https://github.com/danschultz/frappe/tree/example
+[examples]: https://github.com/danschultz/frappe/tree/master/example
 [tracker]: https://github.com/danschultz/frappe/issues
 [test_runner]: https://pub.dartlang.org/packages/test_runner
 [baconjs]: https://github.com/baconjs/bacon.js
