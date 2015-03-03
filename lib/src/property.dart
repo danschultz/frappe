@@ -147,7 +147,7 @@ class Property<T> extends Reactable<T> {
 
   Property<T> sampleOn(Stream trigger) => transform(new SampleOn(trigger));
 
-  Property<T> samplePeriodically(Duration duration) => transform(new SamplePeriodically(duration));
+  Property<T> sampleEachPeriod(Duration duration) => transform(new SamplePeriodically(duration));
 
   Property scan(initialValue, combine(value, T element)) => transform(new Scan(initialValue, combine));
 

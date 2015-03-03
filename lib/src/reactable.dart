@@ -376,14 +376,14 @@ abstract class Reactable<T> extends Stream<T> {
   ///
   ///     // values start at 0
   ///     var source = new Stream.periodic(new Duration(seconds: 1), (i) => i);
-  ///     var stream = new EventStream(source.stream).samplePeriodically(new Duration(seconds: 2))).take(3);
+  ///     var stream = new EventStream(source.stream).sampleEachPeriod(new Duration(seconds: 2))).take(3);
   ///
   ///     stream.listen(print);
   ///
   ///     // 0
   ///     // 2
   ///     // 4
-  Reactable<T> samplePeriodically(Duration duration);
+  Reactable<T> sampleEachPeriod(Duration duration);
 
   /// Reduces the values of a stream into a single value by using an initial
   /// value and an accumulator function. The function is passed the previous

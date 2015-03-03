@@ -9,7 +9,7 @@
 - Add `Reactable.doAction()`
 - Add `Reactable.mergeAll()`
 - Add `Reactable.sampleOn()`
-- Add `Reactable.samplePeriodically()`
+- Add `Reactable.sampleEachPeriod()`
 - Add `Reactable.selectFirst()`
 - Add `Reactable.startWith()`
 - Add `Reactable.startWithValues()`

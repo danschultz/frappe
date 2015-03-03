@@ -98,7 +98,7 @@ class EventStream<T> extends Reactable<T> {
 
   EventStream<T> sampleOn(Stream trigger) => transform(new SampleOn(trigger));
 
-  EventStream<T> samplePeriodically(Duration duration) => transform(new SamplePeriodically(duration));
+  EventStream<T> sampleEachPeriod(Duration duration) => transform(new SamplePeriodically(duration));
 
   EventStream scan(initialValue, combine(value, T element)) => transform(new Scan(initialValue, combine));
 
