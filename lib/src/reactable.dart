@@ -30,7 +30,7 @@ abstract class Reactable<T> extends Stream<T> {
   Property<T> asPropertyWithInitialValue(T initialValue);
 
   /// Returns this reactable as an [EventStream].
-  @deprecated("Expected to be removed in v0.5. Use asEventStream() instead.")
+  @Deprecated("Expected to be removed in v0.5. Use asEventStream() instead.")
   EventStream<T> asStream() => asEventStream();
 
   /// Returns this reactable as an [EventStream].
