@@ -1,7 +1,22 @@
 part of frappe;
 
-/// An [EventStream] is wrapper around a standard Dart `Stream`, but provides utility
-/// methods for creating other streams or properties.
+/// An `EventStream` represents a series of discrete events. They're like a `Stream` in Dart, but
+/// extends its functionality with the methods found on [Reactable].
+///
+/// Event streams can be created from a property via [Property.asEventStream], or through one of
+/// its constructor methods. If an event stream is created from a property, its first event will be
+/// the property's current value.
+///
+/// An `EventStream` will inherit the behavior of the stream from which it originated. So if an event
+/// stream was created from a broadcast stream, it can support multiple subscriptions. Likewise, if
+/// an event stream was created from a single-subscription stream, only one subscription can be added
+/// to it. Take a look at the [article](https://www.dartlang.org/articles/broadcast-streams/) on
+/// single-subscription streams vs broadcast streams to learn more about their different behaviors.
+///
+/// Internally, properties are implemented as broadcast streams and can receive multiple subscriptions.
+///
+/// If you were to model text input using properties and streams, the individual key strokes would be
+/// events, and the resulting text is a property.
 class EventStream<T> extends Reactable<T> {
   final Stream<T> _stream;
 

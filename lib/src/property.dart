@@ -1,12 +1,15 @@
 part of frappe;
 
-/// A property is an reactable with the concept of a current value.
+/// A `Property` represents a value that changes over time. They're similar to event streams,
+/// but they remember their current value. Whenver a subscription is added to a property, it
+/// will receive the property's current value as its first event.
 ///
-/// Calling [listen] on a property will deliver its current value, if one exists.
-/// This means that if the property has previously emitted the value of *x* to
-/// its subscribers, it will deliver this value to any new subscribers. Depending
-/// on how the property was created, some properties might not have an initial
-/// value to start with.
+/// Properties can be created through one of its constructors, or from an event stream via
+/// [EventStream.asProperty()]. Depending on how the property was created, it may or may not
+/// have a starting value. Separate methods are available for creating properties with an
+/// initial value, i.e. [Property.fromStreamWithInitalValue] and [EventStream.asPropertyWithInitalValue].
+/// Properties can support having a null initial value, and is partly the motivation for having
+/// separate construction methods.
 class Property<T> extends Reactable<T> {
   StreamController _controller;
   bool _hasCurrentValue = false;
