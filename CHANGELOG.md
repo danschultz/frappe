@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.0 (TBD)
+## 0.4.0 (03/02/2015)
 
 - Fix an issue where `EventStream`s wouldn't be the same type of stream as its source [#17](https://github.com/danschultz/frappe/issues/17)
 - Transformation methods on `Property` or `EventStream` now return the same type of `Reactable`
