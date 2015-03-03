@@ -66,9 +66,9 @@ An `EventStream` will inherit the behavior of the stream from which it originate
 
 ### `Property`
 
-A `Property` represents a value that changes over time. They're similar to event streams, but they remember their current value. Whenver a subscription is added to a property, it will receive the property's current value as its first event.
+A `Property` represents a value that changes over time. They're similar to event streams, but they remember their current value. Whenever a subscription is added to a property, it will receive the property's current value as its first event.
 
-Properties can be created through one of its constructors, or from an event stream via `EventStream.asProperty()`. Depending on how the property was created, it may or may not have a starting value. Separate methods are available for creating properties with an initial value, i.e. `Property.fromStreamWithInitalValue()` and `EventStream.asPropertyWithInitalValue()`. Properties can support having a null initial value, and is partly the motivation for having separate construction methods.
+Properties can be created through one of its constructors, or from an event stream via `EventStream.asProperty()`. Depending on how the property was created, it may or may not have a starting value. Separate methods are available for creating properties with an initial value, i.e. `Property.fromStreamWithInitialValue()` and `EventStream.asPropertyWithInitialValue()`. Properties can support having a null initial value, and is partly the motivation for having separate construction methods.
 
 Internally, properties are implemented as broadcast streams and can receive multiple subscriptions.
 
