@@ -42,6 +42,6 @@ EventStream<Iterable<String>> queryTerm(String term) {
 
     return new EventStream.fromFuture(results);
   } else {
-    return new EventStream.single([]);
+    return new EventStream.fromValue([]);
   }
 }

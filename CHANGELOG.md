@@ -15,7 +15,7 @@
 - Add `Reactable.startWithValues()`
 - Add `Reactable.zip()`
 - Add `EventStream.empty()` constructor
-- Add `EventStream.single()` constructor
+- Add `EventStream.fromValue()` constructor
 - Add `EventStream.periodic()` constructor
 - Bug fixes in `Reactable.isWaitingOn()`
 - Deprecate `Reactable.asStream()`, it's now `Reactable.asEventStream()`

@@ -283,7 +283,7 @@ abstract class Reactable<T> extends Stream<T> {
   Property<bool> isWaitingOn(Stream other) {
     return new Property.fromStreamWithInitialValue(
         false,
-        flatMapLatest((_) => new EventStream.single(true).merge(other.take(1).map((_) => false))))
+        flatMapLatest((_) => new EventStream.fromValue(true).merge(other.take(1).map((_) => false))))
       .distinct();
   }
 

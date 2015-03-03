@@ -11,12 +11,11 @@ class EventStream<T> extends Reactable<T> {
   /// Returns a new stream that wraps a standard Dart `Stream`.
   EventStream(Stream<T> stream) : _stream = stream;
 
-  /// Returns a new stream that doesn't contain any events and completes when
-  /// subscribed to.
+  /// Returns a new single subscription stream that doesn't contain any events then completes.
   factory EventStream.empty() => new EventStream.fromIterable([]);
 
-  /// Returns a new stream that contains a single event then completes.
-  factory EventStream.single(T value) => new EventStream<T>.fromIterable([value]);
+  /// Returns a new single subscription stream that contains a single event then completes.
+  factory EventStream.fromValue(T value) => new EventStream<T>.fromIterable([value]);
 
   /// Returns a new [EventStream] that contains events from an `Iterable`.
   factory EventStream.fromIterable(Iterable<T> iterable) {
