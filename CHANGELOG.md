@@ -1,8 +1,14 @@
 # Changelog
 
+*Note:* Some patch versions may be omitted for only documentation changes.
+
+## 0.4.0+3 (03/09/2015)
+
+- Fix an issue where the stream returned by `Property.asEventStream()` would still behave like a property [[#38](https://github.com/danschultz/frappe/issues/38)]
+
 ## 0.4.0 (03/02/2015)
 
-- Fix an issue where `EventStream`s wouldn't be the same type of stream as its source [#17](https://github.com/danschultz/frappe/issues/17)
+- Fix an issue where `EventStream`s wouldn't be the same type of stream as its source [[#17](https://github.com/danschultz/frappe/issues/17)]
 - Transformation methods on `Property` or `EventStream` now return the same type of `Reactable`
 - Add `Reactable.concat()`
 - Add `Reactable.concatAll()`
