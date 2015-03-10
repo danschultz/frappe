@@ -1,4 +1,10 @@
 language: dart
+env:
+  global:
+    secure: bYjoEA0gSLf/OzVpwKY/QiWniDNYUQNyOO5A5UpvJytttheuFotDcN87kL82ZoV9BoKLNpkWtEg+Rv8kUl2WohSgRgrNYt3uJi0ZNo1VLB3UXGD7Nx00/Hu+lh/NOxckiGsxeY0CbYfRW18HQDaesO0H8PqyXf9HcSRPwXMXnEw=
 dart:
   - stable
   - dev
+after_success:
+  - pub global activate dart_coveralls
+  - pub global run dart_coveralls:dart_coveralls report --exclude-test-files --token $COVERALLS_TOKEN ./test/all_tests.dart

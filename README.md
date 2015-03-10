@@ -1,6 +1,7 @@
 # Frappé
 
 [![Build Status](https://travis-ci.org/danschultz/frappe.svg)](https://travis-ci.org/danschultz/frappe)
+[![Coverage Status](https://coveralls.io/repos/danschultz/frappe/badge.svg)](https://coveralls.io/r/danschultz/frappe)
 
 A functional reactive programming library for Dart. Frappé extends the functionality of Dart's streams, and introduces new concepts like properties/signals.
 
