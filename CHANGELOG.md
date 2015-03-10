@@ -1,6 +1,6 @@
 # Changelog
 
-*Note:* Some patch versions may be omitted for only documentation changes.
+*Note:* Patch versions that only include documentation changes are omitted.
 
 ## 0.4.0+3 (03/09/2015)
 
