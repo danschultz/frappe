@@ -18,13 +18,15 @@ part of frappe;
 /// If you were to model text input using properties and streams, the individual key strokes would be
 /// events, and the resulting text is a property.
 class EventStream<T> extends Reactable<T> {
-  final Stream<T> _stream;
+  StreamController<T> _controller;
 
   @override
-  bool get isBroadcast => _stream.isBroadcast;
+  bool get isBroadcast => _controller.stream.isBroadcast;
 
   /// Returns a new stream that wraps a standard Dart `Stream`.
-  EventStream(Stream<T> stream) : _stream = stream;
+  EventStream(Stream<T> stream) {
+    _controller = _createControllerForStream(stream);
+  }
 
   /// Returns a new single subscription stream that doesn't contain any events then completes.
   factory EventStream.empty() => new EventStream.fromIterable([]);
@@ -50,6 +52,22 @@ class EventStream<T> extends Reactable<T> {
   /// If computation is omitted the event values will all be `null`.
   factory EventStream.periodic(Duration period, T computation(int count)) {
     return new EventStream<T>(new Stream<T>.periodic(period, computation));
+  }
+
+  StreamController<T> _createControllerForStream(Stream<T> stream) {
+    StreamSubscription subscription;
+
+    void onListen() {
+      subscription = stream.listen(_controller.add, onDone: _controller.close, onError: _controller.addError);
+    }
+
+    void onCancel() {
+      subscription.cancel();
+    }
+
+    return stream.isBroadcast
+        ? new StreamController.broadcast(onListen: onListen, onCancel: onCancel, sync: true)
+        : new StreamController(onListen: onListen, onCancel: onCancel, sync: true);
   }
 
   // Overrides
@@ -100,7 +118,7 @@ class EventStream<T> extends Reactable<T> {
       new EventStream(super.handleError(onError, test: test));
 
   StreamSubscription<T> listen(void onData(T event), {Function onError, void onDone(), bool cancelOnError}) {
-    return _stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
+    return _controller.stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
   }
 
   EventStream map(convert(T event)) => new EventStream(super.map(convert));

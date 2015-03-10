@@ -3,6 +3,7 @@ library event_stream_test;
 import 'dart:async';
 import 'package:frappe/frappe.dart';
 import 'package:guinness/guinness.dart';
+import 'shared/as_event_stream.dart';
 import 'shared/async_expand.dart';
 import 'shared/async_map.dart';
 import 'shared/buffer_when.dart';
@@ -60,6 +61,7 @@ void main() => describe("EventStream", () {
   });
 
   testReturnTypes(EventStream, () => new EventStream(new Stream.fromIterable([1])));
+  testAsEventStream((stream) => new Property.fromStream(stream));
   testAsyncExpand((stream) => new EventStream(stream));
   testAsyncMap((stream) => new EventStream(stream));
   testBufferWhen((stream) => new EventStream(stream));

@@ -3,6 +3,7 @@ library property_test;
 import 'dart:async';
 import 'package:frappe/frappe.dart';
 import 'package:guinness/guinness.dart';
+import 'shared/as_event_stream.dart';
 import 'shared/async_expand.dart';
 import 'shared/async_map.dart';
 import 'shared/buffer_when.dart';
@@ -105,16 +106,6 @@ void main() => describe("Property", () {
       });
     });
 
-    describe("asEventStream()", () {
-      it("includes new values", () {
-        return testStream(property.asEventStream(),
-            behavior: () => controller..add(2)..add(3),
-            expectation: (values) {
-              expect(values).toEqual([2, 3]);
-            });
-      });
-    });
-
     describe("with initial value", () {
       StreamController<int> controller;
 
@@ -174,6 +165,7 @@ void main() => describe("Property", () {
   });
 
   testReturnTypes(Property, () => new Property.constant(1));
+  testAsEventStream((stream) => new Property.fromStream(stream));
   testAsyncExpand((stream) => new Property.fromStream(stream));
   testAsyncMap((stream) => new Property.fromStream(stream));
   testBufferWhen((stream) => new Property.fromStream(stream));
