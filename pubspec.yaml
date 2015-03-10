@@ -1,5 +1,5 @@
 name: frappe
-version: 0.4.0+3
+version: 0.4.0+4
 description: >
   A functional reactive programming library for Dart. Frappé extends the functionality
   of Dart's streams, and introduces new concepts like properties/signals.
