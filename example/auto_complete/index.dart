@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 import 'package:frappe/frappe.dart';

@@ -5,7 +5,6 @@ import 'package:frappe/frappe.dart';
 import 'package:guinness/guinness.dart';
 
 void testReturnTypes(Type expectedType, Reactable provider()) => describe("return types", () {
-  StreamController source;
   Reactable reactable;
 
   beforeEach(() {
