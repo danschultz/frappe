@@ -1,4 +1,4 @@
-library expand_tests;
+library frappe.test.shared.expand_tests;
 
 import 'dart:async';
 import 'package:frappe/frappe.dart';

@@ -1,4 +1,4 @@
-library as_event_stream_tests;
+library frappe.test.shared.as_event_stream_tests;
 
 import 'dart:async';
 import 'package:frappe/frappe.dart';

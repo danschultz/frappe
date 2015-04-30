@@ -1,4 +1,4 @@
-library property_test;
+library frappe.test.property_test;
 
 import 'dart:async';
 import 'package:frappe/frappe.dart';

@@ -1,4 +1,4 @@
-library distinct_tests;
+library frappe.test.shared.distinct_tests;
 
 import 'dart:async';
 import 'package:frappe/frappe.dart';

@@ -1,4 +1,4 @@
-library merge_tests;
+library frappe.test.shared.merge_tests;
 
 import 'dart:async';
 import 'package:frappe/frappe.dart';

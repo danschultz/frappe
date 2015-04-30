@@ -1,4 +1,4 @@
-library all_tests;
+library frappe.test.all_tests;
 
 import 'event_stream_test.dart' as event_stream;
 import 'property_test.dart' as property;

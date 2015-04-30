@@ -1,4 +1,4 @@
-library async_map_tests;
+library frappe.test.shared.async_map_tests;
 
 import 'dart:async';
 import 'package:frappe/frappe.dart';

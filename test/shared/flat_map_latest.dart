@@ -1,4 +1,4 @@
-library flat_map_latest_tests;
+library frappe.test.shared.flat_map_latest_tests;
 
 import 'dart:async';
 import 'package:frappe/frappe.dart';

@@ -1,4 +1,4 @@
-library frappe.tests.util;
+library frappe.test.shared.util;
 
 import 'dart:async';
 

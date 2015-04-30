@@ -1,4 +1,4 @@
-library when_tests;
+library frappe.test.shared.when_tests;
 
 import 'dart:async';
 import 'package:frappe/frappe.dart';

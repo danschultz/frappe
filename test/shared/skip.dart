@@ -1,4 +1,4 @@
-library skip_tests;
+library frappe.test.shared.skip_tests;
 
 import 'dart:async';
 import 'package:frappe/frappe.dart';

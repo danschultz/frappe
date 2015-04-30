@@ -5,12 +5,8 @@ env:
 dart:
   - stable
   - dev
-install:
-  - pub global activate dart_coveralls
-  - pub global activate tuneup
-  - pub global activate grinder
-  - pub install
 script:
-  - grind
+  - dart tool/grind.dart build
 after_success:
+  - pub global activate dart_coveralls
   - dart_coveralls report --exclude-test-files --token $COVERALLS_TOKEN ./test/all_tests.dart

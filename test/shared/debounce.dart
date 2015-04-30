@@ -1,4 +1,4 @@
-library debounce_tests;
+library frappe.test.shared.debounce_tests;
 
 import 'dart:async';
 import 'package:frappe/frappe.dart';

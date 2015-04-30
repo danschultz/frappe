@@ -1,4 +1,4 @@
-library delay_tests;
+library frappe.test.shared.delay_tests;
 
 import 'dart:async';
 import 'package:frappe/frappe.dart';

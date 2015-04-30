@@ -1,4 +1,4 @@
-library handle_error_tests;
+library frappe.test.shared.handle_error_tests;
 
 import 'dart:async';
 import 'package:frappe/frappe.dart';
