@@ -81,16 +81,21 @@ Definitely take a look at the API [documentation], and play around with some of 
 
 ## Running Tests
 
-Tests are run using [test_runner].
+Tests are run through the Grinder `build` task. This will run the Dart Analyzer, linter and unit tests.
 
-* Install *test_runner*: `pub global activate test_runner`
-* Run *test_runner* inside *frappe*: `pub global run run_tests`
+* Install *grinder*: `pub global activate grinder`
+* Run *grinder*: `grind build`
 
 ## Features and bugs
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
+## Contributing
+
+Take a look [here][contributing] on ways to contribute to Frappé.
+
 [documentation]: http://www.dartdocs.org/documentation/frappe/latest
+[contributing]: https://github.com/danschultz/frappe/blob/master/CONTRIBUTING.md
 [examples]: https://github.com/danschultz/frappe/tree/master/example
 [tracker]: https://github.com/danschultz/frappe/issues
 [test_runner]: https://pub.dartlang.org/packages/test_runner
