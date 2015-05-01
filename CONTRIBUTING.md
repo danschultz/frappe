@@ -8,7 +8,7 @@ Documentation and examples go a long way in helping others learn about Frappe. B
 
 If you'd like to submit a code change, here are some guidelines to follow:
 
-* If you plan on submitting a transformation method, implement it first as a `StreamTransformer` and submit a PR to the [stream_transfomers] package.
+* If you plan on submitting a transformation method, implement it first as a `StreamTransformer` and submit a PR to the [stream_transformers] package.
 * All transformation methods should have a unit test that test the following:
   * A transformed `EventStream` that originates from a non-broadcast stream, should return a non-broadcast stream.
   * A transformed `EventStream` that originates from a broadcast stream, should return a broadcast stream.
