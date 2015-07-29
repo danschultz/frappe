@@ -95,7 +95,7 @@ class EventStream<T> extends Reactable<T> {
 
   EventStream combine(Stream other, Object combiner(T a, b)) => transform(new Combine(other, combiner));
 
-  EventStream concat(Stream other) => transform(new Concat(other));
+  EventStream concat(Stream other) => transform(new Concat<T>(other));
 
   EventStream concatAll() => transform(new ConcatAll());
 
@@ -114,7 +114,7 @@ class EventStream<T> extends Reactable<T> {
 
   EventStream flatMapLatest(Stream convert(T event)) => transform(new FlatMapLatest(convert));
 
-  EventStream<T> handleError(onError, {bool test(error)}) =>
+  EventStream<T> handleError(Function onError, {bool test(error)}) =>
       new EventStream(super.handleError(onError, test: test));
 
   StreamSubscription<T> listen(void onData(T event), {Function onError, void onDone(), bool cancelOnError}) {
@@ -145,7 +145,7 @@ class EventStream<T> extends Reactable<T> {
 
   EventStream startWith(value) => transform(new StartWith(value));
 
-  EventStream startWithValues(Iterable values) => transform(new StartWith.many(values));
+  EventStream startWithValues(Iterable values) => transform(new StartWith<T>.many(values));
 
   EventStream<T> take(int count) => new EventStream(super.take(count));
 
@@ -163,5 +163,5 @@ class EventStream<T> extends Reactable<T> {
 
   EventStream<T> where(bool test(T event)) => new EventStream(super.where(test));
 
-  EventStream zip(Stream other, Combiner combiner) => transform(new Zip(other, combiner));
+  EventStream zip(Stream other, Combiner combiner) => transform(new Zip<T, dynamic, dynamic>(other, combiner));
 }

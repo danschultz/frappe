@@ -18,7 +18,7 @@ class Property<T> extends Reactable<T> {
   /// An [EventStream] that contains the changes of the property.
   ///
   /// The stream will *not* contain an event for the current value of the `Property`.
-  EventStream<T> get changes => new EventStream(_controller.stream);
+  EventStream<T> get changes => new EventStream<T>(_controller.stream);
 
   @override
   bool get isBroadcast => _controller.stream.isBroadcast;
@@ -106,7 +106,7 @@ class Property<T> extends Reactable<T> {
 
   Property combine(Stream other, Object combiner(T a, b)) => transform(new Combine(other, combiner));
 
-  Property concat(Stream other) => transform(new Concat(other));
+  Property concat(Stream other) => transform(new Concat<T>(other));
 
   Property concatAll() => transform(new ConcatAll());
 
@@ -125,7 +125,7 @@ class Property<T> extends Reactable<T> {
 
   Property flatMapLatest(Stream convert(T event)) => transform(new FlatMapLatest(convert));
 
-  Property<T> handleError(onError, {bool test(error)}) =>
+  Property<T> handleError(Function onError, {bool test(error)}) =>
       new Property.fromStream(super.handleError(onError, test: test));
 
   StreamSubscription<T> listen(void onData(T value), {Function onError, void onDone(), bool cancelOnError}) {
@@ -164,7 +164,7 @@ class Property<T> extends Reactable<T> {
 
   Property startWith(value) => transform(new StartWith(value));
 
-  Property startWithValues(Iterable values) => transform(new StartWith.many(values));
+  Property<T> startWithValues(Iterable values) => transform(new StartWith<T>.many(values));
 
   Property<T> take(int count) => new Property.fromStream(super.take(count));
 
@@ -182,7 +182,7 @@ class Property<T> extends Reactable<T> {
 
   Property<T> where(bool test(T event)) => new Property.fromStream(super.where(test));
 
-  Property zip(Stream other, Combiner combiner) => transform(new Zip(other, combiner));
+  Property zip(Stream other, Combiner combiner) => transform(new Zip<T, dynamic, dynamic>(other, combiner));
 
   // Deprecated
 
