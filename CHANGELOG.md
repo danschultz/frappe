@@ -2,7 +2,7 @@
 
 *Note:* Patch versions that only include documentation changes are omitted.
 
-## 0.4.0+3 (03/09/2015)
+## 0.4.0+5 (08/06/2015)
 
 - Add better type annotations to suppress warnings in DDC. [[#47](https://github.com/danschultz/frappe/issues/47)]
 
