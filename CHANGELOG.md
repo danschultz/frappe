@@ -4,6 +4,10 @@
 
 ## 0.4.0+3 (03/09/2015)
 
+- Add better type annotations to suppress warnings in DDC. [[#47](https://github.com/danschultz/frappe/issues/47)]
+
+## 0.4.0+3 (03/09/2015)
+
 - Fix an issue where the stream returned by `Property.asEventStream()` would still behave like a property [[#38](https://github.com/danschultz/frappe/issues/38)]
 
 ## 0.4.0 (03/02/2015)
