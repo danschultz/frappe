@@ -288,7 +288,7 @@ abstract class Reactable<T> extends Stream<T> {
   }
 
   @override
-  Reactable<T> handleError(onError, {bool test(error)});
+  Reactable<T> handleError(Function onError, {bool test(error)});
 
   @override
   Reactable map(convert(T event));
