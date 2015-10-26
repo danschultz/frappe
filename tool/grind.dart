@@ -1,6 +1,6 @@
 import 'package:grinder/grinder.dart';
 
-main(args) => grind(args);
+main(List<String> args) => grind(args);
 
 @Task("Analyzes the package for errors or warnings")
 analyze() {
@@ -17,6 +17,4 @@ test() => Tests.runCliTests(testFile: "all_tests.dart");
 
 @DefaultTask()
 @Depends(analyze, test, lint)
-build() {
-
-}
+build() { }

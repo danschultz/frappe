@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
+
 import 'package:frappe/frappe.dart';
 
 void main() {
@@ -29,13 +31,13 @@ void main() {
 
 EventStream<Iterable<String>> queryTerm(String term) {
   if (term.length > 2) {
-    var params = {
+    Map<String, String> params = {
         "api_key": "9eae05e667b4d5d9fbb75d27622347fe",
         "query": term
     };
 
     var uri = Uri.parse("http://api.themoviedb.org/3/search/movie").replace(queryParameters: params);
-    var results = HttpRequest.getString(uri.toString())
+    Future<Iterable<String>> results = HttpRequest.getString(uri.toString())
         .then((response) => JSON.decode(response))
         .then((json) => json["results"].map((result) => result["original_title"]));
 
