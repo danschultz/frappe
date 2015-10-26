@@ -32,11 +32,11 @@ import 'shared/util.dart';
 
 void main() => describe("EventStream", () {
   EventStream<int> stream;
-  StreamController controller;
+  StreamController<int> controller;
 
   beforeEach(() {
     controller = new StreamController();
-    stream = new EventStream(controller.stream);
+    stream = new EventStream<int>(controller.stream);
   });
 
   it("delivers values from the source stream", () {
