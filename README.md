@@ -15,7 +15,7 @@ When writing reactive code, you'll find yourself focusing more on the dependenci
 
 ## Example
 
-Lets write an auto-complete movie widget with Frappé. The widget has an input field for the movie name, and a list element that displays movies that most closely match the user's input. A working version can be found [here](http://danschultz.github.io/frappe/examples/auto_complete/).
+Let's write an auto-complete movie widget with Frappé. The widget has an input field for the movie name, and a list element that displays movies that most closely match the user's input. A working version can be found [here](http://danschultz.github.io/frappe/examples/auto_complete/).
 
 ```dart
 var searchInput = document.querySelector("#searchInput");
@@ -77,7 +77,7 @@ If you were to model text input using properties and streams, the individual key
 
 ## Learning More
 
-Definitely take a look at the API [documentation], and play around with some of the [examples]. It's also worth checking out [BaconJS] and [RxJS]. They're both mature FRP libraries, and offer some great resourses on the subject.
+Definitely take a look at the API [documentation], and play around with some of the [examples]. It's also worth checking out [BaconJS] and [RxJS]. They're both mature FRP libraries, and offer some great resources on the subject.
 
 ## Running Tests
 
